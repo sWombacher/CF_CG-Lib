@@ -8,11 +8,7 @@
 
 namespace cf{
 
-struct Point{
-    Point(float val_x, float val_y):x(val_x), y(val_y){}
-    float x;
-    float y;
-};
+struct Point;
 
 class Window2D{
 public:
@@ -24,8 +20,8 @@ public:
 
     void waitMouseInput(float& x, float& y);
 
-    void  setScale(float scale);
-    float getScale() const;
+    void  setWindowScale(float scale);
+    float getWindowScale() const;
 
     void setInvertYAxis(bool invert);
     bool getInvertYAxis() const;
@@ -59,13 +55,29 @@ protected:
     cv::Mat m_Image;
 
     bool  m_InvertYAxis;
-    float m_Scale;
+    float m_WindowScale;
     const char* m_WindowName;
 
     cf::Intervall m_IntervallX;
     cf::Intervall m_IntervallY;
 
     float m_MouseCallBackData[2];
+};
+
+
+struct Point{
+    Point(float val_x, float val_y):x(val_x), y(val_y){}
+    float x;
+    float y;
+
+    bool operator==(Point& p){
+        if (this->x == p.x && this->y == p.y)
+            return true;
+        return false;
+    }
+    bool operator!=(Point& p){
+        return !(*this == p);
+    }
 };
 
 

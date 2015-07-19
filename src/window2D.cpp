@@ -3,7 +3,7 @@
 namespace cf{
 
 Window2D::Window2D(uint width, uint height, const char* windowName)
-: m_WindowName(windowName), m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_Scale(1.f),
+: m_WindowName(windowName), m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_WindowScale(1.f),
   m_InvertYAxis(true), m_IntervallX(0, this->m_Image.cols - 1), m_IntervallY(0, this->m_Image.rows -1)
 {
     if(!this->m_WindowName)
@@ -16,11 +16,11 @@ Window2D::~Window2D(){
 }
 
 void Window2D::show() const{
-    if (this->m_Scale == 1.f)
+    if (this->m_WindowScale == 1.f)
         cv::imshow(this->m_WindowName, this->m_Image);
     else{
         cv::Mat tmp;
-        cv::resize(this->m_Image, tmp, cv::Size(this->m_Image.cols * this->m_Scale, this->m_Image.rows * this->m_Scale));
+        cv::resize(this->m_Image, tmp, cv::Size(this->m_Image.cols * this->m_WindowScale, this->m_Image.rows * this->m_WindowScale));
         cv::imshow(this->m_WindowName, tmp);
     }
 }
@@ -69,11 +69,11 @@ const Color& Window2D::getColor(float x, float y) const{
     }
 }
 
-void Window2D::setScale(float scale){
-    this->m_Scale = scale;
+void Window2D::setWindowScale(float scale){
+    this->m_WindowScale = scale;
 }
-float Window2D::getScale() const{
-    return this->m_Scale;
+float Window2D::getWindowScale() const{
+    return this->m_WindowScale;
 }
 
 void Window2D::setInvertYAxis(bool invert){
@@ -136,12 +136,12 @@ void Window2D::_correctYValue(T& y) const{
 template<typename T>
 void Window2D::_convertFromNewIntervall(T& x, T& y) const{
     x = Intervall::translateInterverllPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
-    y = Intervall::translateInterverllPostion(this->m_IntervallX, Intervall(0, this->m_Image.rows - 1), y);
+    y = Intervall::translateInterverllPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
 }
 template<typename T>
 void Window2D::_convertToNewIntervall(T& x, T& y) const{
     x = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
-    y = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallX, y);
+    y = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
 }
 
 }
