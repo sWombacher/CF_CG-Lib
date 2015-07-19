@@ -1,4 +1,4 @@
 CMakeLists.txt.user
-./bin/*
-./build/
-./build-*/
+bin/*
+build/
+build-*/
