@@ -1,0 +1,8 @@
+// Sierpinski-Dreieck aus Dreiecken: sierpinski_2.lin
+X
+2
+F>FF
+X>-FXF+FXF+FXF-
+0.0  120.0  0.5
+-1.1   1.1 -1.9  0.1
+2  1

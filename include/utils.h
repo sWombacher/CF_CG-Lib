@@ -1,0 +1,80 @@
+
+#ifndef _UTILS_H_H_
+#define _UTILS_H_H_
+
+#include <string>
+#include <vector>
+#include <iostream>
+
+#include <inttypes.h>
+
+
+//#define
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+
+
+#include "uint128_t.h"
+
+
+
+// enable output for vec2, vec3 & vec4
+std::ostream& operator<<(std::ostream& of, const glm::vec2& vec);
+std::ostream& operator<<(std::ostream& of, const glm::vec3& vec);
+std::ostream& operator<<(std::ostream& of, const glm::vec4& vec);
+
+// enable output for mat3x3 & mat4x4
+std::ostream& operator<<(std::ostream& of, const glm::mat3x3& mat);
+std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
+
+
+namespace cf{
+
+
+/// TODO line endings
+
+struct Color;
+std::vector<Color> readPaletteFromFile(const char* filename);
+std::string readAntString(const char* filename);
+
+
+struct Direction{
+    enum AbsoluteDirection {
+        NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS
+    };
+    enum RelativeDirection{
+        LEFT, FORWARD, RIGHT
+    };
+    static AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
+};
+
+
+
+struct Intervall{
+    Intervall(float _min = 0.f, float _max = 0.f):min(_min), max(_max){};
+    float min;
+    float max;
+
+    static float translateInterverllPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition);
+};
+
+
+struct Color{
+    Color(int red = 0, int green = 0, int blue = 0) : r(red), g(green), b(blue){};
+
+    // NOTE:
+    // do not change order of b, g, r in this struct!
+    uint8_t b;
+    uint8_t g;
+    uint8_t r;
+
+    bool operator==(const Color& c);
+    bool operator!=(const Color& c);
+};
+
+}
+
+#endif

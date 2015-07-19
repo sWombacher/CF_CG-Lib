@@ -1,0 +1,9 @@
+// Hilbert_Kurve.lin
+Y
+3
+X>-YF+XFX+FY-
+Y>+XF-YFY-FX+
+F>F
+0.0  90.0  0.50
+-0.1   1.1 -0.1  1.1
+2  1

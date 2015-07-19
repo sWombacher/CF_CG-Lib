@@ -1,0 +1,8 @@
+// symmetrischer Busch: busch_3D_2.lin
+G
+2
+G>F[+G][***+G][-G][///+G]FG
+F>FF
+90.0  30.0  0.50
+-1.6   0.6 -0.4  2.1
+2  1
