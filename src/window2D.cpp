@@ -2,19 +2,20 @@
 #include "window2D.h"
 namespace cf{
 
-Window_2D::Window_2D(std::size_t width, std::size_t height, const char* windowName)
-: m_WindowName(windowName), m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_Scale(1.f)
+Window2D::Window2D(uint width, uint height, const char* windowName)
+: m_WindowName(windowName), m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_Scale(1.f),
+  m_InvertYAxis(true), m_IntervallX(0, this->m_Image.cols - 1), m_IntervallY(0, this->m_Image.rows -1)
 {
     if(!this->m_WindowName)
         this->m_WindowName = "";
 
     this->show();
 }
-Window_2D::~Window_2D(){
+Window2D::~Window2D(){
     cv::destroyWindow(this->m_WindowName);
 }
 
-void Window_2D::show() const{
+void Window2D::show() const{
     if (this->m_Scale == 1.f)
         cv::imshow(this->m_WindowName, this->m_Image);
     else{
@@ -23,19 +24,43 @@ void Window_2D::show() const{
         cv::imshow(this->m_WindowName, tmp);
     }
 }
-void Window_2D::waitKey() const{
+void Window2D::waitKey() const{
     cv::waitKey();
 }
 
-void Window_2D::setColor(std::size_t x, std::size_t y, const Color& c){
-    this->_getCorrectYValue(y);
+
+void mouseCallBack(int event, int x, int y, int flags, void* userdata){
+    if  (event == cv::EVENT_LBUTTONDOWN) {
+        reinterpret_cast<float*>(userdata)[0] = x;
+        reinterpret_cast<float*>(userdata)[1] = y;
+    }
+}
+
+void Window2D::waitMouseInput(float &x, float &y) {
+    this->m_MouseCallBackData[0] = -1;
+    this->m_MouseCallBackData[1] = -1;
+    cv::setMouseCallback(this->m_WindowName, mouseCallBack, &this->m_MouseCallBackData[0]);
+
+    do{
+        cv::waitKey(200);
+    } while(this->m_MouseCallBackData[0] == -1);
+
+    this->_correctYValue(this->m_MouseCallBackData[1]);
+    this->_convertToNewIntervall(this->m_MouseCallBackData[0], this->m_MouseCallBackData[1]);
+    x = this->m_MouseCallBackData[0];
+    y = this->m_MouseCallBackData[1];
+}
+
+void Window2D::setColor(float x, float y, const Color& c){
+    this->_correctYValue(y);
+    this->_convertFromNewIntervall(x, y);
     if (sizeof(cf::Color) == sizeof(cv::Vec3b)) // should always be true :)
         this->m_Image.at<cf::Color>(y, x) = c;
     else
         this->m_Image.at<cv::Vec3b>(y, x) = cv::Vec3b(c.b, c.g, c.r);
 }
-const Color& Window_2D::getColor(std::size_t x, std::size_t y) const{
-    this->_getCorrectYValue(y);
+const Color& Window2D::getColor(float x, float y) const{
+    this->_correctYValue(y);
     if (sizeof(cf::Color) == sizeof(cv::Vec3b)) // should always be true :)
         return this->m_Image.at<cf::Color>(y, x);
     else{
@@ -44,40 +69,79 @@ const Color& Window_2D::getColor(std::size_t x, std::size_t y) const{
     }
 }
 
-void Window_2D::setScale(float scale){
+void Window2D::setScale(float scale){
     this->m_Scale = scale;
 }
-float Window_2D::getScale() const{
+float Window2D::getScale() const{
     return this->m_Scale;
 }
 
-void Window_2D::setInvertYAxis(bool invert){
+void Window2D::setInvertYAxis(bool invert){
     this->m_InvertYAxis = invert;
 }
-bool Window_2D::getInvertYAxis() const{
+bool Window2D::getInvertYAxis() const{
     return this->m_InvertYAxis;
 }
 
 
-void Window_2D::drawCircle(cv::Point point, std::size_t radius, int lineWidth, const cf::Color& c){
-    this->_getCorrectYValue(point.y);
-    cv::circle(this->m_Image, point, radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
+void Window2D::drawCircle(cf::Point p, uint radius, int lineWidth, const cf::Color& c){
+    this->_correctYValue(p.y);
+    this->_convertFromNewIntervall(p.x, p.y);
+    cv::circle(this->m_Image, cv::Point(p.x, p.y), radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
-void Window_2D::drawRectangle(cv::Point point1, cv::Point point2, int lineWidth, const cf::Color& c){
-    this->_getCorrectYValue(point1.y);
-    this->_getCorrectYValue(point2.y);
-    cv::rectangle(this->m_Image, point1, point2, cv::Scalar(c.b, c.g, c.r), lineWidth);
+void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
+    this->_correctYValue(p1.y);
+    this->_correctYValue(p2.y);
+    this->_convertFromNewIntervall(p1.x, p1.y);
+    this->_convertFromNewIntervall(p2.x, p2.y);
+    cv::rectangle(this->m_Image, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
-void Window_2D::drawLine(cv::Point point1, cv::Point point2, int lineWidth, const cf::Color& c){
-    this->_getCorrectYValue(point1.y);
-    this->_getCorrectYValue(point2.y);
-    cv::line(this->m_Image, point1, point2, cv::Scalar(c.b, c.g, c.r), lineWidth);
+void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
+    this->_correctYValue(p1.y);
+    this->_correctYValue(p2.y);
+    this->_convertFromNewIntervall(p1.x, p1.y);
+    this->_convertFromNewIntervall(p2.x, p2.y);
+    cv::line(this->m_Image, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 
+void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& intervallY){
+    this->m_IntervallX = intervallX;
+    this->m_IntervallY = intervallY;
+}
+
+void Window2D::resetIntervall(){
+    this->m_IntervallX.min = 0;
+    this->m_IntervallX.max = this->m_Image.cols - 1;
+
+    this->m_IntervallY.min = 0;
+    this->m_IntervallY.max = this->m_Image.rows - 1;
+}
+
+int Window2D::getImageWidth() const{
+    return this->m_Image.cols;
+}
+int Window2D::getImageHeight() const{
+    return this->m_Image.rows;
+}
+cv::Mat& Window2D::getImage(){
+    return this->m_Image;
+}
+
+
 template<typename T>
-void Window_2D::_getCorrectYValue(cf::Window_2D::T &y){
+void Window2D::_correctYValue(T& y) const{
     if (this->m_InvertYAxis)
         y = this->m_Image.rows - y;
+}
+template<typename T>
+void Window2D::_convertFromNewIntervall(T& x, T& y) const{
+    x = Intervall::translateInterverllPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
+    y = Intervall::translateInterverllPostion(this->m_IntervallX, Intervall(0, this->m_Image.rows - 1), y);
+}
+template<typename T>
+void Window2D::_convertToNewIntervall(T& x, T& y) const{
+    x = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
+    y = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallX, y);
 }
 
 }

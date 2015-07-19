@@ -8,83 +8,6 @@
 
 namespace cf{
 
-Window2D* ptr = nullptr;
-
-void display(){
-    if (ptr)
-        ptr->draw();
-}
-
-
-Window2D::Window2D(int width, int height, const char* title) : m_Title(title), m_Width(width), m_Height(height), m_WindowID(-1){
-}
-Window2D::~Window2D(){
-    glutDestroyWindow(this->m_WindowID);
-}
-
-
-void Window2D::init(int* argc, char **argv, void (*foo)(int, int, int, int)) {
-    glutInit(argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE);
-    glutInitWindowSize(this->m_Width, this->m_Height);
-
-    this->m_WindowID = glutCreateWindow(this->m_Title.c_str());
-    this->m_PixelData.resize(this->m_Width * this->m_Height * 3, 0);
-
-    this->m_Thread = std::thread([foo](){
-        glutDisplayFunc(display);
-        glutMouseFunc(foo);
-        glutMainLoop();
-    });
-}
-
-
-void Window2D::clear(const Color& color){
-    // set own pixel colors
-    for (int i = 0; i < this->m_PixelData.size(); i += 3){
-        this->m_PixelData[i + 0] = color.r;
-        this->m_PixelData[i + 1] = color.g;
-        this->m_PixelData[i + 2] = color.b;
-    }
-    this->draw();
-}
-
-Color Window2D::getPixelColor(int x, int y){
-
-    int pos = (y * this->m_Width + x) * 3;
-    Color color;
-    color.r = this->m_PixelData[pos + 0];
-    color.g = this->m_PixelData[pos + 1];
-    color.b = this->m_PixelData[pos + 2];
-
-    return color;
-}
-void  Window2D::setPixelColor(int x, int y, const Color& color){
-    int pos = (y * m_Width + x) * 3;
-
-    if (pos + 2 >= this->m_PixelData.size())
-        throw std::out_of_range("out of bound exception in function \"Window::setPixelColor\"");
-
-    this->m_PixelData[pos + 0] = color.r;
-    this->m_PixelData[pos + 1] = color.g;
-    this->m_PixelData[pos + 2] = color.b;
-}
-
-int Window2D::getWindowWidth() const {
-    return this->m_Width;
-}
-int Window2D::getWindowHeight() const{
-    return this->m_Height;
-}
-
-void Window2D::draw() const{
-    glDrawPixels(this->m_Width, this->m_Height, GL_RGB, GL_UNSIGNED_BYTE, this->m_PixelData.data());
-    glutSwapBuffers();
-    glutPostRedisplay();
-}
-
-
-
 
 Window3D::Window3D(int width, int height, const char* title) : m_Title(title), m_Width(width), m_Height(height), m_WindowID(-1){
 }
@@ -102,12 +25,6 @@ void Window3D::draw() const{
 void Window3D::clear(const Color& color){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
-
-
-
-
-
 
 void Window3D::init(int *argc, char **argv){
     glutInit(argc, argv);
