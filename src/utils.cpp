@@ -61,8 +61,10 @@ std::vector<Color> readPaletteFromFile(const char* filename){
         sstr << str;
 
         std::vector<int> rgb;
-        while(std::getline(sstr, str, ','))
+        while(std::getline(sstr, str, ',')){
+            removeWindowsSpecificCarriageReturn(str);
             rgb.push_back(std::stoi(str));
+        }
 
         if (rgb.size() != 3){
             str = filename;
@@ -86,6 +88,7 @@ std::string readAntString(const char* filename){
     // ignore first line
     std::getline(file, str);
     std::getline(file, str);
+    removeWindowsSpecificCarriageReturn(str);
     return str;
 }
 
@@ -136,6 +139,21 @@ bool Color::operator==(const Color& c){
 }
 bool Color::operator!=(const Color& c){
     return !(*this == c);
+}
+
+void removeWindowsSpecificCarriageReturn(std::string& str){
+    if (!str.size())
+        return;
+
+    std::size_t iter;
+    while((iter = str.find('\r')) != std::string::npos)
+        str.erase(iter);
+
+    /*
+    std::size_t cr = str.rfind('\r');
+    if (cr != std::string::npos)
+        str = str.substr(0, cr);
+    */
 }
 
 

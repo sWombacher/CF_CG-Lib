@@ -14,20 +14,24 @@ void IteratedFunctionSystem::read(const char* fiilename){
 
     std::getline(input, str); // name
     {
-        std::size_t nameStartposition = str.rfind(' ');
+        removeWindowsSpecificCarriageReturn(str);
+        std::size_t nameStartposition = str.rfind('/');
         if (nameStartposition != std::string::npos)
             this->m_Name = str.substr(nameStartposition + 1);
     }
 
     std::getline(input, str); // num transformations
+    removeWindowsSpecificCarriageReturn(str);
 
     int num_transformations = std::stoi(str);
     for (int i = 0; i < num_transformations && std::getline(input, str); ++i) {
+        removeWindowsSpecificCarriageReturn(str);
         std::stringstream sstr;
         sstr << str;
         std::vector<double> transformation;
 
         while (std::getline(sstr, str, ' ')) {
+            removeWindowsSpecificCarriageReturn(str);
             if (str.size()) // two spaces in a row
                 transformation.push_back(std::stod(str));
         }
@@ -53,11 +57,13 @@ void IteratedFunctionSystem::read(const char* fiilename){
 
     // read bounds
     std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
     std::stringstream sstr;
     sstr << str;
 
     std::vector<float> values;
     while (std::getline(sstr, str, ' ')) {
+        removeWindowsSpecificCarriageReturn(str);
         if (str.size()) // two spaces in a row
             values.push_back(std::stof(str));
     }

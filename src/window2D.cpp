@@ -11,6 +11,12 @@ Window2D::Window2D(uint width, uint height, const char* windowName)
 
     this->show();
 }
+
+Window2D::Window2D(const char *filename):m_IntervallX(0, 0), m_IntervallY(0, 0){
+    this->m_Image = cv::imread(filename, CV_LOAD_IMAGE_COLOR);
+    this->m_IntervallX.max = this->m_Image.cols - 1;
+    this->m_IntervallY.max = this->m_Image.rows - 1;
+}
 Window2D::~Window2D(){
     cv::destroyWindow(this->m_WindowName);
 }
@@ -37,18 +43,23 @@ void mouseCallBack(int event, int x, int y, int flags, void* userdata){
 }
 
 void Window2D::waitMouseInput(float &x, float &y) {
-    this->m_MouseCallBackData[0] = -1;
-    this->m_MouseCallBackData[1] = -1;
-    cv::setMouseCallback(this->m_WindowName, mouseCallBack, &this->m_MouseCallBackData[0]);
+    this->m_MouseCallBackStorage[0] = -1;
+    this->m_MouseCallBackStorage[1] = -1;
+    this->show();
+    cv::setMouseCallback(this->m_WindowName, mouseCallBack, &this->m_MouseCallBackStorage[0]);
 
     do{
         cv::waitKey(200);
-    } while(this->m_MouseCallBackData[0] == -1);
+    } while(this->m_MouseCallBackStorage[0] == -1);
 
-    this->_correctYValue(this->m_MouseCallBackData[1]);
-    this->_convertToNewIntervall(this->m_MouseCallBackData[0], this->m_MouseCallBackData[1]);
-    x = this->m_MouseCallBackData[0];
-    y = this->m_MouseCallBackData[1];
+    // undo scaling
+    this->m_MouseCallBackStorage[0] /= this->m_WindowScale;
+    this->m_MouseCallBackStorage[1] /= this->m_WindowScale;
+
+    this->_correctYValue(this->m_MouseCallBackStorage[1]);
+    this->_convertToNewIntervall(this->m_MouseCallBackStorage[0], this->m_MouseCallBackStorage[1]);
+    x = this->m_MouseCallBackStorage[0];
+    y = this->m_MouseCallBackStorage[1];
 }
 
 void Window2D::setColor(float x, float y, const Color& c){

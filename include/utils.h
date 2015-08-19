@@ -9,7 +9,6 @@
 #include <inttypes.h>
 
 
-//#define
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -54,7 +53,7 @@ struct Direction{
 
 
 struct Intervall{
-    Intervall(float _min = 0.f, float _max = 0.f):min(_min), max(_max){};
+    Intervall(float _min, float _max):min(_min), max(_max){};
     float min;
     float max;
 
@@ -66,7 +65,7 @@ struct Color{
     Color(int red = 0, int green = 0, int blue = 0) : r(red), g(green), b(blue){};
 
     // NOTE:
-    // do not change order of b, g, r in this struct!
+    // do not change the order of b, g, r in this struct!
     uint8_t b;
     uint8_t g;
     uint8_t r;
@@ -74,6 +73,8 @@ struct Color{
     bool operator==(const Color& c);
     bool operator!=(const Color& c);
 };
+
+void removeWindowsSpecificCarriageReturn(std::string& str);
 
 }
 

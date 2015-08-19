@@ -17,17 +17,21 @@ void LindenmayerSystem::read(const char* filename){
 
     // read filename
     std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
     this->m_Name = str.substr(str.rfind(' '));
 
     // read axiom
     std::getline(input, this->m_Axiom);
+    removeWindowsSpecificCarriageReturn(this->m_Axiom);
 
     // read num productions
     std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
     int productionCounter = std::stoi(str);
 
     for (int i = 0; i < productionCounter; ++i){
         std::getline(input, str);
+        removeWindowsSpecificCarriageReturn(str);
         char symbol = str[0];
         str = str.substr(str.find('>') + 1);
         //str = str.substr(0, str.size() -1);
@@ -38,6 +42,7 @@ void LindenmayerSystem::read(const char* filename){
     }
 
     std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
     std::stringstream sstream;
     sstream << str;
 
@@ -58,6 +63,8 @@ void LindenmayerSystem::read(const char* filename){
     this->m_Scale = std::stof(str);
 
     std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
+
     sstream.clear();
     sstream << str;
 
@@ -74,6 +81,8 @@ void LindenmayerSystem::read(const char* filename){
     this->m_RangeY.max = std::stof(str);
 
     std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
+
     if (str[str.size() - 2] == '0')
         this->m_ClearWindowEachTime = false;
     else if (str[str.size() - 2] == '1')

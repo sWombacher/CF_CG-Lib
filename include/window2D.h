@@ -12,7 +12,8 @@ struct Point;
 
 class Window2D{
 public:
-    Window2D(uint width = 800, uint height = 600, const char* windowName = "Chaos and Fractals");
+    Window2D(uint width, uint height, const char* windowName = "Chaos and Fractals");
+    Window2D(const char* filename);
     ~Window2D();
 
     void show() const;
@@ -61,7 +62,7 @@ protected:
     cf::Intervall m_IntervallX;
     cf::Intervall m_IntervallY;
 
-    float m_MouseCallBackData[2];
+    float m_MouseCallBackStorage[2];
 };
 
 
@@ -73,6 +74,7 @@ struct Point{
     bool operator==(Point& p){
         if (this->x == p.x && this->y == p.y)
             return true;
+
         return false;
     }
     bool operator!=(Point& p){
