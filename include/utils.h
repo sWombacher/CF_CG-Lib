@@ -39,6 +39,16 @@ struct Color;
 std::vector<Color> readPaletteFromFile(const char* filename);
 std::string readAntString(const char* filename);
 
+struct Convert{
+    template<typename T>
+    static T radiant2degree(T radiantValue){
+        return radiantValue / glm::pi<T>() * 180.0;
+    }
+    template<typename T>
+    static T degree2radiant(T degreeValue){
+        return degreeValue / 180.0 * glm::pi<T>();
+    }
+};
 
 struct Direction{
     enum AbsoluteDirection {

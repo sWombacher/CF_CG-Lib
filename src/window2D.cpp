@@ -70,7 +70,7 @@ void Window2D::setColor(float x, float y, const Color& c){
     else
         this->m_Image.at<cv::Vec3b>(y, x) = cv::Vec3b(c.b, c.g, c.r);
 }
-const Color& Window2D::getColor(float x, float y) const{
+Color Window2D::getColor(float x, float y) const{
     this->_correctYValue(y);
     if (sizeof(cf::Color) == sizeof(cv::Vec3b)) // should always be true :)
         return this->m_Image.at<cf::Color>(y, x);
@@ -95,10 +95,10 @@ bool Window2D::getInvertYAxis() const{
 }
 
 
-void Window2D::drawCircle(cf::Point p, uint radius, int lineWidth, const cf::Color& c){
-    this->_correctYValue(p.y);
-    this->_convertFromNewIntervall(p.x, p.y);
-    cv::circle(this->m_Image, cv::Point(p.x, p.y), radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
+void Window2D::drawCircle(cf::Point point, uint radius, int lineWidth, const cf::Color& c){
+    this->_correctYValue(point.y);
+    this->_convertFromNewIntervall(point.x, point.y);
+    cv::circle(this->m_Image, cv::Point(point.x, point.y), radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
     this->_correctYValue(p1.y);

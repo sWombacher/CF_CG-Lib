@@ -93,8 +93,6 @@ std::string readAntString(const char* filename){
 }
 
 
-
-
 Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
     switch(relativeMovement){
     case RelativeDirection::LEFT:{
@@ -145,15 +143,28 @@ void removeWindowsSpecificCarriageReturn(std::string& str){
     if (!str.size())
         return;
 
-    std::size_t iter;
-    while((iter = str.find('\r')) != std::string::npos)
-        str.erase(iter);
+    // NOTE:
+    // erase function didn't work here...
+    // for whatever reason...
 
-    /*
-    std::size_t cr = str.rfind('\r');
-    if (cr != std::string::npos)
-        str = str.substr(0, cr);
-    */
+    // count \r
+    int count = 0;
+    for (auto e : str){
+        if (e == '\r')
+            ++count;
+    }
+
+    if (count){
+        std::string toReturn;
+        toReturn.resize(str.size() - count);
+        for (int iter = 0, iter2 = 0; iter < str.size(); ++iter){
+            if (str[iter] != '\r'){
+                toReturn[iter2] = str[iter];
+                ++iter2;
+            }
+        }
+        str = std::move(toReturn);
+    }
 }
 
 
