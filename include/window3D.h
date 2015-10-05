@@ -23,9 +23,7 @@ public:
         NONE, ROTATION, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
     };
 
-    //void init(int* argc, char** argv);
     void clear(const Color& color = Color(0, 0, 0));
-
 
     virtual void draw() = 0;
 
