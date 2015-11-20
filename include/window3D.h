@@ -8,6 +8,7 @@
 #include <string>
 #include <thread>
 #include <inttypes.h>
+#include <functional>
 
 #include "utils.h"
 
@@ -27,9 +28,8 @@ public:
 
     virtual void draw() = 0;
 
-    [[noreturn]]
+    // this function does NOT return!
     int startDrawing();
-
 
     int getWindowWidth()  const;
     int getWindowHeight() const;
@@ -39,7 +39,18 @@ public:
     void drawAxis(float length = 100.f) const;
     void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, const Color color = Color(255, 255, 255)) const;
 
+    void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
+
 protected:
+    friend void myKeyboardCallbackFunction(unsigned char key, int x, int y);
+    float   m_DistAdjustment = 1.f;
+    float  m_AngleAdjustment = 1.f;
+    float m_CameraAdjustment = 1.f;
+
+protected:
+    friend void myKeyboardCallbackFunction(unsigned char key, int x, int y);
+
+    std::function<void(unsigned char key, int x, int y)> m_AdditionalKeyboardCallback;
     void _adjustCamera();
     int m_Width;
     int m_Height;

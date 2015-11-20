@@ -54,6 +54,7 @@ void Window3D::draw() const{
 }
 */
 
+/*
 int Window3D::startDrawing(){
     // cap fps
     using namespace std::chrono;
@@ -75,7 +76,121 @@ int Window3D::startDrawing(){
         current = next;
     }
 }
+*/
 
+Window3D* windowPtr = nullptr;
+void myDrawingFunction(){
+    if (!windowPtr)
+        throw "Error: window ptr not set!";
+
+    std::cout << "drawing" << std::endl;
+    using namespace std::chrono;
+    system_clock::time_point current = system_clock::now(), next;
+    constexpr float maxFPS = 1.0f;
+    constexpr int timePerFrameInMS = (1.f / maxFPS) * 1000.f;
+
+    windowPtr->draw();
+    glutSwapBuffers();
+    glFlush();
+
+    next = system_clock::now();
+    int numMilliseconds = duration_cast<milliseconds>(next - current).count();
+    if (numMilliseconds < timePerFrameInMS)
+        std::this_thread::sleep_for(milliseconds(timePerFrameInMS - numMilliseconds));
+
+    glutTimerFunc(0, [](int v) { glutPostRedisplay(); }, 1);
+}
+void myKeyboardCallbackFunction(unsigned char key, int x, int y){
+    if (!windowPtr)
+        throw "Error: window ptr not set!";
+
+    // user specified function
+    if (windowPtr->m_AdditionalKeyboardCallback)
+        windowPtr->m_AdditionalKeyboardCallback(key, x, y);
+
+    glm::vec3 left, up;
+    switch(windowPtr->m_CameraType){
+    case Window3D::CameraType::NONE:
+        // nothing to do!
+        break;
+    case Window3D::CameraType::ROTATION:
+        break;
+    case Window3D::CameraType::STATIC_X_AXIS:
+        left = glm::vec3(-1.f, 0.f, 0.f);
+        up   = glm::vec3( 0.f, 1.f, 0.f);
+        break;
+    case Window3D::CameraType::STATIC_Y_AXIS:
+        left = glm::vec3(-1.f, 0.f, 0.f);
+        up   = glm::vec3( 0.f, 0.f, 1.f);
+        break;
+    case Window3D::CameraType::STATIC_Z_AXIS:
+        left = glm::vec3(0.f, 0.f, -1.f);
+        up   = glm::vec3( 0.f, 1.f, 0.f);
+        break;
+    default:
+        throw "Unknown camera type";
+    }
+
+    // set left/up vectors to correct length
+    left = glm::normalize(left);
+    left *= windowPtr->m_CameraAdjustment;
+
+    up = glm::normalize(up);
+    up *= windowPtr->m_CameraAdjustment;
+
+
+    switch (key){
+    case 'a':
+        windowPtr->m_LookAt += left; // go left
+        break;
+    case 'd':
+        windowPtr->m_LookAt -= left; // go right
+        break;
+
+
+    case 's':
+        windowPtr->m_LookAt += up; // go up
+        break;
+    case 'w':
+        windowPtr->m_LookAt -= up; // go down
+        break;
+
+
+    case 'o':
+        windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
+        break;
+    case 'p':
+        windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
+        break;
+
+
+    case 'k':
+        windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
+        break;
+    case 'l':
+        windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
+        break;
+
+
+    case 'm':
+        windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; //  incrase distance
+        break;
+    case 'n':
+        windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment; // decrease distance
+        break;
+
+    default:
+        break;
+    }
+}
+
+int Window3D::startDrawing(){
+    windowPtr = this;
+    glutKeyboardFunc(myKeyboardCallbackFunction);
+    glutDisplayFunc(myDrawingFunction);
+    glutMainLoop();
+    return 0; // never reached
+}
 
 void Window3D::clear(const Color& color){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -178,6 +293,10 @@ void Window3D::_adjustCamera(){
     default:
         throw "Error: Unknown CameraType";
     }
+}
+
+void Window3D::setKeyboardCallbackFunction(std::function<void(unsigned char, int, int)> foo){
+    this->m_AdditionalKeyboardCallback = foo;
 }
 
 int Window3D::getWindowWidth() const {
