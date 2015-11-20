@@ -6,6 +6,7 @@
 #include <GL/glut.h>
 #include <chrono>
 #include <thread>
+#include <glm/gtx/quaternion.hpp>
 
 
 namespace cf{
@@ -46,13 +47,10 @@ Window3D::~Window3D(){
 }
 
 
-/*
-void Window3D::draw() const{
-    glutSwapBuffers();
-    glutPostRedisplay();
-    glFlush();
-}
-*/
+
+
+
+
 
 /*
 int Window3D::startDrawing(){
@@ -70,11 +68,12 @@ int Window3D::startDrawing(){
 
         next = system_clock::now();
         int numMilliseconds = duration_cast<milliseconds>(next - current).count();
-        if (numMilliseconds < timePerFrameInMS){
+        if (numMilliseconds < timePerFrameInMS)
             std::this_thread::sleep_for(milliseconds(timePerFrameInMS - numMilliseconds));
-        }
+
         current = next;
     }
+    return 0;
 }
 */
 
@@ -251,25 +250,14 @@ void Window3D::_adjustCamera(){
     switch(this->m_CameraType){
     case CameraType::NONE:
         break;
-    case CameraType::ROTATION:{/*
-        if (this->m_RotationAngle_Y <= -90.f)
-            this->m_RotationAngle_Y  = -90.f;
-        if (this->m_RotationAngle_Y >= +90.f)
-            this->m_RotationAngle_Y  = +90.f;
-
-        if (this->m_RotationAngle_Z <= -90.f)
-            this->m_RotationAngle_Z  = -90.f;
-        if (this->m_RotationAngle_Z >= +90.f)
-            this->m_RotationAngle_Z  = +90.f;
-*/
-        glm::vec3 cameraPos(0.f, 0.f, this->m_LookAtDistance);
-        cameraPos = glm::rotateY(cameraPos, this->m_RotationAngle_Z / 180.f * glm::pi<float>());
-        cameraPos = glm::rotateX(cameraPos, this->m_RotationAngle_Y / 180.f * glm::pi<float>());
+    case CameraType::ROTATION:{
+        glm::vec4 cameraPos(0,0,this->m_LookAtDistance,1);
+        glm::vec3 angles(cf::Convert::degree2radiant(this->m_RotationAngle_Y), cf::Convert::degree2radiant(this->m_RotationAngle_Z), 0.f);
+        glm::quat rot(angles);
+        cameraPos = glm::rotate(rot, cameraPos);
 
         glm::vec3 lookUpVector(0.f, 1.f, 0.f);
-        if (lookUpVector.x == 0.f && lookUpVector.z == 0.f)
-            lookUpVector.x  = lookUpVector.y / 100.f;
-
+        lookUpVector = glm::rotate(rot, lookUpVector);
         gluLookAt(cameraPos.x     , cameraPos.y     , cameraPos.z     ,
                   this->m_LookAt.x, this->m_LookAt.y, this->m_LookAt.z,
                   lookUpVector.x  , lookUpVector.y  , lookUpVector.z  );
