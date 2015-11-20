@@ -37,7 +37,7 @@ else()
 endif()
 
 _add_lib(glut GLUT_LIB)
-_add_cxxFlag(" -std=c++1y ")
+_add_cxxFlag(" -std=c++0x ")
 
 # find all .h and .hpp files
 FOREACH(dir ${directories_to_include})

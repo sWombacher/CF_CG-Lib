@@ -50,7 +50,7 @@ void LindenmayerSystem::read(const char* filename){
     this->m_StartAngle = std::stof(str);
 
 
-    auto readNext = [&str](auto& stream){
+    auto readNext = [&str](std::stringstream& stream){
         do{
             std::getline(stream, str, ' ');
         } while (!str.size());
