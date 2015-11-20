@@ -47,33 +47,6 @@ Window3D::~Window3D(){
 }
 
 
-
-
-/*
-int Window3D::startDrawing(){
-    // cap fps
-    using namespace std::chrono;
-    system_clock::time_point current = system_clock::now(), next;
-    constexpr float maxFPS = 60.0f;
-    constexpr int timePerFrameInMS = (1.f / maxFPS) * 1000.f;
-
-    while(true){
-        this->draw();
-        glutSwapBuffers();
-        glutPostRedisplay();
-        glFlush();
-
-        next = system_clock::now();
-        int numMilliseconds = duration_cast<milliseconds>(next - current).count();
-        if (numMilliseconds < timePerFrameInMS)
-            std::this_thread::sleep_for(milliseconds(timePerFrameInMS - numMilliseconds));
-
-        current = next;
-    }
-    return 0;
-}
-*/
-
 Window3D* windowPtr = nullptr;
 void myDrawingFunction(){
     if (!windowPtr)

@@ -6,8 +6,6 @@
 
 #include <vector>
 #include <string>
-#include <thread>
-#include <inttypes.h>
 #include <functional>
 
 #include "utils.h"
@@ -42,12 +40,11 @@ public:
     void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
 
 protected:
-    friend void myKeyboardCallbackFunction(unsigned char key, int x, int y);
     float   m_DistAdjustment = 1.f;
     float  m_AngleAdjustment = 1.f;
     float m_CameraAdjustment = 1.f;
 
-protected:
+private:
     friend void myKeyboardCallbackFunction(unsigned char key, int x, int y);
 
     std::function<void(unsigned char key, int x, int y)> m_AdditionalKeyboardCallback;
