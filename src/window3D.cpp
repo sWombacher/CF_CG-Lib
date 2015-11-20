@@ -112,7 +112,17 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
     case Window3D::CameraType::NONE:
         // nothing to do!
         break;
-    case Window3D::CameraType::ROTATION:
+    case Window3D::CameraType::ROTATION:{
+            glm::vec3 cameraPos(0.f, 0.f, windowPtr->m_LookAtDistance);
+            up = glm::vec3(0.f, 1.f, 0.f);
+
+            glm::vec3 angles(cf::Convert::degree2radiant(windowPtr->m_RotationAngle_Y), cf::Convert::degree2radiant(windowPtr->m_RotationAngle_Z), 0.f);
+            glm::quat rot(angles);
+
+            cameraPos = glm::rotate(rot, cameraPos);
+            up = glm::rotate(rot, up);
+            left = glm::cross(up, cameraPos);
+        }
         break;
     case Window3D::CameraType::STATIC_X_AXIS:
         left = glm::vec3(-1.f, 0.f, 0.f);
@@ -130,7 +140,7 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
         throw "Unknown camera type";
     }
 
-    // set left/up vectors to correct length
+    // adjust left/up vectors to correct length
     left = glm::normalize(left);
     left *= windowPtr->m_CameraAdjustment;
 
@@ -146,14 +156,12 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
         windowPtr->m_LookAt -= left; // go right
         break;
 
-
     case 's':
         windowPtr->m_LookAt += up; // go up
         break;
     case 'w':
         windowPtr->m_LookAt -= up; // go down
         break;
-
 
     case 'o':
         windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
@@ -162,14 +170,12 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
         windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
         break;
 
-
     case 'k':
         windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
         break;
     case 'l':
         windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
         break;
-
 
     case 'm':
         windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; //  incrase distance
