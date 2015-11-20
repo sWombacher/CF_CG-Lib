@@ -16,8 +16,6 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 
-#include "uint128_t.h"
-
 
 
 // enable output for vec2, vec3 & vec4
@@ -32,9 +30,6 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 
 namespace cf{
 
-
-/// TODO line endings
-
 struct Color;
 std::vector<Color> readPaletteFromFile(const char* filename);
 std::string readAntString(const char* filename);
@@ -42,11 +37,11 @@ std::string readAntString(const char* filename);
 struct Convert{
     template<typename T>
     static T radiant2degree(T radiantValue){
-        return radiantValue / glm::pi<T>() * 180.0;
+        return radiantValue / glm::pi<T>() * T(180.0);
     }
     template<typename T>
     static T degree2radiant(T degreeValue){
-        return degreeValue / 180.0 * glm::pi<T>();
+        return degreeValue / T(180.0) * glm::pi<T>();
     }
 };
 
