@@ -54,11 +54,16 @@ private:
 
 
 int main(int argc, char** argv){
+    // show camera usage
+    MyWindow::printCameraUsage();
+
+    // create window, set up camera
     MyWindow window(&argc, argv);
-    //window.setCamera(cf::Window3D::CameraType::STATIC_X_AXIS);
-    //window.setCamera(cf::Window3D::CameraType::STATIC_Y_AXIS);
-    //window.setCamera(cf::Window3D::CameraType::STATIC_Z_AXIS);
-    window.setCamera(cf::Window3D::CameraType::ROTATION);
+    //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS);
+    //window.setCamera(MyWindow::CameraType::STATIC_Y_AXIS);
+    //window.setCamera(MyWindow::CameraType::STATIC_Z_AXIS);
+    window.setCamera(MyWindow::CameraType::ROTATION);
+
     return window.startDrawing();
 }
 
