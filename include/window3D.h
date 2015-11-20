@@ -3,7 +3,7 @@
 #define _WINDOW_H_H_
 
 
-
+#include <GL/freeglut.h>
 #include <vector>
 #include <string>
 #include <functional>
@@ -22,7 +22,7 @@ public:
         NONE, ROTATION, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
     };
 
-    static void printCameraUsage();
+    static void showWindowUsage();
     void clear(const Color& color = Color(0, 0, 0));
 
     virtual void draw() = 0;
@@ -40,6 +40,9 @@ public:
 
     void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
 
+
+    void setMaxFPS(float maxFPS = 0.f); // value of 0 indicates "only draw after key-input"
+
 protected:
     float   m_DistAdjustment = 1.f;
     float  m_AngleAdjustment = 1.f;
@@ -50,10 +53,13 @@ protected:
     float m_LookAtDistance;
 
 private:
-    friend void myKeyboardCallbackFunction(unsigned char key, int x, int y);
+    friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
+    friend void _DrawingFunction();
+    void _adjustCamera();
+
+    float m_MaxFPS = 0.f;
 
     std::function<void(unsigned char key, int x, int y)> m_AdditionalKeyboardCallback;
-    void _adjustCamera();
     int m_Width;
     int m_Height;
 
@@ -62,7 +68,6 @@ private:
 
     int m_WindowID;
     CameraType m_CameraType;
-    const std::string m_Title;
 };
 }
 

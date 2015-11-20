@@ -3,24 +3,24 @@
 #include <stdexcept>
 #include <math.h>
 
-#include <GL/glut.h>
 #include <chrono>
 #include <thread>
 #include <glm/gtx/quaternion.hpp>
+
 
 
 namespace cf{
 
 
 Window3D::Window3D(int* argc, char** argv, int width, int height, const char* title)
-    : m_Title(title), m_Width(width), m_Height(height), m_WindowID(-1),
+    : m_Width(width), m_Height(height), m_WindowID(-1),
       m_LookAt(0.f, 0.f, 0.f), m_LookAtDistance(10.f), m_RotationAngle_Z(0.f), m_RotationAngle_Y(0.f)
 {
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);
     glutInitWindowSize(this->m_Width, this->m_Height);
 
-    this->m_WindowID = glutCreateWindow(this->m_Title.c_str());
+    this->m_WindowID = glutCreateWindow(title);
     glLoadIdentity();             // Reset
 
     // Set the viewport to cover the new window
@@ -34,11 +34,7 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
     // Compute aspect ratio of the new window
     GLfloat aspect = (GLfloat)this->m_Width / (GLfloat)this->m_Height;
     gluPerspective(45.0f, aspect, 0.1f, 1000.0f);
-    /*
-    gluLookAt(0, 0, 10,
-              0, 0, 0,
-              0, 1, 0);
-    */
+
     // set default camera
     this->setCamera(Window3D::CameraType::STATIC_Z_AXIS);
 }
@@ -46,8 +42,10 @@ Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
 }
 
-void Window3D::printCameraUsage(){
-    std::cout << "Camera usage:\n"
+void Window3D::showWindowUsage(){
+    std::cout << "Close window:\n"
+              << "esc-key\n\n"
+              << "Camera usage:\n"
               << "a/d: camera movement left/right\n"
               << "w/s: camera movement up/down\n"
               << "f/r: move camera closer/further away\n\n"
@@ -59,28 +57,28 @@ void Window3D::printCameraUsage(){
 
 
 Window3D* windowPtr = nullptr;
-void myDrawingFunction(){
+void _DrawingFunction(){
     if (!windowPtr)
         throw "Error: window ptr not set!";
-
-    //std::cout << "drawing" << std::endl;
-    using namespace std::chrono;
-    system_clock::time_point current = system_clock::now(), next;
-    constexpr float maxFPS = 60.0f;
-    constexpr int timePerFrameInMS = (1.f / maxFPS) * 1000.f;
 
     windowPtr->draw();
     glutSwapBuffers();
     glFlush();
 
-    next = system_clock::now();
-    int numMilliseconds = duration_cast<milliseconds>(next - current).count();
-    if (numMilliseconds < timePerFrameInMS)
-        std::this_thread::sleep_for(milliseconds(timePerFrameInMS - numMilliseconds));
+    if (windowPtr->m_MaxFPS){
+        using namespace std::chrono;
+        system_clock::time_point current = system_clock::now(), next;
 
-    glutTimerFunc(0, [](int v) { glutPostRedisplay(); }, 1);
+        int timePerFrameInMS = (1.f / windowPtr->m_MaxFPS) * 1000.f;
+        next = system_clock::now();
+        int numMilliseconds = duration_cast<milliseconds>(next - current).count();
+        if (numMilliseconds < timePerFrameInMS)
+            std::this_thread::sleep_for(milliseconds(timePerFrameInMS - numMilliseconds));
+
+        glutTimerFunc(0, [](int v) { glutPostRedisplay(); }, 1);
+    }
 }
-void myKeyboardCallbackFunction(unsigned char key, int x, int y){
+void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     if (!windowPtr)
         throw "Error: window ptr not set!";
 
@@ -129,51 +127,32 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
     up *= windowPtr->m_CameraAdjustment;
 
     switch (key){
-    case 'a':
-        windowPtr->m_LookAt += left; // go left
-        break;
-    case 'd':
-        windowPtr->m_LookAt -= left; // go right
-        break;
+    case 'a': windowPtr->m_LookAt += left; break;
+    case 'd': windowPtr->m_LookAt -= left; break;
 
-    case 'w':
-        windowPtr->m_LookAt += up; // go up
-        break;
-    case 's':
-        windowPtr->m_LookAt -= up; // go down
-        break;
+    case 'w': windowPtr->m_LookAt += up; break;
+    case 's': windowPtr->m_LookAt -= up; break;
 
-    case 'y':
-        windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
-        break;
-    case 'c':
-        windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
-        break;
+    case 'y': windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment; break;
+    case 'c': windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment; break;
 
-    case 'e':
-        windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
-        break;
-    case 'q':
-        windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
-        break;
+    case 'e': windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment; break;
+    case 'q': windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment; break;
 
-    case 'r':
-        windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; //  incrase distance
-        break;
-    case 'f':
-        windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment; // decrease distance
-        break;
+    case 'r': windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; break;
+    case 'f': windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment; break;
 
-    default:
-        break;
+    case 27 /*esc key*/: glutLeaveMainLoop(); break;
+    default: break;
     }
+    glutPostRedisplay();
     windowPtr->_adjustCamera();
 }
 
 int Window3D::startDrawing(){
     windowPtr = this;
-    glutKeyboardFunc(myKeyboardCallbackFunction);
-    glutDisplayFunc(myDrawingFunction);
+    glutKeyboardFunc(_KeyboardCallbackFunction);
+    glutDisplayFunc(_DrawingFunction);
     glutMainLoop();
     return 0; // never reached
 }
@@ -272,6 +251,15 @@ void Window3D::_adjustCamera(){
 
 void Window3D::setKeyboardCallbackFunction(std::function<void(unsigned char, int, int)> foo){
     this->m_AdditionalKeyboardCallback = foo;
+}
+
+void Window3D::setMaxFPS(float maxFPS){
+    if (maxFPS < 0.f)
+        this->m_MaxFPS = 0.f;
+    else if (maxFPS > 60.f)
+        this->m_MaxFPS = 60.f;
+    else
+        this->m_MaxFPS = maxFPS;
 }
 
 int Window3D::getWindowWidth() const {
