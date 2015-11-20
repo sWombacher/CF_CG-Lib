@@ -49,9 +49,6 @@ Window3D::~Window3D(){
 
 
 
-
-
-
 /*
 int Window3D::startDrawing(){
     // cap fps
@@ -82,10 +79,10 @@ void myDrawingFunction(){
     if (!windowPtr)
         throw "Error: window ptr not set!";
 
-    std::cout << "drawing" << std::endl;
+    //std::cout << "drawing" << std::endl;
     using namespace std::chrono;
     system_clock::time_point current = system_clock::now(), next;
-    constexpr float maxFPS = 1.0f;
+    constexpr float maxFPS = 60.0f;
     constexpr int timePerFrameInMS = (1.f / maxFPS) * 1000.f;
 
     windowPtr->draw();
@@ -120,20 +117,20 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
             glm::quat rot(angles);
 
             cameraPos = glm::rotate(rot, cameraPos);
-            up = glm::rotate(rot, up);
-            left = glm::cross(up, cameraPos);
+            up   = glm::rotate(rot, up);
+            left = glm::cross(cameraPos, up);
         }
         break;
     case Window3D::CameraType::STATIC_X_AXIS:
-        left = glm::vec3(-1.f, 0.f, 0.f);
+        left = glm::vec3( 0.f, 0.f, 1.f);
         up   = glm::vec3( 0.f, 1.f, 0.f);
         break;
     case Window3D::CameraType::STATIC_Y_AXIS:
-        left = glm::vec3(-1.f, 0.f, 0.f);
-        up   = glm::vec3( 0.f, 0.f, 1.f);
+        up   = glm::vec3(1.f, 0.f,  0.f);
+        left = glm::vec3(0.f, 0.f, -1.f);
         break;
     case Window3D::CameraType::STATIC_Z_AXIS:
-        left = glm::vec3(0.f, 0.f, -1.f);
+        left = glm::vec3(-1.f, 0.f, 0.f);
         up   = glm::vec3( 0.f, 1.f, 0.f);
         break;
     default:
@@ -147,6 +144,7 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
     up = glm::normalize(up);
     up *= windowPtr->m_CameraAdjustment;
 
+    std::cout << "key: " << key << std::endl;
 
     switch (key){
     case 'a':
@@ -156,37 +154,38 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
         windowPtr->m_LookAt -= left; // go right
         break;
 
-    case 's':
+    case 'w':
         windowPtr->m_LookAt += up; // go up
         break;
-    case 'w':
+    case 's':
         windowPtr->m_LookAt -= up; // go down
         break;
 
-    case 'o':
+    case 'y':
         windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
         break;
-    case 'p':
+    case 'c':
         windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
         break;
 
-    case 'k':
+    case 'q':
         windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
         break;
-    case 'l':
+    case 'e':
         windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
         break;
 
-    case 'm':
+    case 'r':
         windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; //  incrase distance
         break;
-    case 'n':
+    case 'f':
         windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment; // decrease distance
         break;
 
     default:
         break;
     }
+    windowPtr->_adjustCamera();
 }
 
 int Window3D::startDrawing(){
