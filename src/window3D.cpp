@@ -46,6 +46,17 @@ Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
 }
 
+void Window3D::printCameraUsage(){
+    std::cout << "Camera usage:\n"
+              << "a/d: camera movement left/right\n"
+              << "w/s: camera movement up/down\n"
+              << "f/r: move camera closer/further away\n\n"
+              << "Rotation-Type specific movements:\n"
+              << "q/e: rotation y-axis\n"
+              << "y/c: rotation z-axis\n"
+              << std::endl;
+}
+
 
 Window3D* windowPtr = nullptr;
 void myDrawingFunction(){
@@ -117,8 +128,6 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
     up = glm::normalize(up);
     up *= windowPtr->m_CameraAdjustment;
 
-    std::cout << "key: " << key << std::endl;
-
     switch (key){
     case 'a':
         windowPtr->m_LookAt += left; // go left
@@ -141,10 +150,10 @@ void myKeyboardCallbackFunction(unsigned char key, int x, int y){
         windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
         break;
 
-    case 'q':
+    case 'e':
         windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
         break;
-    case 'e':
+    case 'q':
         windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
         break;
 

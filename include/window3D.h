@@ -22,6 +22,7 @@ public:
         NONE, ROTATION, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
     };
 
+    static void printCameraUsage();
     void clear(const Color& color = Color(0, 0, 0));
 
     virtual void draw() = 0;
@@ -44,6 +45,10 @@ protected:
     float  m_AngleAdjustment = 1.f;
     float m_CameraAdjustment = 1.f;
 
+    // you may change this parameters to the center of your object / you own distance
+    glm::vec3 m_LookAt;
+    float m_LookAtDistance;
+
 private:
     friend void myKeyboardCallbackFunction(unsigned char key, int x, int y);
 
@@ -52,8 +57,6 @@ private:
     int m_Width;
     int m_Height;
 
-    glm::vec3 m_LookAt;
-    float m_LookAtDistance;
     float m_RotationAngle_Z;
     float m_RotationAngle_Y;
 
