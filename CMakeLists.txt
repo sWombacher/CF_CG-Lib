@@ -5,6 +5,11 @@ include(functions.cmake)
 include_directories(include)
 
 
+# set Debug/Release
+#set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
+
+
 find_package(OpenCV REQUIRED)
 
 
@@ -19,22 +24,20 @@ set(single_src_files
 )
 
 
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib)
 
-_add_lib(GL GL_LIB)
-_add_lib(glu GLU_LIB)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("Debug version")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    message("Release version")
+else()
+    message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
+endif()
+
 _add_lib(glut GLUT_LIB)
-_add_lib(glfw GLFW_LIB)
 _add_cxxFlag(" -std=c++1y ")
-
-
-# add OS specific include folders (can be found in include/<OS>)
-message(your\ system\ name\ is\ \"${CMAKE_SYSTEM_NAME}\"\ you\ may\ add\ OS\ specific\ code\ in\ <include/src>/${CMAKE_SYSTEM_NAME}\n\n)
-set(    sources_to_include      ${sources_to_include}       src/${CMAKE_SYSTEM_NAME})
-set(directories_to_include  ${directories_to_include}   include/${CMAKE_SYSTEM_NAME})
-
 
 # find all .h and .hpp files
 FOREACH(dir ${directories_to_include})
@@ -47,16 +50,12 @@ FOREACH(dir ${sources_to_include})
     file(GLOB SRC_FILES ${SRC_FILES} ${dir}/*.cpp ${dir}/*.c)
 ENDFOREACH()
 
-# add alle single sorce files (like main.cpp)
+# add alle single source files (like main.cpp)
 FOREACH(file ${single_src_files})
-    set(SRC_FILES ${SRC_FILES} ${file})
+    set(SINGLE_FILES ${SINGLE_FILES} ${file})
 ENDFOREACH()
 
 
-add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADERS_FILES})
-target_link_libraries(${PROJECT_NAME} ${GL_LIB})
-target_link_libraries(${PROJECT_NAME} ${GLU_LIB})
+add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADERS_FILES} ${SINGLE_FILES})
 target_link_libraries(${PROJECT_NAME} ${GLUT_LIB})
-target_link_libraries(${PROJECT_NAME} ${GLFW_LIB})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
-
