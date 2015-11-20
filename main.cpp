@@ -30,85 +30,13 @@ int main(int argc, char** argv) {
 }
 */
 
+
 #include "window3D.h"
-#include <chrono>
-#include <thread>
-#include <string>
-#include <mutex>
-#include <iostream>
-
-
-
 
 
 class MyWindow : public cf::Window3D {
 public:
     MyWindow(int* argc, char** argv):cf::Window3D(argc, argv){ }
-
-
-
-    void TEST_waitEvent(){
-        char c;
-        std::cin >> c;
-
-        switch (c){
-        case 'a':
-            --this->m_LookAt.x;
-            break;
-        case 'd':
-            ++this->m_LookAt.x;
-            break;
-
-
-        case 's':
-            --this->m_LookAt.y;
-            break;
-        case 'w':
-            ++this->m_LookAt.y;
-            break;
-
-
-        case 'r':
-            --this->m_LookAt.z;
-            break;
-        case 't':
-            ++this->m_LookAt.z;
-            break;
-
-
-        case 'o':
-            --this->m_RotationAngle_Y;
-            break;
-        case 'p':
-            ++this->m_RotationAngle_Y;
-            break;
-
-
-        case 'k':
-            --this->m_RotationAngle_Z;
-            break;
-        case 'l':
-            ++this->m_RotationAngle_Z;
-            break;
-
-
-        case 'm':
-            ++this->m_LookAtDistance;
-            break;
-        case 'n':
-            --this->m_LookAtDistance;
-            break;
-
-        default:
-            std::cout << "wrong key" << std::endl;
-            return;
-            break;
-        }
-        this->_adjustCamera();
-    }
-
-
-
 
     virtual void draw() override{
         this->clear();
@@ -117,35 +45,20 @@ public:
         float radiantValue = cf::Convert::degree2radiant(this->m_Angle);
         glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1));
         dir = dir * rotMat;
-        this->drawCylinder(glm::vec3(dir.x, dir.y, dir.z), glm::vec3(0, 0, 0));
-        //++this->m_Angle;
-
-        this->TEST_waitEvent();
-        /*
-        // TEST
-        static int counter = 0;
-        ++counter;
-        if (counter > 10){
-            ++this->m_RotationAngle_Z;
-            //++this->m_RotationAngle_Y;
-            this->_adjustCamera();
-            counter = 0;
-        }
-        // END TEST
-        */
+        this->drawCylinder(glm::vec3(dir.x, dir.y, dir.z), this->m_StartPos);
     }
 private:
     float m_Angle = 0;
+    glm::vec3 m_StartPos = glm::vec3(0.f, 0.f, 0.f);
 };
 
 
 int main(int argc, char** argv){
     MyWindow window(&argc, argv);
-    window.setCamera(cf::Window3D::CameraType::STATIC_X_AXIS);
+    //window.setCamera(cf::Window3D::CameraType::STATIC_X_AXIS);
     //window.setCamera(cf::Window3D::CameraType::STATIC_Y_AXIS);
     //window.setCamera(cf::Window3D::CameraType::STATIC_Z_AXIS);
-    //window.setCamera(cf::Window3D::CameraType::ROTATION);
+    window.setCamera(cf::Window3D::CameraType::ROTATION);
     return window.startDrawing();
 }
-
 
