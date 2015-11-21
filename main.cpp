@@ -28,10 +28,12 @@ int main(int argc, char** argv) {
 
 #include "window3D.h"
 
-
 class MyWindow : public cf::Window3D {
 public:
-    MyWindow(int* argc, char** argv):cf::Window3D(argc, argv){ }
+    MyWindow(int* argc, char** argv):cf::Window3D(argc, argv){
+        this->m_AngleAdjustment = 2.0f; // speed up  rotation
+        this->m_CameraAdjustment= 0.1f; // slow down camera movement
+    }
 
     virtual void draw() override{
         this->clear();
@@ -43,7 +45,11 @@ public:
         //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 1, 0)); // rotation around y-axis
         glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1)); // rotation around z-axis
         dir = dir * rotMat;
-        this->drawCylinder(glm::vec3(dir.x, dir.y, dir.z), this->m_StartPos);
+
+        glm::vec3 direction = glm::vec3(dir.x, dir.y, dir.z);
+        //cf::Color color = Color(255, 255, 255);
+        cf::Color color = cf::ColorType::ORANGE;
+        this->drawCylinder(direction, this->m_StartPos, this->m_Scale, color);
     }
     void myKeyboardCallback(unsigned char key, int x, int y){
         switch(key){
@@ -51,6 +57,9 @@ public:
         case 'l': this->m_StartPos.x++; break;
         case 'i': this->m_StartPos.y++; break;
         case 'k': this->m_StartPos.y--; break;
+
+        case 'n': this->m_Scale *= 1.5f; break;
+        case 'm': this->m_Scale /= 1.5f; break;
 
         case 'u': this->m_Angle++; break;
         case 'o': this->m_Angle--; break;
@@ -60,6 +69,7 @@ public:
 
 private:
     float m_Angle = 0;
+    float m_Scale = 1.f;
     glm::vec3 m_StartPos = glm::vec3(0.f, 0.f, 0.f);
 };
 
@@ -77,7 +87,7 @@ int main(int argc, char** argv){
 
     // get keyboard input
     window.setKeyboardCallbackFunction([&window](unsigned char key, int x, int y){
-        std::cout << "Key: " << key << " pressed at mouse position: " << x << ' ' << y << std::endl;
+        std::cout << "Key: " << key << "\t\tpressed at mouse position: " << x << ' ' << y << std::endl;
         window.myKeyboardCallback(key, x, y);
     });
 
