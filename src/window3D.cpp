@@ -12,10 +12,7 @@
 namespace cf{
 
 
-Window3D::Window3D(int* argc, char** argv, int width, int height, const char* title)
-    : m_Width(width), m_Height(height), m_WindowID(-1),
-      m_LookAt(0.f, 0.f, 0.f), m_LookAtDistance(10.f), m_RotationAngle_Z(0.f), m_RotationAngle_Y(0.f)
-{
+Window3D::Window3D(int* argc, char** argv, int width, int height, const char* title) : m_Width(width), m_Height(height) {
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);
     glutInitWindowSize(this->m_Width, this->m_Height);
@@ -34,9 +31,6 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
     // Compute aspect ratio of the new window
     GLfloat aspect = (GLfloat)this->m_Width / (GLfloat)this->m_Height;
     gluPerspective(45.0f, aspect, 0.1f, 1000.0f);
-
-    // set default camera
-    this->setCamera(Window3D::CameraType::STATIC_Z_AXIS);
 }
 Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
@@ -162,7 +156,7 @@ void Window3D::clear(const Color& color){
 }
 
 
-void Window3D::drawCylinder(const glm::vec3 &drawingDirection, const glm::vec3 &position, const Color color) const {
+void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float scale, const Color color) const {
     // set drawing angles
     const glm::vec3 startDir = glm::vec3(1.f, 0.f, 0.f);
     const glm::vec3 dir = glm::normalize(drawingDirection);
@@ -172,26 +166,21 @@ void Window3D::drawCylinder(const glm::vec3 &drawingDirection, const glm::vec3 &
     glPushMatrix();
     {
         static GLUquadricObj* obj = gluNewQuadric();
-        glColor3f(color.r, color.g, color.b);
+
+        glColor3f((float)color.r / 255.f, (float)color.g / 255.f, (float)color.b / 255.f);
         glTranslatef(position.x, position.y, position.z);
 
         float angle = glm::angle(startDir, dir) / glm::pi<float>() * 180.f;
         glRotatef(angle, rotVec.x, rotVec.y, rotVec.z);
 
-        float vx = drawingDirection.x;
-        float vy = drawingDirection.y;
-        float vz = drawingDirection.z;
-
-        float scale = sqrt(vx * vx + vy * vy + vz * vz);
-
         // start rotations
-        glRotatef(90, 0, 1, 0);
+        glRotatef(90, 0, 1.f, 0);
         glScalef(scale, scale, scale);
 
         glBegin(GL_POLYGON);
         {
             gluQuadricDrawStyle(obj, GLU_LINE);
-            gluCylinder(obj, 0.1, 0.1, 1, 10, 10);
+            gluCylinder(obj, 0.1, 0.1, glm::length(drawingDirection) / scale, 10, 10);
         }
         glEnd();
     }

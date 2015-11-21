@@ -36,7 +36,10 @@ public:
     void setCamera(CameraType type, glm::vec3 lookAt = glm::vec3(0, 0, 0), float distance = 10.f);
 
     void drawAxis(float length = 100.f) const;
-    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, const Color color = Color(255, 255, 255)) const;
+
+    // Note:
+    // scale does not affect the length
+    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float scale = 1.f, const Color color = Color(255, 255, 255)) const;
 
     void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
 
@@ -49,8 +52,8 @@ protected:
     float m_CameraAdjustment = 1.f;
 
     // you may change this parameters to the center of your object / you own distance
-    glm::vec3 m_LookAt;
-    float m_LookAtDistance;
+    glm::vec3 m_LookAt = glm::vec3(0.f, 0.f, 0.f);
+    float m_LookAtDistance = 10.f;
 
 private:
     friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
@@ -63,11 +66,11 @@ private:
     int m_Width;
     int m_Height;
 
-    float m_RotationAngle_Z;
-    float m_RotationAngle_Y;
+    float m_RotationAngle_Z = 0.f;
+    float m_RotationAngle_Y = 0.f;
 
-    int m_WindowID;
-    CameraType m_CameraType;
+    int m_WindowID = -1;
+    CameraType m_CameraType = Window3D::CameraType::NONE;
 };
 }
 
