@@ -16,7 +16,8 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 
-
+/// TODO:
+/// orb-files, dat-files
 
 // enable standard output for vec2, vec3 & vec4
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec);
@@ -67,8 +68,25 @@ struct Color{
     uint8_t g;
     uint8_t r;
 
+    Color  operator* (float value);
+    Color  operator/ (float value);
+
+    Color& operator*=(float value);
+    Color& operator/=(float value);
+
+    Color  operator+ (const Color& c);
+    Color  operator- (const Color& c);
+
+    Color& operator+=(const Color& c);
+    Color& operator-=(const Color& c);
+
+    friend cf::Color operator*(float value, const cf::Color& c);
+    friend cf::Color operator/(float value, const cf::Color& c);
+
     bool operator==(const Color& c);
     bool operator!=(const Color& c);
+
+    friend std::ostream& operator<<(std::ostream& os, const Color& c);
 
     static const Color MAGENTA;
     static const Color YELLOW;
@@ -82,10 +100,10 @@ struct Color{
     static const Color RED;
 };
 
-
 void removeWindowsSpecificCarriageReturn(std::string& str);
-
-
 }
+
+
+
 
 #endif

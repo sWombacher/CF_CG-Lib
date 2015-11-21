@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-
+#include <opencv2/opencv.hpp>
 
 
 
@@ -135,10 +135,86 @@ bool Color::operator==(const Color& c){
         return true;
     return false;
 }
+
 bool Color::operator!=(const Color& c){
     return !(*this == c);
 }
 
+
+std::ostream& operator<<(std::ostream &os, const Color& c){
+    os << "Red: " << c.r << "\tGreen: " << c.g << "\tBlue: " << c.b;
+    return os;
+}
+
+Color  Color::operator* (float value){
+    Color tmp = *this;
+    tmp *= value;
+    return tmp;
+}
+Color  Color::operator/ (float value){
+    Color tmp = *this;
+    tmp /= value;
+    return tmp;
+}
+
+Color  Color::operator+ (const Color& c){
+    Color toReturn = *this;
+    toReturn += c;
+    return toReturn;
+}
+Color  Color::operator- (const Color& c){
+    Color toReturn = *this;
+    toReturn -= c;
+    return toReturn;
+}
+
+Color& Color::operator*=(float value){
+    cv::Vec3b* e1 = reinterpret_cast<cv::Vec3b*>(this);
+    (*e1) *= value;
+    return *this;
+}
+Color& Color::operator/=(float value){
+    cv::Vec3b* e1 = reinterpret_cast<cv::Vec3b*>(this);
+    (*e1) /= value;
+    return *this;
+}
+
+Color& Color::operator+=(const Color& c){
+    int red   = int(this->r) + int(c.r);
+    int green = int(this->g) + int(c.g);
+    int blue  = int(this->b) + int(c.b);
+
+    if (red > 255)
+        red = 255;
+    if (green > 255)
+        green = 255;
+    if (blue > 255)
+        blue = 255;
+
+    this->r = red;
+    this->g = green;
+    this->b = blue;
+
+    return *this;
+}
+Color& Color::operator-=(const Color& c){
+    int red   = int(this->r) - int(c.r);
+    int green = int(this->g) - int(c.g);
+    int blue  = int(this->b) - int(c.b);
+
+    if (red < 0)
+        red = 0;
+    if (green < 0)
+        green = 0;
+    if (blue < 0)
+        blue = 0;
+
+    this->r = red;
+    this->g = green;
+    this->b = blue;
+
+    return *this;
+}
 
 const Color Color::MAGENTA = Color(128,   0, 255);
 const Color Color::YELLOW  = Color(255, 255,   0);
@@ -151,6 +227,18 @@ const Color Color::CYAN    = Color(  0, 255, 255);
 const Color Color::PINK    = Color(255,   0, 255);
 const Color Color::RED     = Color(255,   0,   0);
 
+
+
+cf::Color operator* (float value, const cf::Color& c){
+    cf::Color tmp = c;
+    tmp *= value;
+    return tmp;
+}
+cf::Color operator/ (float value, const cf::Color& c){
+    cf::Color tmp = c;
+    tmp /= value;
+    return tmp;
+}
 
 
 
@@ -192,3 +280,4 @@ float degree2radiant(float degreeValue){
 
 
 }
+

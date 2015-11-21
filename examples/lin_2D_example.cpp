@@ -32,8 +32,6 @@ int main(int argc, char** argv) {
         std::cout << *prod << std::endl;
     else
         std::cout << "File does not have production to: " << symbol << std::endl;
-    getchar();
-
 
     // print all productions
     std::cout << std::endl << std::endl << "All productions:" << std::endl << std::endl;

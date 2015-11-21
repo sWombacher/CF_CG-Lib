@@ -5,38 +5,58 @@
 
 int main(int argc, char** argv) {
 
-    cf::Window2D w(800,600);
+    cf::Window2D window(800,600);
 
-    for (int y = 0; y < w.getImageHeight(); ++y){
-        for (int x = 0; x < w.getImageWidth() / 2;  ++x)
-            w.setColor(x, y, cf::Color::ORANGE);
-
-        for (int x = w.getImageWidth() / 2; x < w.getImageWidth();  ++x)
-            w.setColor(x, y, cf::Color::WHITE);
+    // init image colors
+    for (int y = 0; y < window.getImageHeight(); ++y){
+    for (int x = 0; x < window.getImageWidth() ; ++x){
+        window.setColor(x, y, cf::Color::ORANGE);
+    }
     }
     float x, y;
-    w.show();
+    window.show();
 
+    std::cout << "Mouse position - standard intervall" << std::endl;
     for (int i = 0; i < 3; ++i){
         // waitMouseInput uses floating point values, this is required for exchanging intervalls
-        w.waitMouseInput(x, y);
+        window.waitMouseInput(x, y);
+        window.drawCircle(cf::Point(x, y), 2, 2, cf::Color::BLACK);
         std::cout << "x: " << x << "\ty: " << y <<std::endl;
+        window.show();
     }
 
     std::cout << std::fixed << std::setprecision(3); // set cout to use 3 post dot digits
-    w.setNewIntervall(cf::Intervall(0.f, 1.f), cf::Intervall(10.f, 100.f));
-    for (int i = 0; i < 6; ++i){
-        if (i == 3)
-            w.setInvertYAxis(false); // invert y-values, top to bottom
-
+    std::cout << "\nMouse position - changed intervall" << std::endl;
+    window.setNewIntervall(cf::Intervall(0.f, 1.f), cf::Intervall(10.f, 100.f));
+    cf::Point firstPoint(0, 0);
+    for (int i = 0; i < 2; ++i){
         // waitMouseInput uses floating point values, this is required for exchanging intervalls
-        w.waitMouseInput(x, y);
+        window.waitMouseInput(x, y);
         std::cout << "x: " << x << "\ty: " << y <<std::endl;
+        if (i == 0)
+            firstPoint = cf::Point(x, y);
+        else
+            window.drawLine(firstPoint, cf::Point(x, y), 2, cf::Color(255, 255, 255));
+        window.show();
     }
 
 
+    std::cout << "\nMouse position - changed intervall & inverted y-values" << std::endl;
+    window.setInvertYAxis(true); // invert y-values (bottom line = intervall minimum)
+    for (int i = 0; i < 2; ++i){
+        // waitMouseInput uses floating point values, this is required for exchanging intervalls
+        window.waitMouseInput(x, y);
+        std::cout << "x: " << x << "\ty: " << y <<std::endl;
+        if (i == 0)
+            firstPoint = cf::Point(x, y);
+        else
+            window.drawRectangle(firstPoint, cf::Point(x, y), 2, cf::Color::GREEN);
+        window.show();
+    }
+
+    std::cout << "\nKey input test" << std::endl;
     for (int i = 0; i < 3; ++i){
-        unsigned char key = w.waitKey(0);
+        unsigned char key = window.waitKey(0);
         if (key == 27 /*esc-key*/){
             std::cout << "Esc-Key pressed, closing program" << std::endl;
             break;
@@ -46,6 +66,5 @@ int main(int argc, char** argv) {
         else
             std::cout << "Key: " << key << std::endl;
     }
-
     return 0;
 }

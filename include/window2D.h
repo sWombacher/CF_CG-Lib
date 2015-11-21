@@ -27,7 +27,7 @@ public:
     void setInvertYAxis(bool invert);
     bool getInvertYAxis() const;
 
-    void  setColor(float x, float y, const Color& color);
+    void   setColor(float x, float y, const Color& color);
     Color& getColor(float x, float y);
 
     void drawCircle   (cf::Point point ,      uint radius, int lineWidth, const cf::Color& color);
@@ -39,11 +39,14 @@ public:
     void  resetIntervall();
 
 
+    void saveImage(const char* filename) const;
+
+
     int getImageWidth() const;
     int getImageHeight()const;
     cv::Mat& getImage();
 
-protected:
+private:
     template<typename T>
     void _correctYValue(T& y) const;
 
@@ -63,12 +66,11 @@ protected:
     cf::Intervall m_IntervallY;
 
     float m_MouseCallBackStorage[2];
-
-
     bool m_IntervallChanged = false;
 };
 
 
+// Note: cv::Point only alows int positions NOT floatingpoint
 struct Point{
     Point(float val_x, float val_y):x(val_x), y(val_y){}
     float x;
