@@ -1,6 +1,6 @@
 
-#ifndef _WINDOW_H_H_
-#define _WINDOW_H_H_
+#ifndef _WINDOW_3D_H_H_
+#define _WINDOW_3D_H_H_
 
 
 #include <GL/freeglut.h>
@@ -16,7 +16,7 @@ namespace cf{
 class Window3D{
 public:
     Window3D(int* argc, char** argv, int width = 800, int height = 600, const char* title = "chaos and fractals");
-    ~Window3D();
+    virtual ~Window3D();
 
     enum class CameraType{
         NONE, ROTATION, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
@@ -27,7 +27,6 @@ public:
 
     virtual void draw() = 0;
 
-    // this function does NOT return!
     int startDrawing();
 
     int getWindowWidth()  const;
@@ -39,11 +38,9 @@ public:
 
     // Note:
     // scale does not affect the length
-    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float scale = 1.f, const Color color = Color(255, 255, 255)) const;
+    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color color = Color(255, 255, 255)) const;
 
     void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
-
-
     void setMaxFPS(float maxFPS = 0.f); // value of 0 indicates "only draw after key-input"
 
 protected:
@@ -58,7 +55,7 @@ protected:
 private:
     friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
     friend void _DrawingFunction();
-    void _adjustCamera();
+    void _AdjustCamera();
 
     float m_MaxFPS = 0.f;
 
@@ -70,7 +67,7 @@ private:
     float m_RotationAngle_Y = 0.f;
 
     int m_WindowID = -1;
-    CameraType m_CameraType = Window3D::CameraType::NONE;
+    CameraType m_CameraType = Window3D::CameraType::ROTATION;
 };
 }
 

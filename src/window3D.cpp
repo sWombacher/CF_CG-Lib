@@ -1,7 +1,5 @@
 
 #include "window3D.h"
-#include <stdexcept>
-#include <math.h>
 
 #include <chrono>
 #include <thread>
@@ -140,7 +138,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     default: break;
     }
     glutPostRedisplay();
-    windowPtr->_adjustCamera();
+    windowPtr->_AdjustCamera();
 }
 
 int Window3D::startDrawing(){
@@ -156,7 +154,7 @@ void Window3D::clear(const Color& color){
 }
 
 
-void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float scale, const Color color) const {
+void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter, const Color color) const {
     // set drawing angles
     const glm::vec3 startDir = glm::vec3(1.f, 0.f, 0.f);
     const glm::vec3 dir = glm::normalize(drawingDirection);
@@ -175,19 +173,19 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
 
         // start rotations
         glRotatef(90, 0, 1.f, 0);
-        glScalef(scale, scale, scale);
+        glScalef(diameter, diameter, diameter);
 
         glBegin(GL_POLYGON);
         {
             gluQuadricDrawStyle(obj, GLU_LINE);
-            gluCylinder(obj, 0.1, 0.1, glm::length(drawingDirection) / scale, 10, 10);
+            gluCylinder(obj, 0.1, 0.1, glm::length(drawingDirection) / diameter, 10, 10);
         }
         glEnd();
     }
     glPopMatrix();
 }
 
-void Window3D::_adjustCamera(){
+void Window3D::_AdjustCamera(){
     glLoadIdentity();             // Reset
 
     // Compute aspect ratio of the new window
@@ -263,7 +261,7 @@ void Window3D::setCamera(Window3D::CameraType type, glm::vec3 lookAt, float dist
     this->m_CameraType     = type;
     this->m_LookAt         = lookAt;
     this->m_LookAtDistance = distance;
-    this->_adjustCamera();
+    this->_AdjustCamera();
 }
 
 void Window3D::drawAxis(float len) const{

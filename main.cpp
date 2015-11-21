@@ -25,7 +25,6 @@ int main(int argc, char** argv) {
 }
 */
 
-
 #include "window3D.h"
 
 class MyWindow : public cf::Window3D {
@@ -34,7 +33,7 @@ public:
         this->m_AngleAdjustment = 2.0f; // speed up  rotation
         this->m_CameraAdjustment= 0.1f; // slow down camera movement
     }
-
+    virtual ~MyWindow() = default;
     virtual void draw() override{
         this->clear();
         this->drawAxis(2.f);
@@ -47,9 +46,10 @@ public:
         dir = dir * rotMat;
 
         glm::vec3 direction = glm::vec3(dir.x, dir.y, dir.z);
+
         //cf::Color color = Color(255, 255, 255);
         cf::Color color = cf::ColorType::ORANGE;
-        this->drawCylinder(direction, this->m_StartPos, this->m_Scale, color);
+        this->drawCylinder(direction, this->m_StartPos, this->m_Diameter, color);
     }
     void myKeyboardCallback(unsigned char key, int x, int y){
         switch(key){
@@ -58,8 +58,8 @@ public:
         case 'i': this->m_StartPos.y++; break;
         case 'k': this->m_StartPos.y--; break;
 
-        case 'n': this->m_Scale *= 1.5f; break;
-        case 'm': this->m_Scale /= 1.5f; break;
+        case 'n': this->m_Diameter *= 1.5f; break;
+        case 'm': this->m_Diameter /= 1.5f; break;
 
         case 'u': this->m_Angle++; break;
         case 'o': this->m_Angle--; break;
@@ -68,8 +68,8 @@ public:
     }
 
 private:
-    float m_Angle = 0;
-    float m_Scale = 1.f;
+    float m_Angle = 0.f;
+    float m_Diameter = 1.f;
     glm::vec3 m_StartPos = glm::vec3(0.f, 0.f, 0.f);
 };
 
@@ -83,18 +83,16 @@ int main(int argc, char** argv){
     //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Y_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Z_AXIS);
-    window.setCamera(MyWindow::CameraType::ROTATION);
+    window.setCamera(MyWindow::CameraType::ROTATION); // Rotation is the default, you propably want to use this
 
     // get keyboard input
     window.setKeyboardCallbackFunction([&window](unsigned char key, int x, int y){
-        std::cout << "Key: " << key << "\t\tpressed at mouse position: " << x << ' ' << y << std::endl;
+        std::cout << "Key: " << key << "\t\tpressed at mouse position: " << x << ' ' << y << "      \r" << std::flush;
         window.myKeyboardCallback(key, x, y);
     });
 
     // if you want to draw all the time
-    // the default is to draw only after each key-input
+    // default: draw after each key-input
     //window.setMaxFPS(60.f);
-    return window.startDrawing();
+    return window.startDrawing(); // function returns when the "esc-key" is pressed
 }
-
-
