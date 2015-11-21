@@ -66,6 +66,7 @@ struct Intervall{
 };
 
 
+
 struct Color{
     Color(int red = 0, int green = 0, int blue = 0) : r(red), g(green), b(blue){};
 
@@ -79,7 +80,22 @@ struct Color{
     bool operator!=(const Color& c);
 };
 
+struct ColorType{
+    static Color MAGENTA;
+    static Color YELLOW;
+    static Color ORANGE;
+    static Color WHITE;
+    static Color BLACK;
+    static Color GREEN;
+    static Color BLUE;
+    static Color CYAN;
+    static Color PINK;
+    static Color RED;
+};
+
+
 void removeWindowsSpecificCarriageReturn(std::string& str);
+
 
 }
 

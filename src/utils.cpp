@@ -139,6 +139,21 @@ bool Color::operator!=(const Color& c){
     return !(*this == c);
 }
 
+
+Color ColorType::MAGENTA = Color(128,   0, 255);
+Color ColorType::YELLOW  = Color(255, 255,   0);
+Color ColorType::ORANGE  = Color(255, 128,   0);
+Color ColorType::WHITE   = Color(255, 255, 255);
+Color ColorType::BLACK   = Color(  0,   0,   0);
+Color ColorType::GREEN   = Color(  0, 255,   0);
+Color ColorType::BLUE    = Color(  0,   0, 255);
+Color ColorType::CYAN    = Color(  0, 255, 255);
+Color ColorType::PINK    = Color(255,   0, 255);
+Color ColorType::RED     = Color(255,   0,   0);
+
+
+
+
 void removeWindowsSpecificCarriageReturn(std::string& str){
     if (!str.size())
         return;
