@@ -12,15 +12,14 @@ void IteratedFunctionSystem::read(const char* fiilename){
     std::fstream input(fiilename, std::fstream::in);
     std::string str;
 
-    std::getline(input, str); // name
-    {
-        removeWindowsSpecificCarriageReturn(str);
-        std::size_t nameStartposition = str.rfind('/');
-        if (nameStartposition != std::string::npos)
-            this->m_Name = str.substr(nameStartposition + 1);
-    }
+    std::getline(input, str);
 
-    std::getline(input, str); // num transformations
+    // name
+    removeWindowsSpecificCarriageReturn(str);
+    this->m_Name = str.substr(str.rfind(' ') + 1);
+
+    // num transformations
+    std::getline(input, str);
     removeWindowsSpecificCarriageReturn(str);
 
     int num_transformations = std::stoi(str);

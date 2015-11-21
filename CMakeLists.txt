@@ -21,9 +21,9 @@ set(sources_to_include
 )
 
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -37,28 +37,32 @@ endif()
 _add_lib(glut GLUT_LIB)
 _add_cxxFlag(" -std=c++0x ")
 
+
 # find all .h and .hpp files
-FOREACH(dir ${directories_to_include})
-    INCLUDE_DIRECTORIES(${dir})
+foreach(dir ${directories_to_include})
+    include_directories(${dir})
     file(GLOB HEADERS_FILES ${HEADERS_FILES} ${dir}/*.h ${dir}/*.hpp)
-ENDFOREACH()
+endforeach()
 
 # find all .cpp files
-FOREACH(dir ${sources_to_include})
+foreach(dir ${sources_to_include})
     file(GLOB SRC_FILES ${SRC_FILES} ${dir}/*.cpp ${dir}/*.c)
-ENDFOREACH()
+endforeach()
 
 
 add_library(${PROJECT_NAME} ${SRC_FILES} ${HEADERS_FILES})
 
 # add all example programs
 file(GLOB examples ${CMAKE_CURRENT_LIST_DIR}/examples/*.cpp)
+file(GLOB myLib ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/*)
+
 foreach(example ${examples})
     # get file name without its path or extenstion
     get_filename_component(name ${example} NAME_WE)
 
-    add_executable(${name} ${example} ${SRC_FILES} ${HEADERS_FILES})
+    add_executable(${name} ${example} ${HEADERS_FILES})
     target_link_libraries(${name} ${GLUT_LIB})
     target_link_libraries(${name} ${OpenCV_LIBS})
+    target_link_libraries(${name} ${myLib})
 endforeach()
 

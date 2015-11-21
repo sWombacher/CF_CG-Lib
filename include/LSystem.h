@@ -19,7 +19,6 @@ namespace cf{
 class LindenmayerSystem{
 
 public:
-
     void read(const char* filename);
 
     const std::string& getName () const;

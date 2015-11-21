@@ -28,7 +28,7 @@ public:
     bool getInvertYAxis() const;
 
     void  setColor(float x, float y, const Color& color);
-    Color getColor(float x, float y) const;
+    Color& getColor(float x, float y);
 
     void drawCircle   (cf::Point point ,      uint radius, int lineWidth, const cf::Color& color);
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
@@ -63,6 +63,9 @@ protected:
     cf::Intervall m_IntervallY;
 
     float m_MouseCallBackStorage[2];
+
+
+    bool m_IntervallChanged = false;
 };
 
 

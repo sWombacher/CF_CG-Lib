@@ -23,7 +23,7 @@ public:
     };
 
     static void showWindowUsage();
-    void clear(const Color& color = ColorType::BLACK);
+    void clear(const Color& color = Color::BLACK);
 
     virtual void draw() = 0;
 
@@ -38,7 +38,7 @@ public:
 
     // Note:
     // scale does not affect the length
-    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color color = ColorType::WHITE) const;
+    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color color = Color::WHITE) const;
 
     void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
     void setMaxFPS(float maxFPS = 0.f); // value of 0 indicates "only draw after key-input"

@@ -12,13 +12,13 @@ int main(int argc, char** argv) {
     cf::IteratedFunctionSystem ifs; // alternative:    cf::IFS ifs;
     ifs.read(argv[1]);
 
-
-    std::cout << "Name: "               << ifs.getName() << '\n'
-              << "Num transformation: " << ifs.getNumTransformations() << '\n'
-              << "Intervall X min: "    << ifs.getRangeX().min << '\n'
-              << "Intervall X max: "    << ifs.getRangeX().max << '\n'
-              << "Intervall Y min: "    << ifs.getRangeY().min << '\n'
-              << "Intervall Y max: "    << ifs.getRangeY().max << '\n'
+    std::string align = "\r\t\t\t: ";
+    std::cout << "Name"               << align << ifs.getName()               << '\n'
+              << "Num transformation" << align << ifs.getNumTransformations() << '\n'
+              << "Intervall X min"    << align << ifs.getRangeX().min         << '\n'
+              << "Intervall X max"    << align << ifs.getRangeX().max         << '\n'
+              << "Intervall Y min"    << align << ifs.getRangeY().min         << '\n'
+              << "Intervall Y max"    << align << ifs.getRangeY().max         << '\n'
               << "\n\n" << std::endl;
 
     for (int i = 0; i < ifs.getNumTransformations(); ++i)

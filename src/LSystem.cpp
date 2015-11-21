@@ -13,16 +13,20 @@ namespace cf{
 
 void LindenmayerSystem::read(const char* filename){
     std::fstream input(filename, std::fstream::in);
+    if (!input)
+        throw "File not found in function: \"LindenmayerSystem::read\"";
+
     std::string str;
 
     // read filename
     std::getline(input, str);
     removeWindowsSpecificCarriageReturn(str);
-    this->m_Name = str.substr(str.rfind(' '));
+    this->m_Name = str.substr(str.rfind(' ') + 1);
 
     // read axiom
-    std::getline(input, this->m_Axiom);
-    removeWindowsSpecificCarriageReturn(this->m_Axiom);
+    std::getline(input, str);
+    removeWindowsSpecificCarriageReturn(str);
+    this->m_Axiom = str;
 
     // read num productions
     std::getline(input, str);
@@ -35,8 +39,6 @@ void LindenmayerSystem::read(const char* filename){
         char symbol = str[0];
         str = str.substr(str.find('>') + 1);
         //str = str.substr(0, str.size() -1);
-
-        /// TODO line endings
 
         this->m_Productions.push_back(std::make_pair(symbol, str));
     }
@@ -53,6 +55,7 @@ void LindenmayerSystem::read(const char* filename){
     auto readNext = [&str](std::stringstream& stream){
         do{
             std::getline(stream, str, ' ');
+            removeWindowsSpecificCarriageReturn(str);
         } while (!str.size());
     };
 
@@ -83,9 +86,9 @@ void LindenmayerSystem::read(const char* filename){
     std::getline(input, str);
     removeWindowsSpecificCarriageReturn(str);
 
-    if (str[str.size() - 2] == '0')
+    if (str[str.size() - 1] == '0')
         this->m_ClearWindowEachTime = false;
-    else if (str[str.size() - 2] == '1')
+    else if (str[str.size() - 1] == '1')
         this->m_ClearWindowEachTime = true;
     else
         throw std::runtime_error("no flag (not) to clear window");

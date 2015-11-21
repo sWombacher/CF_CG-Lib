@@ -5,21 +5,21 @@
 int main(int argc, char** argv) {
 
     if (argc < 2){
-        std::cout << "Please provide a .ifs file" << std::endl;
+        std::cout << "Please provide a .lin file" << std::endl;
         return -1;
     }
 
     cf::LindenmayerSystem ls;   // alternative:     cf::LSystem ls;
-
     ls.read(argv[1]);
 
-    std::cout << "Name : " << ls.getName()  << '\n'
-              << "Axiom: " << ls.getAxiom() << '\n'
-              << "Number of productions: " << ls.getNumProductions() << '\n'
-              << "Clear window each time?: " << (ls.clearWindowEachTime() ? "yes" : "no") << '\n'
-              << "Start angle: " << ls.getStartAngle() << '\n'
-              << "Adjustment angle: " << ls.getAdjustmentAngel() << '\n'
-              << "Scale: " << ls.getScale() << std::endl;
+    std::string align = "\r\t\t\t: ";
+    std::cout << "Name"                    << align << ls.getName()                              << '\n'
+              << "Axiom"                   << align << ls.getAxiom()                             << '\n'
+              << "Number of productions"   << align << ls.getNumProductions()                    << '\n'
+              << "Clear window each time?" << align << (ls.clearWindowEachTime() ? "yes" : "no") << '\n'
+              << "Start angle"             << align << ls.getStartAngle()                        << "°\n"
+              << "Adjustment angle"        << align << ls.getAdjustmentAngel()                   << '\n'
+              << "Scale"                   << align << ls.getScale()                             << std::endl;
 
 
     // most of the files provide F as a symbol
@@ -32,6 +32,13 @@ int main(int argc, char** argv) {
         std::cout << *prod << std::endl;
     else
         std::cout << "File does not have production to: " << symbol << std::endl;
+    getchar();
+
+
+    // print all productions
+    std::cout << std::endl << std::endl << "All productions:" << std::endl << std::endl;
+    for (auto& e: ls.getAllProductions())
+        std::cout << "Symbol: " << e.first << "\nProduction: " << e.second << std::endl << std::endl;
 
     getchar();
     return 0;

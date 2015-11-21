@@ -69,9 +69,7 @@ struct Color{
 
     bool operator==(const Color& c);
     bool operator!=(const Color& c);
-};
 
-struct ColorType{
     static const Color MAGENTA;
     static const Color YELLOW;
     static const Color ORANGE;

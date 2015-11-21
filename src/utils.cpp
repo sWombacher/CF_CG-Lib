@@ -140,16 +140,16 @@ bool Color::operator!=(const Color& c){
 }
 
 
-const Color ColorType::MAGENTA = Color(128,   0, 255);
-const Color ColorType::YELLOW  = Color(255, 255,   0);
-const Color ColorType::ORANGE  = Color(255, 128,   0);
-const Color ColorType::WHITE   = Color(255, 255, 255);
-const Color ColorType::BLACK   = Color(  0,   0,   0);
-const Color ColorType::GREEN   = Color(  0, 255,   0);
-const Color ColorType::BLUE    = Color(  0,   0, 255);
-const Color ColorType::CYAN    = Color(  0, 255, 255);
-const Color ColorType::PINK    = Color(255,   0, 255);
-const Color ColorType::RED     = Color(255,   0,   0);
+const Color Color::MAGENTA = Color(128,   0, 255);
+const Color Color::YELLOW  = Color(255, 255,   0);
+const Color Color::ORANGE  = Color(255, 128,   0);
+const Color Color::WHITE   = Color(255, 255, 255);
+const Color Color::BLACK   = Color(  0,   0,   0);
+const Color Color::GREEN   = Color(  0, 255,   0);
+const Color Color::BLUE    = Color(  0,   0, 255);
+const Color Color::CYAN    = Color(  0, 255, 255);
+const Color Color::PINK    = Color(255,   0, 255);
+const Color Color::RED     = Color(255,   0,   0);
 
 
 
