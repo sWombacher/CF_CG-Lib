@@ -14,7 +14,6 @@ int main(int argc, char** argv){
     Image img2(argv[2]);
 
     // blend image2 above image1
-
     int minWidth = img1.getImageWidth();
     if (minWidth > img2.getImageWidth())
         minWidth = img2.getImageWidth();
