@@ -48,7 +48,7 @@ namespace Direction{
 
 
 struct Intervall{
-    Intervall(float _min, float _max):min(_min), max(_max){};
+    Intervall(float _min = 0, float _max = 0):min(_min), max(_max){};
     float min;
     float max;
 

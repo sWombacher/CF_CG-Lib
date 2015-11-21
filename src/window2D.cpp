@@ -29,9 +29,10 @@ void Window2D::show() const{
         cv::resize(this->m_Image, tmp, cv::Size(this->m_Image.cols * this->m_WindowScale, this->m_Image.rows * this->m_WindowScale));
         cv::imshow(this->m_WindowName, tmp);
     }
+    cv::waitKey(1);
 }
-void Window2D::waitKey() const{
-    cv::waitKey();
+unsigned char Window2D::waitKey(int delay) const{
+    return cv::waitKey(delay);
 }
 
 

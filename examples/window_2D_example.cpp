@@ -1,37 +1,36 @@
 
 
-#include "window.h"
+#include "window2D.h"
 
 
 int main(int argc, char** argv) {
 
     cf::Window2D w;
-    w.init(&argc, argv);
 
-    for (int y = 0; y < w.getWindowHeight(); ++y){
-        for (int x = 0; x < w.getWindowWidth() / 2;  ++x)
-            w.setPixelColor(x, y, cf::Color(255, 255, 255));
+    for (int y = 0; y < w.getImageHeight(); ++y){
+        for (int x = 0; x < w.getImageWidth() / 2;  ++x)
+            w.setColor(x, y, cf::Color(255, 255, 255));
 
-        for (int x = w.getWindowWidth() / 2; x < w.getWindowWidth();  ++x)
-            w.setPixelColor(x, y, cf::Color(255, 0, 0));
+        for (int x = w.getImageWidth() / 2; x < w.getImageWidth();  ++x)
+            w.setColor(x, y, cf::Color(255, 0, 0));
     }
-    w.draw();
-    getchar();
+    w.show();
+    w.waitKey();
 
     const int step_count = 10;
-    while(w.getPixelColor(0, 0) == cf::Color(255, 255, 255)){
+    while(w.getColor(0, 0) == cf::Color(255, 255, 255)){
 
         for (int i = 0; i < step_count; ++i){
-            for (int y = 0; y < w.getWindowHeight(); ++y){
-            for (int x = 0; x < w.getWindowWidth() - 1;  ++x){
-                cf::Color col = w.getPixelColor(x + 1, y);
-                w.setPixelColor(x, y, col);
+            for (int y = 0; y < w.getImageHeight(); ++y){
+            for (int x = 0; x < w.getImageWidth() - 1;  ++x){
+                cf::Color col = w.getColor(x + 1, y);
+                w.setColor(x, y, col);
             }
             }
         }
 
-        w.draw();
-        getchar();
+        w.show();
+        w.waitKey();
     }
 
 

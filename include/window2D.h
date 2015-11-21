@@ -12,12 +12,12 @@ struct Point;
 
 class Window2D{
 public:
-    Window2D(uint width, uint height, const char* windowName = "Chaos and Fractals");
+    Window2D(uint width = 800, uint height = 600, const char* windowName = "Chaos and Fractals");
     Window2D(const char* filename);
     ~Window2D();
 
     void show() const;
-    void waitKey() const;
+    unsigned char waitKey(int delay = 0) const;
 
     void waitMouseInput(float& x, float& y);
 

@@ -12,6 +12,7 @@ namespace cf{
 class IteratedFunctionSystem{
 
 public:
+    IteratedFunctionSystem() = default;
     void read(const char* fiilename);
 
     std::size_t getNumTransformations() const;
