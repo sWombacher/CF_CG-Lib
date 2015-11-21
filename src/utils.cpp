@@ -140,16 +140,16 @@ bool Color::operator!=(const Color& c){
 }
 
 
-Color ColorType::MAGENTA = Color(128,   0, 255);
-Color ColorType::YELLOW  = Color(255, 255,   0);
-Color ColorType::ORANGE  = Color(255, 128,   0);
-Color ColorType::WHITE   = Color(255, 255, 255);
-Color ColorType::BLACK   = Color(  0,   0,   0);
-Color ColorType::GREEN   = Color(  0, 255,   0);
-Color ColorType::BLUE    = Color(  0,   0, 255);
-Color ColorType::CYAN    = Color(  0, 255, 255);
-Color ColorType::PINK    = Color(255,   0, 255);
-Color ColorType::RED     = Color(255,   0,   0);
+const Color ColorType::MAGENTA = Color(128,   0, 255);
+const Color ColorType::YELLOW  = Color(255, 255,   0);
+const Color ColorType::ORANGE  = Color(255, 128,   0);
+const Color ColorType::WHITE   = Color(255, 255, 255);
+const Color ColorType::BLACK   = Color(  0,   0,   0);
+const Color ColorType::GREEN   = Color(  0, 255,   0);
+const Color ColorType::BLUE    = Color(  0,   0, 255);
+const Color ColorType::CYAN    = Color(  0, 255, 255);
+const Color ColorType::PINK    = Color(255,   0, 255);
+const Color ColorType::RED     = Color(255,   0,   0);
 
 
 
@@ -180,6 +180,14 @@ void removeWindowsSpecificCarriageReturn(std::string& str){
         }
         str = std::move(toReturn);
     }
+}
+
+float radiant2degree(float radiantValue){
+    return radiantValue / glm::pi<float>() * 180.f;
+}
+
+float degree2radiant(float degreeValue){
+    return degreeValue / 180.f * glm::pi<float>();
 }
 
 

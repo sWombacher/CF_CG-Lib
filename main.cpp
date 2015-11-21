@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
 }
 */
 
+#include "utils.h"
 #include "window3D.h"
 
 class MyWindow : public cf::Window3D {
@@ -38,7 +39,7 @@ public:
         this->clear();
         this->drawAxis(2.f);
         glm::vec4 dir(1, 0, 0, 1);
-        float radiantValue = cf::Convert::degree2radiant(this->m_Angle);
+        float radiantValue = cf::degree2radiant(this->m_Angle);
 
         //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(1, 0, 0)); // rotation around x-axis
         //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 1, 0)); // rotation around y-axis

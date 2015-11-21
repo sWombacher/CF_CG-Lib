@@ -18,12 +18,12 @@
 
 
 
-// enable output for vec2, vec3 & vec4
+// enable standard output for vec2, vec3 & vec4
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec);
 std::ostream& operator<<(std::ostream& of, const glm::vec3& vec);
 std::ostream& operator<<(std::ostream& of, const glm::vec4& vec);
 
-// enable output for mat3x3 & mat4x4
+// enable standard output for mat3x3 & mat4x4
 std::ostream& operator<<(std::ostream& of, const glm::mat3x3& mat);
 std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 
@@ -34,24 +34,14 @@ struct Color;
 std::vector<Color> readPaletteFromFile(const char* filename);
 std::string readAntString(const char* filename);
 
-struct Convert{
-    template<typename T>
-    static T radiant2degree(T radiantValue){
-        return radiantValue / glm::pi<T>() * T(180.0);
-    }
-    template<typename T>
-    static T degree2radiant(T degreeValue){
-        return degreeValue / T(180.0) * glm::pi<T>();
-    }
-};
 
-struct Direction{
-    enum AbsoluteDirection {
-        NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS
-    };
-    enum RelativeDirection{
-        LEFT, FORWARD, RIGHT
-    };
+float radiant2degree(float radiantValue);
+float degree2radiant(float degreeValue);
+
+
+namespace Direction{
+    enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
+    enum RelativeDirection { LEFT, FORWARD, RIGHT };
     static AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
 };
 
@@ -72,6 +62,7 @@ struct Color{
 
     // NOTE:
     // do not change the order of b, g, r in this struct!
+    // this order is required for some window2D functions
     uint8_t b;
     uint8_t g;
     uint8_t r;
@@ -81,16 +72,16 @@ struct Color{
 };
 
 struct ColorType{
-    static Color MAGENTA;
-    static Color YELLOW;
-    static Color ORANGE;
-    static Color WHITE;
-    static Color BLACK;
-    static Color GREEN;
-    static Color BLUE;
-    static Color CYAN;
-    static Color PINK;
-    static Color RED;
+    static const Color MAGENTA;
+    static const Color YELLOW;
+    static const Color ORANGE;
+    static const Color WHITE;
+    static const Color BLACK;
+    static const Color GREEN;
+    static const Color BLUE;
+    static const Color CYAN;
+    static const Color PINK;
+    static const Color RED;
 };
 
 
