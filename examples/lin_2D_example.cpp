@@ -1,6 +1,4 @@
 
-
-
 #include "LSystem.h"
 
 

@@ -53,16 +53,16 @@ public:
     }
     void myKeyboardCallback(unsigned char key, int x, int y){
         switch(key){
-        case 'j': this->m_StartPos.x--; break;
-        case 'l': this->m_StartPos.x++; break;
-        case 'i': this->m_StartPos.y++; break;
-        case 'k': this->m_StartPos.y--; break;
+        case 'j': this->m_StartPos.x -= 0.1f; break;
+        case 'l': this->m_StartPos.x += 0.1f; break;
+        case 'k': this->m_StartPos.y -= 0.1f; break;
+        case 'i': this->m_StartPos.y += 0.1f; break;
 
         case 'n': this->m_Diameter *= 1.5f; break;
         case 'm': this->m_Diameter /= 1.5f; break;
 
-        case 'u': this->m_Angle++; break;
-        case 'o': this->m_Angle--; break;
+        case 'u': this->m_Angle += 5.f; break;
+        case 'o': this->m_Angle -= 5.f; break;
         default : break;
         }
     }
@@ -83,7 +83,7 @@ int main(int argc, char** argv){
     //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Y_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Z_AXIS);
-    window.setCamera(MyWindow::CameraType::ROTATION); // Rotation is the default, you propably want to use this
+    window.setCamera(MyWindow::CameraType::ROTATION); // default value, you propably want to use this
 
     // get keyboard input
     window.setKeyboardCallbackFunction([&window](unsigned char key, int x, int y){
