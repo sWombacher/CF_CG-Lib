@@ -10,9 +10,9 @@ public:
     MyWindow(int* argc, char** argv, cv::Mat heightMap) : cf::Window3D(argc, argv), m_HeightMap(heightMap){ }
     virtual void draw() override{
         this->clear();
-        const float minHeight =  0.1f;
+        const float minHeight = 0.1f;
         const float maxHeight = 10.f;
-        const float cubeSize  =  0.5f;
+        const float cubeSize  = 0.5f;
         const std::uniform_real_distribution<float> dis(0.f, 1.f);
 
         for (int y = 0; y < this->m_HeightMap.rows; ++y){

@@ -4,7 +4,7 @@
 
 class MyWindow : public cf::Window3D {
 public:
-    MyWindow(int* argc, char** argv):cf::Window3D(argc, argv){
+    MyWindow(int* argc, char** argv):cf::Window3D(argc, argv, 800, 600, "Example"){
         this->m_AngleAdjustment = 2.0f; // speed up  rotation
         this->m_CameraAdjustment= 0.1f; // slow down camera movement
     }
@@ -12,7 +12,7 @@ public:
     virtual void draw() override{
         this->clear();
         this->drawAxis(2.f);
-        glm::vec4 dir(1, 0, 0, 1);
+        glm::vec4 dir(this->m_Length, 0, 0, 1);
         float radiantValue = cf::degree2radiant(this->m_Angle);
 
         //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(1, 0, 0)); // rotation around x-axis
@@ -40,11 +40,14 @@ public:
         case 'o': this->m_Angle -= 5.f; break;
         default : break;
         }
+        if (key >= '0' && key <= '9') // adjust the length by typing a number key
+            this->m_Length = key - '0';
     }
 
 private:
     float m_Angle = 0.f;
     float m_Diameter = 1.f;
+    float m_Length = 1.f;
     glm::vec3 m_StartPos = glm::vec3(0.f, 0.f, 0.f);
 };
 
