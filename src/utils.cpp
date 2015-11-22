@@ -47,6 +47,9 @@ namespace cf{
 
 std::vector<Color> readPaletteFromFile(const char* filename){
     std::fstream file(filename, std::fstream::in);
+    if (!file)
+        throw "File not found in function: \"readPaletteFromFile\"";
+
     std::string str;
     if (!file.good()){
         str = filename;
@@ -79,12 +82,16 @@ std::vector<Color> readPaletteFromFile(const char* filename){
 
 std::string readAntString(const char* filename){
     std::fstream file(filename, std::fstream::in);
+    if (!file)
+        throw "File not found in function: \"readAntString\"";
+
     std::string str;
     if (!file.good()){
         str = filename;
         str += ", file not found";
         throw std::runtime_error(str.c_str());
     }
+
     // ignore first line
     std::getline(file, str);
     std::getline(file, str);

@@ -204,7 +204,7 @@ void Window3D::_AdjustCamera(){
     case CameraType::NONE:
         break;
     case CameraType::ROTATION:{
-        glm::vec4 cameraPos(0,0,this->m_LookAtDistance,1);
+        glm::vec4 cameraPos(0, 0, this->m_LookAtDistance, 1);
         glm::vec3 angles(cf::degree2radiant(this->m_RotationAngle_Y), cf::degree2radiant(this->m_RotationAngle_Z), 0.f);
         glm::quat rot(angles);
         cameraPos = glm::rotate(rot, cameraPos);

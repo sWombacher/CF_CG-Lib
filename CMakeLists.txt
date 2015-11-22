@@ -6,8 +6,8 @@ include_directories(include)
 
 
 # set Debug/Release
-#set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE "Release")
+#set(CMAKE_BUILD_TYPE "Debug")
 
 
 find_package(OpenCV REQUIRED)
@@ -35,7 +35,7 @@ else()
 endif()
 
 _add_lib(glut GLUT_LIB)
-_add_cxxFlag(" -std=c++0x ")
+_add_cxxFlag("-std=c++0x")
 
 
 # find all .h and .hpp files
