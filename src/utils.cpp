@@ -128,7 +128,7 @@ AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, Relative
 }}
 
 
-float Intervall::translateInterverllPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition){
+float Intervall::translateIntervallPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition){
     float factor = (newIntervall.max - newIntervall.min) / (originalInterall.max - originalInterall.min);
     originalPosition -= originalInterall.min;
 
