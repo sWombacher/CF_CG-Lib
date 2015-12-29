@@ -1,9 +1,7 @@
 project(chaos)
 cmake_minimum_required(VERSION 2.8)
 
-include(functions.cmake)
 include_directories(include)
-
 
 # set Debug/Release
 #set(CMAKE_BUILD_TYPE "Release")
