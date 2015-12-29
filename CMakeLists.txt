@@ -6,12 +6,12 @@ include_directories(include)
 
 
 # set Debug/Release
-set(CMAKE_BUILD_TYPE "Release")
-#set(CMAKE_BUILD_TYPE "Debug")
+#set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 
 
 find_package(OpenCV REQUIRED)
-
+find_library(GLUT_LIB NAMES glut)
 
 set(directories_to_include
     include
@@ -26,21 +26,21 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_T
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
 
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message("Debug version")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("Release version")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
+    message("${CMAKE_BUILD_TYPE} version")
 else()
     message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
 endif()
 
-_add_lib(glut GLUT_LIB)
-_add_cxxFlag("-std=c++0x")
+
+message("Current compiler: ${CMAKE_CXX_COMPILER_ID}, \nif you want to change you compiler checkout\n\"https://cmake.org/Wiki/CMake_FAQ#How_do_I_use_a_different_compiler.3F\"\n")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -std=c++0x ")
+endif()
 
 
 # find all .h and .hpp files
 foreach(dir ${directories_to_include})
-    include_directories(${dir})
     file(GLOB HEADERS_FILES ${HEADERS_FILES} ${dir}/*.h ${dir}/*.hpp)
 endforeach()
 
@@ -54,15 +54,14 @@ add_library(${PROJECT_NAME} ${SRC_FILES} ${HEADERS_FILES})
 
 # add all example programs
 file(GLOB examples ${CMAKE_CURRENT_LIST_DIR}/examples/*.cpp)
-file(GLOB myLib ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/*)
 
 foreach(example ${examples})
     # get file name without its path or extenstion
     get_filename_component(name ${example} NAME_WE)
 
-    add_executable(${name} ${example} ${HEADERS_FILES})
+    add_executable(${name} WIN32 ${example} ${HEADERS_FILES})
     target_link_libraries(${name} ${GLUT_LIB})
     target_link_libraries(${name} ${OpenCV_LIBS})
-    target_link_libraries(${name} ${myLib})
+    target_link_libraries(${name} ${PROJECT_NAME})
 endforeach()
 
