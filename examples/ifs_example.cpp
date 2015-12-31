@@ -1,9 +1,7 @@
 
 #include "IFS.h"
 
-
 int main(int argc, char** argv) {
-
     if (argc < 2){
         std::cout << "Please provide a .ifs file" << std::endl;
         return -1;
@@ -21,7 +19,7 @@ int main(int argc, char** argv) {
               << "Intervall Y max"    << align << ifs.getRangeY().max         << '\n'
               << "\n\n" << std::endl;
 
-    for (int i = 0; i < ifs.getNumTransformations(); ++i)
+    for (std::size_t i = 0; i < ifs.getNumTransformations(); ++i)
          std::cout << "Transformation " << i << ": \n" << ifs.getTransformation(i) << std::endl;
 
     std::cout << "\nTransformation example:" << std::endl;
