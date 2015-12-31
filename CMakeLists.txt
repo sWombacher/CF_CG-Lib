@@ -1,4 +1,4 @@
-# in case you want to change your compiler
+# in case you want to change your compiler from gcc/g++ to clang/clang++
 #set(CMAKE_C_COMPILER   "/usr/bin/clang"  )
 #set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
@@ -8,38 +8,37 @@ cmake_minimum_required(VERSION 3.1)
 #set(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_BUILD_TYPE "Debug")
 
-#set(USE_SYSTEM_LIBS FALSE)
-set(USE_SYSTEM_LIBS TRUE )
+set(USE_SYSTEM_LIBS FALSE)
+#set(USE_SYSTEM_LIBS TRUE )
 
 include_directories(include)
 add_definitions(-D${CMAKE_SYSTEM_NAME})
 
+if(UNIX AND NOT CYGWIN)
+    # search for system libs,
+    # windows provides it without linking? TODO check
+    find_library(GL_LIB NAMES GL)
+    find_library(GLU_LIB NAMES GLU)
+endif()
+
 if (USE_SYSTEM_LIBS)
     message("Using system libs")
     find_package(OpenCV REQUIRED)
-    find_library(GL_LIB NAMES GL)
-    find_library(GLU_LIB NAMES GLU)
     find_library(GLUT_LIB NAMES glut)
+    set(EXTERNAL_LIBS ${GLUT_LIB} ${OpenCV_LIBS})
 else()
     message("Using provided 3rd party libs")
     include_directories(3rdparty/include)
-    find_library(GL_LIB NAMES GL)
-    find_library(GLU_LIB NAMES GLU)
-    find_library(GLUT_LIB NAMES glut PATHS 3rdparty/lib/${CMAKE_SYSTEM_NAME} NO_DEFAULT_PATH)
+    set(LIB_DIR ${CMAKE_CURRENT_LIST_DIR}/3rdparty/lib/${CMAKE_SYSTEM_NAME})
+    if(WIN32 OR CYGWIN)
+        set(LIB_DIR ${LIB_DIR}/${CMAKE_BUILD_TYPE}) # windows requires linking against similar build type (debug/release)
+    endif()
+    file(GLOB EXTERNAL_LIBS ${LIB_DIR}/*)
 
-    file(GLOB tmp 3rdparty/lib/${CMAKE_SYSTEM_NAME}/*opencv*${CMAKE_SHARED_MODULE_SUFFIX})
-    foreach(file ${tmp})
-        get_filename_component(name ${file} NAME_WE)
-
-        # remove prefix
-        # NOTE: the  ^  at the beginning is itentional, do not change
-        string(REGEX REPLACE "^${CMAKE_SHARED_MODULE_PREFIX}" "" name ${name})
-        find_library(file NAMES ${name} PATHS 3rdparty/lib/${CMAKE_SYSTEM_NAME} NO_DEFAULT_PATH)
-        set(OpenCV_LIBS ${OpenCV_LIBS} ${file})
-    endforeach()
-
+    # set rpath (unix only),
+    # this prefers .so files from a specified directory over system libs
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_CURRENT_LIST_DIR}/3rdparty/lib/${CMAKE_SYSTEM_NAME}")
+    SET(CMAKE_INSTALL_RPATH "${LIB_DIR}")
 endif()
 
 # enable c++11 features
@@ -65,8 +64,7 @@ file(GLOB SRC_FILES src/*.cpp src/*.c)
 
 # create chaos lib
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES})
-target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
-
+target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${EXTERNAL_LIBS})
 
 # add all example executeables
 file(GLOB examples ${CMAKE_CURRENT_LIST_DIR}/examples/*.cpp)
