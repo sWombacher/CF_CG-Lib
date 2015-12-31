@@ -1,13 +1,18 @@
+# in case you want to change your compiler
+#set(CMAKE_C_COMPILER   "/usr/bin/clang"  )
+#set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
 project(chaos)
 cmake_minimum_required(VERSION 3.1)
 
-set(CMAKE_BUILD_TYPE "Release")
-#set(CMAKE_BUILD_TYPE "Debug")
+#set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 
 #set(USE_SYSTEM_LIBS FALSE)
 set(USE_SYSTEM_LIBS TRUE )
 
 include_directories(include)
+add_definitions(-D${CMAKE_SYSTEM_NAME})
 
 if (USE_SYSTEM_LIBS)
     message("Using system libs")
@@ -27,7 +32,7 @@ else()
         get_filename_component(name ${file} NAME_WE)
 
         # remove prefix
-        # NOTE: the "^" at the beginning is itentional, do not change
+        # NOTE: the  ^  at the beginning is itentional, do not change
         string(REGEX REPLACE "^${CMAKE_SHARED_MODULE_PREFIX}" "" name ${name})
         find_library(file NAMES ${name} PATHS 3rdparty/lib/${CMAKE_SYSTEM_NAME} NO_DEFAULT_PATH)
         set(OpenCV_LIBS ${OpenCV_LIBS} ${file})
@@ -36,7 +41,6 @@ else()
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
     SET(CMAKE_INSTALL_RPATH "${CMAKE_CURRENT_LIST_DIR}/3rdparty/lib/${CMAKE_SYSTEM_NAME}")
 endif()
-
 
 # enable c++11 features
 set(CMAKE_CXX_STANDARD 11)
