@@ -1,4 +1,7 @@
 
+#ifndef _ORBIT_H_H__
+#define _ORBIT_H_H__
+
 
 #include "utils.h"
 
@@ -33,3 +36,4 @@ typedef Orbit ORB;
 
 }
 
+#endif

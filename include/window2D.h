@@ -12,7 +12,7 @@ struct Point;
 
 class Window2D{
 public:
-    Window2D(uint width = 800, uint height = 600, const char* windowName = "Chaos and Fractals");
+    Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals");
     Window2D(const char* filename);
     ~Window2D();
 
@@ -30,7 +30,7 @@ public:
     void   setColor(float x, float y, const Color& color);
     Color& getColor(float x, float y);
 
-    void drawCircle   (cf::Point point ,      uint radius, int lineWidth, const cf::Color& color);
+    void drawCircle   (cf::Point point ,       int radius, int lineWidth, const cf::Color& color);
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
     void drawLine     (cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
@@ -59,8 +59,8 @@ private:
     cv::Mat m_Image;
 
     bool  m_InvertYAxis;
-    float m_WindowScale;
     const char* m_WindowName;
+    float m_WindowScale;
 
     cf::Intervall m_IntervallX;
     cf::Intervall m_IntervallY;

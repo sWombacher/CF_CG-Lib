@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <opencv2/opencv.hpp>
 
+typedef unsigned int uint; // may not be defined (for example on windows)
 
 
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec){
@@ -34,11 +35,10 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat){
     of << std::fixed << std::setprecision(5)
        << '/'  << mat[0][0] << ' ' << mat[1][0] << ' ' << mat[2][0] << ' ' << mat[3][0] << "\\\n"
        << '|'  << mat[0][1] << ' ' << mat[1][1] << ' ' << mat[2][1] << ' ' << mat[3][1] << "|\n"
-       << '\\' << mat[0][2] << ' ' << mat[1][2] << ' ' << mat[2][2] << ' ' << mat[3][2] << "/\n";
+       << '|'  << mat[0][2] << ' ' << mat[1][2] << ' ' << mat[2][2] << ' ' << mat[3][2] << "|\n"
+       << '\\' << mat[0][3] << ' ' << mat[1][3] << ' ' << mat[2][3] << ' ' << mat[3][3] << "/\n";
     return of;
 }
-
-
 
 
 
@@ -63,10 +63,10 @@ std::vector<Color> readPaletteFromFile(const char* filename){
         std::stringstream sstr;
         sstr << str;
 
-        std::vector<int> rgb;
+        std::vector<uint8_t> rgb;
         while(std::getline(sstr, str, ',')){
             removeWindowsSpecificCarriageReturn(str);
-            rgb.push_back(std::stoi(str));
+            rgb.push_back(uint8_t(std::stoi(str)));
         }
 
         if (rgb.size() != 3){
@@ -111,7 +111,6 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
 
         return static_cast<AbsoluteDirection>(dir);
     }
-        break;
     case RelativeDirection::RIGHT:{
 
         int dir = currentDirection;
@@ -121,8 +120,7 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
 
         return static_cast<AbsoluteDirection>(dir);
     }
-        break;
-    default:
+    case RelativeDirection::FORWARD:
         return currentDirection;
     }
 }
@@ -198,9 +196,9 @@ Color& Color::operator+=(const Color& c){
     if (blue > 255)
         blue = 255;
 
-    this->r = red;
-    this->g = green;
-    this->b = blue;
+    this->r = uint8_t(red);
+    this->g = uint8_t(green);
+    this->b = uint8_t(blue);
 
     return *this;
 }
@@ -216,9 +214,9 @@ Color& Color::operator-=(const Color& c){
     if (blue < 0)
         blue = 0;
 
-    this->r = red;
-    this->g = green;
-    this->b = blue;
+    this->r = uint8_t(red);
+    this->g = uint8_t(green);
+    this->b = uint8_t(blue);
 
     return *this;
 }
@@ -258,7 +256,7 @@ void removeWindowsSpecificCarriageReturn(std::string& str){
     // for whatever reason...
 
     // count \r
-    int count = 0;
+    std::size_t count = 0;
     for (auto e : str){
         if (e == '\r')
             ++count;
@@ -267,7 +265,7 @@ void removeWindowsSpecificCarriageReturn(std::string& str){
     if (count){
         std::string toReturn;
         toReturn.resize(str.size() - count);
-        for (int iter = 0, iter2 = 0; iter < str.size(); ++iter){
+        for (std::size_t iter = 0, iter2 = 0; iter < str.size(); ++iter){
             if (str[iter] != '\r'){
                 toReturn[iter2] = str[iter];
                 ++iter2;

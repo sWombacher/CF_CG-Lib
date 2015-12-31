@@ -29,12 +29,12 @@ void IteratedFunctionSystem::read(const char* fiilename){
         removeWindowsSpecificCarriageReturn(str);
         std::stringstream sstr;
         sstr << str;
-        std::vector<double> transformation;
+        std::vector<float> transformation;
 
         while (std::getline(sstr, str, ' ')) {
             removeWindowsSpecificCarriageReturn(str);
             if (str.size()) // two spaces in a row
-                transformation.push_back(std::stod(str));
+                transformation.push_back(std::stof(str));
         }
 
         if (transformation.size() != 6)

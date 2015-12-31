@@ -2,9 +2,10 @@
 #include "window2D.h"
 namespace cf{
 
-Window2D::Window2D(uint width, uint height, const char* windowName)
-: m_WindowName(windowName), m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_WindowScale(1.f),
-  m_InvertYAxis(false), m_IntervallX(0, this->m_Image.cols - 1), m_IntervallY(0, this->m_Image.rows -1)
+Window2D::Window2D(int width, int height, const char* windowName)
+: m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_InvertYAxis(false),
+  m_WindowName(windowName), m_WindowScale(1.f),
+  m_IntervallX(0, this->m_Image.cols - 1), m_IntervallY(0, this->m_Image.rows -1)
 {
     if(!this->m_WindowName)
         this->m_WindowName = "";
@@ -26,13 +27,13 @@ void Window2D::show() const{
         cv::imshow(this->m_WindowName, this->m_Image);
     else{
         cv::Mat tmp;
-        cv::resize(this->m_Image, tmp, cv::Size(this->m_Image.cols * this->m_WindowScale, this->m_Image.rows * this->m_WindowScale));
+        cv::resize(this->m_Image, tmp, cv::Size(int(this->m_Image.cols * this->m_WindowScale), int(this->m_Image.rows * this->m_WindowScale)));
         cv::imshow(this->m_WindowName, tmp);
     }
     cv::waitKey(10);
 }
 unsigned char Window2D::waitKey(int delay) const{
-    return cv::waitKey(delay);
+    return static_cast<unsigned char>(cv::waitKey(delay));
 }
 
 
@@ -50,7 +51,7 @@ void Window2D::waitMouseInput(float &x, float &y) {
 
     do{
         cv::waitKey(200);
-    } while(this->m_MouseCallBackStorage[0] == -1);
+    } while(this->m_MouseCallBackStorage[0] == -1.f);
 
     // undo scaling
     this->m_MouseCallBackStorage[0] /= this->m_WindowScale;
@@ -67,13 +68,13 @@ void Window2D::setColor(float x, float y, const Color& c){
     this->_convertFromNewIntervall(x, y);
     this->_correctYValue(y);
 
-    this->m_Image.at<cf::Color>(y, x) = c;
+    this->m_Image.at<cf::Color>(int(y), int(x)) = c;
 }
 Color& Window2D::getColor(float x, float y){
     this->_convertFromNewIntervall(x, y);
     this->_correctYValue(y);
 
-    return this->m_Image.at<cf::Color>(y, x);
+    return this->m_Image.at<cf::Color>(int(y), int(x));
 }
 
 void Window2D::setWindowScale(float scale){
@@ -91,11 +92,11 @@ bool Window2D::getInvertYAxis() const{
 }
 
 
-void Window2D::drawCircle(cf::Point point, uint radius, int lineWidth, const cf::Color& c){
+void Window2D::drawCircle(cf::Point point, int radius, int lineWidth, const cf::Color& c){
     this->_convertFromNewIntervall(point.x, point.y);
     this->_correctYValue(point.y);
 
-    cv::circle(this->m_Image, cv::Point(point.x, point.y), radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::circle(this->m_Image, cv::Point(int(point.x), int(point.y)), radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
     this->_convertFromNewIntervall(p1.x, p1.y);
@@ -103,7 +104,7 @@ void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
-    cv::rectangle(this->m_Image, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::rectangle(this->m_Image, cv::Point(int(p1.x), int(p1.y)), cv::Point(int(p2.x), int(p2.y)), cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
     this->_convertFromNewIntervall(p1.x, p1.y);
@@ -111,7 +112,7 @@ void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Col
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
-    cv::line(this->m_Image, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::line(this->m_Image, cv::Point(int(p1.x), int(p1.y)), cv::Point(int(p2.x), int(p2.y)), cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 
 void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& intervallY){

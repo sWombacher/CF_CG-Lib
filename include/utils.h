@@ -49,7 +49,7 @@ namespace Direction{
 
 
 struct Intervall{
-    Intervall(float _min = 0, float _max = 0):min(_min), max(_max){};
+    Intervall(float _min = 0, float _max = 0):min(_min), max(_max){}
     float min;
     float max;
 
@@ -59,7 +59,7 @@ struct Intervall{
 
 
 struct Color{
-    Color(int red = 0, int green = 0, int blue = 0) : r(red), g(green), b(blue){};
+    Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0) : b(blue), g(green), r(red){}
 
     // NOTE:
     // do not change the order of b, g, r in this struct!

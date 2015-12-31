@@ -1,6 +1,6 @@
 
-#ifndef _ITERATED_FUNCTION_SYSTEM_H_H__
-#define _ITERATED_FUNCTION_SYSTEM_H_H__
+#ifndef _H_ITERATED_FUNCTION_SYSTEM_H_H__
+#define _H_ITERATED_FUNCTION_SYSTEM_H_H__
 
 
 #include "utils.h"

@@ -102,7 +102,7 @@ const std::string& LindenmayerSystem::getAxiom() const{
 }
 
 const std::string* LindenmayerSystem::getProduction(char symbol) const{
-    for (int i = 0; i < this->m_Productions.size(); ++i){
+    for (std::size_t i = 0; i < this->m_Productions.size(); ++i){
         if (this->m_Productions[i].first == symbol)
             return &this->m_Productions[i].second;
     }
