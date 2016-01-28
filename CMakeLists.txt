@@ -68,6 +68,12 @@ else()
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
 endif()
 
+# endable openmp support
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
     message("${CMAKE_BUILD_TYPE} version")
@@ -82,6 +88,12 @@ file(GLOB SRC_FILES src/*.cpp src/*.c)
 # create chaos lib
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES})
 if (WIN32 OR CYGWIN)
+	# copy dlls
+	file(GLOB tmp ${LIB_DIR}/dlls/Debug/*)
+	file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
+	file(GLOB tmp ${LIB_DIR}/dlls/Release/*)
+	file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
+	
 	target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} optimized ${GLUT_LIB_RELEASE})
 	
 	list(LENGTH OpenCV_LIBS_DEBUG   Debug_SIZE)
