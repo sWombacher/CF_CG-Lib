@@ -66,5 +66,6 @@ int main(int argc, char** argv) {
         else
             std::cout << "Key: " << key << std::endl;
     }
+	getchar();
     return 0;
 }

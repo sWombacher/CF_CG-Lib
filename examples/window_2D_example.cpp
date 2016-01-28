@@ -5,7 +5,6 @@
 
 int main(int argc, char** argv) {
     cf::Window2D w;
-	w.waitKey();
 
     for (int y = 0; y < w.getImageHeight(); ++y){
         for (int x = 0; x < w.getImageWidth() / 2;  ++x)
@@ -51,5 +50,6 @@ int main(int argc, char** argv) {
         w.show();
         w.waitKey();
     }
+	getchar();
     return 0;
 }

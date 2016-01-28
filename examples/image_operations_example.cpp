@@ -8,6 +8,7 @@ int main(int argc, char** argv){
 
     if (argc < 3){
         std::cout << "Please provide two image files";
+		getchar();
         return -1;
     }
     Image img1(argv[1]);
@@ -35,5 +36,6 @@ int main(int argc, char** argv){
         toDisplay.show();
         toDisplay.waitKey();
     }
+	getchar();
     return 0;
 }

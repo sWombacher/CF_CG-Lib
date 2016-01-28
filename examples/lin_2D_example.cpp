@@ -6,18 +6,19 @@ int main(int argc, char** argv) {
 
     if (argc < 2){
         std::cout << "Please provide a .lin file" << std::endl;
+		getchar();
         return -1;
     }
 
     cf::LindenmayerSystem ls;   // alternative:     cf::LSystem ls;
     ls.read(argv[1]);
 
-    std::string align = "\r\t\t\t: ";
+    std::string align = " :  ";
     std::cout << "Name"                    << align << ls.getName()                              << '\n'
               << "Axiom"                   << align << ls.getAxiom()                             << '\n'
               << "Number of productions"   << align << ls.getNumProductions()                    << '\n'
               << "Clear window each time?" << align << (ls.clearWindowEachTime() ? "yes" : "no") << '\n'
-              << "Start angle"             << align << ls.getStartAngle()                        << "°\n"
+              << "Start angle"             << align << ls.getStartAngle()                        << "\n"
               << "Adjustment angle"        << align << ls.getAdjustmentAngel()                   << '\n'
               << "Scale"                   << align << ls.getScale()                             << std::endl;
 
