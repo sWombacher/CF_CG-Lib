@@ -21,12 +21,18 @@ int main(int argc, char** argv) {
     while(w.getColor(0, 0) == cf::Color::WHITE){
         for (int i = 0; i < step_count; ++i){
 			printf("Processing: %d%% \r", int((float)i / (float)step_count * 100));
+
+			// this algorithm might be slow (debug version) 
+			// so we might want to parallize this by using openmp
+			// by default openmp uses number of processor cores, however you may specify this yourself
+			#pragma omp parallel for //num_threads(4)
+
             for (int y = 0; y < w.getImageHeight()   ; ++y){
             for (int x = 0; x < w.getImageWidth() - 1; ++x){
 				cf::Color col = w.getColor(x + 1, y);
                 w.setColor(x, y, col);
 
-                // alternative (and faster) version
+                // alternative (and much faster) version
                 // NOTE: by using this version you have to deal with y-axis inverting and invervall changing yourself
 				//		(additional you might have to know:
 				//			cv::Vec3b[0]		// blue  value
