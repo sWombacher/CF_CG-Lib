@@ -17,6 +17,7 @@ add_definitions(-D${CMAKE_SYSTEM_NAME})
 
 if (USE_SYSTEM_LIBS)
     message("Using system libs")
+	
     find_package(OpenCV REQUIRED)
     find_library(GL_LIB NAMES GL)
     find_library(GLU_LIB NAMES GLU)
@@ -59,11 +60,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set output paths
 if (WIN32 OR CYGWIN)
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) # executeable
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
 else()
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE})
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE}) # executeable
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
 endif()
@@ -73,12 +74,6 @@ find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif()
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("${CMAKE_BUILD_TYPE} version")
-else()
-    message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
 endif()
 
 # find all header and source files
@@ -91,12 +86,14 @@ if (WIN32 OR CYGWIN)
 	# copy dlls
 	file(GLOB tmp ${LIB_DIR}/dlls/Debug/*)
 	file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
+	
 	file(GLOB tmp ${LIB_DIR}/dlls/Release/*)
 	file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
 	
 	target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} optimized ${GLUT_LIB_RELEASE})
 	
-	list(LENGTH OpenCV_LIBS_DEBUG   Debug_SIZE)
+	# link debug and release libraries
+	list(LENGTH OpenCV_LIBS_DEBUG     Debug_SIZE)
 	list(LENGTH OpenCV_LIBS_RELEASE Release_SIZE)
 	if (NOT ${Debug_SIZE} EQUAL ${Release_SIZE})
 		message(SEND_ERROR "Error: Unequal number of opencv libs between debug and release")
@@ -106,9 +103,15 @@ if (WIN32 OR CYGWIN)
 	foreach(val RANGE ${SIZE})
 		list(GET OpenCV_LIBS_DEBUG   ${val} deb)
 		list(GET OpenCV_LIBS_RELEASE ${val} rel)
+		
 		target_link_libraries(${PROJECT_NAME} debug ${deb} 	optimized ${rel})
 	endforeach()
 else()
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
+		message("${CMAKE_BUILD_TYPE} version")
+	else()
+		message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
+	endif()
 	target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
 endif()
 
