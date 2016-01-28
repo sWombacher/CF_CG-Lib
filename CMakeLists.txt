@@ -1,11 +1,12 @@
-# in case you want to change your compiler
+# in case you want to change your compiler in unix systems
 #set(CMAKE_C_COMPILER   "/usr/bin/clang"  )
 #set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
 project(chaos)
 cmake_minimum_required(VERSION 3.1)
 
-#set(CMAKE_BUILD_TYPE "Release") # do not change case
+# this is case sensitive!
+#set(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_BUILD_TYPE "Debug")
 
 set(USE_SYSTEM_LIBS FALSE)
@@ -56,9 +57,16 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
+# set output paths
+if (WIN32 OR CYGWIN)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
+else()
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE})
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
+endif()
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -67,21 +75,19 @@ else()
     message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
 endif()
 
-# find all .h and .hpp files
+# find all header and source files
 file(GLOB HEADERS_FILES include/*.h include/*.hpp)
-
-# find all .cpp files
 file(GLOB SRC_FILES src/*.cpp src/*.c)
 
 # create chaos lib
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES})
 if (WIN32 OR CYGWIN)
-	target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} 	optimized ${GLUT_LIB_RELEASE})
+	target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} optimized ${GLUT_LIB_RELEASE})
 	
 	list(LENGTH OpenCV_LIBS_DEBUG   Debug_SIZE)
 	list(LENGTH OpenCV_LIBS_RELEASE Release_SIZE)
 	if (NOT ${Debug_SIZE} EQUAL ${Release_SIZE})
-		message(SEND_ERROR "error")
+		message(SEND_ERROR "Error: Unequal number of opencv libs between debug and release")
 	endif()
 	
 	math(EXPR SIZE "${Debug_SIZE} - 1")
