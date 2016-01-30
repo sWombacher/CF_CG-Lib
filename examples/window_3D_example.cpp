@@ -26,7 +26,7 @@ public:
         cf::Color color = cf::Color::ORANGE;
         this->drawCylinder(direction, this->m_StartPos, this->m_Diameter, color);
     }
-    void myKeyboardCallback(unsigned char key, int x, int y){
+    void handleKeyboardInput(unsigned char key, int x, int y) override{
         switch(key){
         case 'j': this->m_StartPos.x -= 0.1f; break;
         case 'l': this->m_StartPos.x += 0.1f; break;
@@ -56,6 +56,15 @@ int main(int argc, char** argv){
     // show camera usage
     MyWindow::showWindowUsage();
 
+	// print object movement options
+	std::cout << std::endl << std::endl
+		      << "Object movement:\n"
+			  << "press:\ti/j/k/l\t to translate the object\n"
+			  << "press:\tu/o    \t to   rotate  the object\n"
+		      << "press: a number\t to    set    the objests length\n"
+			  << "press:\tm/n    \t to   change  the objects diameter\n"
+		      << std::endl;
+
     // create window and set up camera
     MyWindow window(&argc, argv);
     //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS);
@@ -63,14 +72,8 @@ int main(int argc, char** argv){
     //window.setCamera(MyWindow::CameraType::STATIC_Z_AXIS);
     window.setCamera(MyWindow::CameraType::ROTATION); // default value, you propably want to use this
 
-    // get keyboard input
-    window.setKeyboardCallbackFunction([&window](unsigned char key, int x, int y){
-        std::cout << "Key: " << key << "\t\tpressed at mouse position: " << x << ' ' << y << "      \r" << std::flush;
-        window.myKeyboardCallback(key, x, y);
-    });
-
-    // if you want to draw all the time
-    // default: draw after each key-input
+    // set draw type
+    // default: 0 - draw after each key-input
     //window.setMaxFPS(60.f);
     return window.startDrawing(); // function returns when the "esc-key" is pressed
 }

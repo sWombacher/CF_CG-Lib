@@ -27,8 +27,8 @@ public:
     void setInvertYAxis(bool invert);
     bool getInvertYAxis() const;
 
-    void   setColor(float x, float y, const Color& color);
-    Color& getColor(float x, float y);
+    void  setColor(float x, float y, const Color& color);
+    Color getColor(float x, float y) const;
 
     void drawCircle   (cf::Point point ,       int radius, int lineWidth, const cf::Color& color);
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);

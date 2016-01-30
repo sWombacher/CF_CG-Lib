@@ -41,6 +41,7 @@ private:
 int main(int argc, char** argv){
     if (argc < 2){
         std::cout << "Please provide a heightmap";
+		getchar();
         return -1;
     }
     cv::Mat img = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);

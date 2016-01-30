@@ -4,13 +4,14 @@
 int main(int argc, char** argv) {
     if (argc < 2){
         std::cout << "Please provide a .ifs file" << std::endl;
+		getchar();
         return -1;
     }
 
     cf::IteratedFunctionSystem ifs; // alternative:    cf::IFS ifs;
     ifs.read(argv[1]);
 
-    std::string align = "\r\t\t\t: ";
+    std::string align = " :  ";
     std::cout << "Name"               << align << ifs.getName()               << '\n'
               << "Num transformation" << align << ifs.getNumTransformations() << '\n'
               << "Intervall X min"    << align << ifs.getRangeX().min         << '\n'

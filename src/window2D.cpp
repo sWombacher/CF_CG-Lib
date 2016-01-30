@@ -10,6 +10,7 @@ Window2D::Window2D(int width, int height, const char* windowName)
     if(!this->m_WindowName)
         this->m_WindowName = "";
 
+	cv::namedWindow(this->m_WindowName);
     this->show();
 }
 
@@ -68,13 +69,23 @@ void Window2D::setColor(float x, float y, const Color& c){
     this->_convertFromNewIntervall(x, y);
     this->_correctYValue(y);
 
-    this->m_Image.at<cf::Color>(int(y), int(x)) = c;
+    //this->m_Image.at<cf::Color>(int(y), int(x)) = c;
+	auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
+	tmp[0] = c.b;
+	tmp[1] = c.g;
+	tmp[2] = c.r;
 }
-Color& Window2D::getColor(float x, float y){
+Color Window2D::getColor(float x, float y) const{
     this->_convertFromNewIntervall(x, y);
     this->_correctYValue(y);
 
-    return this->m_Image.at<cf::Color>(int(y), int(x));
+    //return this->m_Image.at<cf::Color>(int(y), int(x));
+	const auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
+	cf::Color c;
+	c.r = tmp[2];
+	c.g = tmp[1];
+	c.b = tmp[0];
+	return c;
 }
 
 void Window2D::setWindowScale(float scale){
