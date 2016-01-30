@@ -36,6 +36,5 @@ int main(int argc, char** argv){
         toDisplay.show();
         toDisplay.waitKey();
     }
-	getchar();
     return 0;
 }

@@ -50,6 +50,5 @@ int main(int argc, char** argv) {
         w.show();
         w.waitKey();
     }
-	getchar();
     return 0;
 }
