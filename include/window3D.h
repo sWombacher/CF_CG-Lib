@@ -26,6 +26,7 @@ public:
     void clear(const Color& color = Color::BLACK);
 
     virtual void draw() = 0;
+	virtual void handleKeyboardInput(unsigned char key, int x, int y);
 
     int startDrawing();
 
@@ -40,7 +41,6 @@ public:
     // scale does not affect the length
     void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color color = Color::WHITE) const;
 
-    void setKeyboardCallbackFunction(std::function<void(unsigned char key, int x, int y)> foo);
     void setMaxFPS(float maxFPS = 0.f); // value of 0 indicates "only draw after key-input"
 
 protected:

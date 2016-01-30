@@ -29,6 +29,10 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
     // Compute aspect ratio of the new window
     GLfloat aspect = (GLfloat)this->m_Width / (GLfloat)this->m_Height;
     gluPerspective(45.0f, aspect, 0.1f, 1000.0f);
+
+	this->m_AdditionalKeyboardCallback = [this](unsigned char key, int x, int y) {
+		this->handleKeyboardInput(key, x, y);
+	};
 }
 Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
@@ -141,6 +145,8 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     windowPtr->_AdjustCamera();
 }
 
+void Window3D::handleKeyboardInput(unsigned char key, int x, int y){}
+
 int Window3D::startDrawing(){
     windowPtr = this;
     glutKeyboardFunc(_KeyboardCallbackFunction);
@@ -234,10 +240,6 @@ void Window3D::_AdjustCamera(){
     default:
         throw "Error: Unknown CameraType";
     }
-}
-
-void Window3D::setKeyboardCallbackFunction(std::function<void(unsigned char, int, int)> foo){
-    this->m_AdditionalKeyboardCallback = foo;
 }
 
 void Window3D::setMaxFPS(float maxFPS){
