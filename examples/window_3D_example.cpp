@@ -57,7 +57,8 @@ int main(int argc, char** argv){
     MyWindow::showWindowUsage();
 
 	// print object movement options
-	std::cout << "Object movement:\n"
+	std::cout << std::endl << std::endl
+		      << "Object movement:\n"
 			  << "press:\ti/j/k/l\t to translate the object\n"
 			  << "press:\tu/o    \t to   rotate  the object\n"
 		      << "press: a number\t to    set    the objests length\n"
