@@ -6,6 +6,8 @@ int main(int argc, char** argv){
     // additional operations can be used from opencv directly
     typedef cf::Window2D Image;
 
+	std::cout << "Press keys on a window \"Result\", to blend image1 to image2";
+
     if (argc < 3){
         std::cout << "Please provide two image files";
 		getchar();
@@ -25,7 +27,7 @@ int main(int argc, char** argv){
     if (minHeight > img2.getImageHeight())
         minHeight = img2.getImageHeight();
 
-    Image toDisplay(minWidth, minHeight);
+    Image toDisplay(minWidth, minHeight, "Result");
     const float blending_step = 0.1f;
 
     for (float blend = 0.f; blend <= 1.f; blend += blending_step){

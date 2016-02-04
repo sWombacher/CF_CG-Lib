@@ -5,6 +5,7 @@
 
 int main(int argc, char** argv) {
 
+	std::cout << "Use your mouse to set points on the window\n\n";
     cf::Window2D window(800,600);
 
     // init image colors
@@ -54,6 +55,8 @@ int main(int argc, char** argv) {
         window.show();
     }
 
+
+	std::cout << "\n\n\n\nUse the keyboard on active window to display keys\n";
     std::cout << "\nKey input test" << std::endl;
     for (int i = 0; i < 3; ++i){
         unsigned char key = window.waitKey(0);
