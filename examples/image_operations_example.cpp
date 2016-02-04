@@ -13,6 +13,8 @@ int main(int argc, char** argv){
     }
     Image img1(argv[1]);
     Image img2(argv[2]);
+	img1.show();
+	img2.show();
 
     // blend image2 above image1
     int minWidth = img1.getImageWidth();
