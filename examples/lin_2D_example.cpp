@@ -18,10 +18,12 @@ int main(int argc, char** argv) {
               << "Axiom"                   << align << ls.getAxiom()                             << '\n'
               << "Number of productions"   << align << ls.getNumProductions()                    << '\n'
               << "Clear window each time?" << align << (ls.clearWindowEachTime() ? "yes" : "no") << '\n'
-              << "Start angle"             << align << ls.getStartAngle()                        << "\n"
+              << "Start angle"             << align << ls.getStartAngle()                        << '\n'
               << "Adjustment angle"        << align << ls.getAdjustmentAngel()                   << '\n'
-              << "Scale"                   << align << ls.getScale()                             << std::endl;
-
+              << "Scale"                   << align << ls.getScale()                             << '\n'
+              << "Intervall X"             << align << ls.getRangeX()                            << '\n'
+              << "Intervall Y"             << align << ls.getRangeY()                            << '\n'
+              << std::endl;
 
     // most of the files provide F as a symbol
     char symbol = 'F';

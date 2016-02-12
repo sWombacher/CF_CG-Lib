@@ -54,6 +54,7 @@ struct Intervall{
     float max;
 
     static float translateInterverllPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition);
+    friend std::ostream& operator<<(std::ostream& os, const Intervall& intervall);
 };
 
 

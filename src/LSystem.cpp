@@ -139,7 +139,10 @@ const std::vector<std::pair<const char, const std::string> > &LindenmayerSystem:
     return this->m_Productions;
 }
 
-
+std::ostream& operator<<(std::ostream& os, const Intervall& intervall){
+    os << '[' << intervall.min << ", " << intervall.max << ']';
+    return os;
+}
 
 }
 
