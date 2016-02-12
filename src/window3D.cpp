@@ -129,8 +129,8 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     case 'w': windowPtr->m_LookAt += up; break;
     case 's': windowPtr->m_LookAt -= up; break;
 
-    case 'y': windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment; break;
-    case 'c': windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment; break;
+    case 'c': windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment; break;
+    case 'y': windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment; break;
 
     case 'e': windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment; break;
     case 'q': windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment; break;
