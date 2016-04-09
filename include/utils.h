@@ -15,10 +15,6 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
-
-/// TODO:
-/// orb-files, dat-files
-
 // enable standard output for vec2, vec3 & vec4
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec);
 std::ostream& operator<<(std::ostream& of, const glm::vec3& vec);

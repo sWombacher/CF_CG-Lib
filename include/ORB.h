@@ -7,6 +7,10 @@
 
 namespace cf{
 
+/**
+ * @brief The Orbit class
+ * lazy people (like myself) may use the ORB tyepdef
+ */
 class Orbit{
 public:
     Orbit() = default;

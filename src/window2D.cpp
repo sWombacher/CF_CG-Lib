@@ -130,8 +130,8 @@ void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& int
     this->m_IntervallX = intervallX;
     this->m_IntervallY = intervallY;
 
-    if (intervallX.min != 0 || intervallX.max != this->m_Image.cols - 1 ||
-        intervallY.min != 0 || intervallY.max != this->m_Image.rows - 1)
+    if (intervallX.min != 0.f || intervallX.max != this->m_Image.cols - 1 ||
+        intervallY.min != 0.f || intervallY.max != this->m_Image.rows - 1)
     {
         this->m_IntervallChanged = true;
     }
@@ -184,6 +184,13 @@ void Window2D::_convertToNewIntervall(T& x, T& y) const{
 
     x = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
     y = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
+}
+
+bool Point::operator==(const Point &p) const{
+    return this->x == p.x && this->y == p.y;
+}
+bool Point::operator!=(const Point &p) const{
+    return !(*this == p);
 }
 
 }

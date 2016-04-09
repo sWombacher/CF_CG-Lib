@@ -172,7 +172,7 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
     {
         static GLUquadricObj* obj = gluNewQuadric();
 
-        glColor3f((float)color.r / 255.f, (float)color.g / 255.f, (float)color.b / 255.f);
+        glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
         glTranslatef(position.x, position.y, position.z);
 
         float angle = glm::angle(startDir, dir) / glm::pi<float>() * 180.f;
@@ -196,7 +196,7 @@ void Window3D::_AdjustCamera(){
     glLoadIdentity();             // Reset
 
     // Compute aspect ratio of the new window
-    GLfloat aspect = (GLfloat)this->m_Width / (GLfloat)this->m_Height;
+    GLfloat aspect = GLfloat(this->m_Width) / GLfloat(this->m_Height);
 
     // Set the viewport to cover the new window
     glViewport(0, 0, this->m_Width, this->m_Height);

@@ -15,7 +15,10 @@
 
 namespace cf{
 
-
+/**
+ * @brief The LindenmayerSystem class
+ * lazy people (like myself) may use the IFS tyepdef
+ */
 class LindenmayerSystem{
 
 public:

@@ -76,15 +76,8 @@ struct Point{
     float x;
     float y;
 
-    bool operator==(Point& p){
-        if (this->x == p.x && this->y == p.y)
-            return true;
-
-        return false;
-    }
-    bool operator!=(Point& p){
-        return !(*this == p);
-    }
+    bool operator==(const Point& p) const;
+    bool operator!=(const Point& p) const;
 };
 
 
