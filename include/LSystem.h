@@ -1,7 +1,7 @@
 
 
-#ifndef _LSYSTEM_H_H__
-#define _LSYSTEM_H_H__
+#ifndef LSYSTEM_H_H
+#define LSYSTEM_H_H
 
 #include <string>
 #include <vector>

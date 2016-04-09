@@ -1,6 +1,6 @@
 
-#ifndef __WINDOW_2D_H_H__
-#define __WINDOW_2D_H_H__
+#ifndef WINDOW_2D_H_H
+#define WINDOW_2D_H_H
 
 #include <opencv2/opencv.hpp>
 #include "utils.h"

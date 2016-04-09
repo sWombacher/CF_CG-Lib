@@ -1,6 +1,6 @@
 
-#ifndef _WINDOW_3D_H_H_
-#define _WINDOW_3D_H_H_
+#ifndef WINDOW_3D_H_H
+#define WINDOW_3D_H_H
 
 
 #include <GL/freeglut.h>

@@ -1,6 +1,6 @@
 
-#ifndef _UTILS_H_H_
-#define _UTILS_H_H_
+#ifndef UTILS_H_H
+#define UTILS_H_H
 
 #include <string>
 #include <vector>
@@ -43,7 +43,7 @@ float degree2radiant(float degreeValue);
 namespace Direction{
     enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
     enum RelativeDirection { LEFT, FORWARD, RIGHT };
-    static AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
+    AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
 };
 
 
