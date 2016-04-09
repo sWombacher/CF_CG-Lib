@@ -3,7 +3,7 @@
 #include <iomanip> // set precision
 
 
-int main(int argc, char** argv) {
+int main(void) {
 
 	std::cout << "Use your mouse to set points on the window\n\n";
     cf::Window2D window(800,600);

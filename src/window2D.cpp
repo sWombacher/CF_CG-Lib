@@ -14,7 +14,7 @@ Window2D::Window2D(int width, int height, const char* windowName)
     this->show();
 }
 
-Window2D::Window2D(const char *filename):m_IntervallX(0, 0), m_IntervallY(0, 0), m_WindowName(filename), m_WindowScale(1.f), m_InvertYAxis(false) {
+Window2D::Window2D(const char *filename):m_InvertYAxis(false), m_WindowName(filename), m_WindowScale(1.f), m_IntervallX(0, 0), m_IntervallY(0, 0) {
     this->m_Image = cv::imread(filename, CV_LOAD_IMAGE_COLOR);
     this->m_IntervallX.max = this->m_Image.cols - 1;
     this->m_IntervallY.max = this->m_Image.rows - 1;
@@ -38,7 +38,7 @@ unsigned char Window2D::waitKey(int delay) const{
 }
 
 
-void mouseCallBack(int event, int x, int y, int flags, void* userdata){
+void mouseCallBack(int event, int x, int y, int, void* userdata){
     if  (event == cv::EVENT_LBUTTONDOWN) {
         reinterpret_cast<float*>(userdata)[0] = x;
         reinterpret_cast<float*>(userdata)[1] = y;

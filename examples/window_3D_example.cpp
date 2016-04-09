@@ -27,6 +27,8 @@ public:
         this->drawCylinder(direction, this->m_StartPos, this->m_Diameter, color);
     }
     void handleKeyboardInput(unsigned char key, int x, int y) override{
+        printf("Key: %c pressed at mouse position: %d, %d\r", key, x, y);
+        fflush(stdout);
         switch(key){
         case 'j': this->m_StartPos.x -= 0.1f; break;
         case 'l': this->m_StartPos.x += 0.1f; break;
@@ -53,7 +55,7 @@ private:
 
 
 int main(int argc, char** argv){
-    // show camera usage
+    // print camera usage
     MyWindow::showWindowUsage();
 
 	// print object movement options
@@ -67,6 +69,7 @@ int main(int argc, char** argv){
 
     // create window and set up camera
     MyWindow window(&argc, argv);
+    //window.setCamera(MyWindow::CameraType::NONE);
     //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Y_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Z_AXIS);

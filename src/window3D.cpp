@@ -52,7 +52,7 @@ void Window3D::showWindowUsage(){
 }
 
 
-Window3D* windowPtr = nullptr;
+static Window3D* windowPtr = nullptr;
 void _DrawingFunction(){
     if (!windowPtr)
         throw "Error: window ptr not set!";
@@ -61,17 +61,17 @@ void _DrawingFunction(){
     glutSwapBuffers();
     glFlush();
 
-    if (windowPtr->m_MaxFPS){
+    if (windowPtr->m_MaxFPS > 0.f){
         using namespace std::chrono;
         system_clock::time_point current = system_clock::now(), next;
 
-        int timePerFrameInMS = (1.f / windowPtr->m_MaxFPS) * 1000.f;
+        int timePerFrameInMS = int((1.f / windowPtr->m_MaxFPS) * 1000.f);
         next = system_clock::now();
-        int numMilliseconds = duration_cast<milliseconds>(next - current).count();
+        int numMilliseconds = int(duration_cast<milliseconds>(next - current).count());
         if (numMilliseconds < timePerFrameInMS)
             std::this_thread::sleep_for(milliseconds(timePerFrameInMS - numMilliseconds));
 
-        glutTimerFunc(0, [](int v) { glutPostRedisplay(); }, 1);
+        glutTimerFunc(0, [](int) { glutPostRedisplay(); }, 1);
     }
 }
 void _KeyboardCallbackFunction(unsigned char key, int x, int y){
@@ -145,7 +145,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     windowPtr->_AdjustCamera();
 }
 
-void Window3D::handleKeyboardInput(unsigned char key, int x, int y){}
+void Window3D::handleKeyboardInput(unsigned char, int, int){}
 
 int Window3D::startDrawing(){
     windowPtr = this;
@@ -157,6 +157,7 @@ int Window3D::startDrawing(){
 
 void Window3D::clear(const Color& color){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(color.r, color.g, color.b, 255);
 }
 
 
