@@ -49,7 +49,7 @@ struct Intervall{
     float min;
     float max;
 
-    static float translateInterverllPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition);
+    static float translateIntervallPostion(const Intervall& originalIntervall, const Intervall& newIntervall, float originalPosition);
     friend std::ostream& operator<<(std::ostream& os, const Intervall& intervall);
 };
 
@@ -58,9 +58,6 @@ struct Intervall{
 struct Color{
     Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0) : b(blue), g(green), r(red){}
 
-    // NOTE:
-    // do not change the order of b, g, r in this struct!
-    // this order is required for some window2D functions
     uint8_t b;
     uint8_t g;
     uint8_t r;
@@ -96,13 +93,6 @@ struct Color{
     static const Color PINK;
     static const Color RED;
 };
-
-
-// this function is very similar to std::getline
-// difference: '\r' at the end of a line will be ignored (windows line ending: "\r\n")
-// Note: The function call is simplified to just a standard string of type 'char'
-std::ifstream& getLine(std::ifstream& in, std::string& output);
-
 
 void _removeWindowsSpecificCarriageReturn(std::string& str);
 }
