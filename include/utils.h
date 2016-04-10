@@ -97,7 +97,14 @@ struct Color{
     static const Color RED;
 };
 
-void removeWindowsSpecificCarriageReturn(std::string& str);
+
+// this function is very similar to std::getline
+// difference: '\r' at the end of a line will be ignored (windows line ending: "\r\n")
+// Note: The function call is simplified to just a standard string of type 'char'
+std::ifstream& getLine(std::ifstream& in, std::string& output);
+
+
+void _removeWindowsSpecificCarriageReturn(std::string& str);
 }
 
 
