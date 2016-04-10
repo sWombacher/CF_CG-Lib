@@ -174,16 +174,16 @@ void Window2D::_convertFromNewIntervall(T& x, T& y) const{
     if (!this->m_IntervallChanged)
         return;
 
-    x = Intervall::translateInterverllPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
-    y = Intervall::translateInterverllPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
+    x = Intervall::translateIntervallPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
+    y = Intervall::translateIntervallPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
 }
 template<typename T>
 void Window2D::_convertToNewIntervall(T& x, T& y) const{
     if (!this->m_IntervallChanged)
         return;
 
-    x = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
-    y = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
+    x = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
+    y = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
 }
 
 bool Point::operator==(const Point &p) const{
@@ -192,5 +192,49 @@ bool Point::operator==(const Point &p) const{
 bool Point::operator!=(const Point &p) const{
     return !(*this == p);
 }
+
+Point  Point::operator+ (const Point& p) const {
+    return { this->x + p.x, this->y + p.y };
+}
+Point& Point::operator+=(const Point& p){
+    this->x += p.x;
+    this->y += p.y;
+    return *this;
+}
+
+Point  Point::operator- (const Point& p) const{
+    return { this->x - p.x, this->y - p.y };
+}
+Point& Point::operator-=(const Point& p){
+    this->x -= p.x;
+    this->y -= p.y;
+    return *this;
+}
+
+Point  Point::operator* (float factor) const {
+    return { this->x * factor, this->y * factor };
+}
+Point& Point::operator*=(float factor){
+    this->x *= factor;
+    this->y *= factor;
+    return *this;
+}
+
+Point  Point::operator/ (float rhs) const{
+    return { this->x / rhs, this->y / rhs };
+}
+Point& Point::operator/=(float rhs){
+    this->x /= rhs;
+    this->y /= rhs;
+    return *this;
+}
+
+Point operator* (float factor, const Point& p){
+    return p * factor;
+}
+Point operator/ (float lhs, const Point& p){
+    return p * lhs;
+}
+
 
 }

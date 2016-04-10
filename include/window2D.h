@@ -78,6 +78,21 @@ struct Point{
 
     bool operator==(const Point& p) const;
     bool operator!=(const Point& p) const;
+
+    Point  operator+ (const Point& p) const;
+    Point& operator+=(const Point& p);
+
+    Point  operator- (const Point& p) const;
+    Point& operator-=(const Point& p);
+
+    Point  operator* (float factor) const;
+    Point& operator*=(float factor);
+
+    Point  operator/ (float rhs) const;
+    Point& operator/=(float rhs);
+
+    friend Point operator* (float  factor, const Point& p);
+    friend Point operator/ (float lhs, const Point& p);
 };
 
 
