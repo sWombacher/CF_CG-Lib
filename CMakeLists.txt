@@ -12,6 +12,12 @@ set(CMAKE_BUILD_TYPE "Debug")
 set(USE_SYSTEM_LIBS FALSE)
 #set(USE_SYSTEM_LIBS TRUE )
 
+# enable compiler warnings for gcc/clang
+if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} EQUAL "Clang")
+    set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -Wall -Wextra ")
+endif()
+
+
 include_directories(include)
 add_definitions(-D${CMAKE_SYSTEM_NAME})
 
@@ -107,7 +113,7 @@ if (WIN32 OR CYGWIN)
 		list(GET OpenCV_LIBS_DEBUG   ${val} deb)
 		list(GET OpenCV_LIBS_RELEASE ${val} rel)
 		
-		target_link_libraries(${PROJECT_NAME} debug ${deb} 	optimized ${rel})
+                target_link_libraries(${PROJECT_NAME} debug ${deb} optimized ${rel})
 	endforeach()
 else()
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")

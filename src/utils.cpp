@@ -65,7 +65,7 @@ std::vector<Color> readPaletteFromFile(const char* filename){
 
         std::vector<uint8_t> rgb;
         while(std::getline(sstr, str, ',')){
-            removeWindowsSpecificCarriageReturn(str);
+            _removeWindowsSpecificCarriageReturn(str);
             rgb.push_back(uint8_t(std::stoi(str)));
         }
 
@@ -95,12 +95,13 @@ std::string readAntString(const char* filename){
     // ignore first line
     std::getline(file, str);
     std::getline(file, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     return str;
 }
 
 
-Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
+namespace Direction{
+AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
     switch(relativeMovement){
     case RelativeDirection::LEFT:{
 
@@ -123,13 +124,13 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
     case RelativeDirection::FORWARD:
         return currentDirection;
     }
-}
+    return AbsoluteDirection::NUM_ABS_DIRS; // this should not occur hopfully :)
+}}
 
 
-
-float Intervall::translateInterverllPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition){
-    float factor = (newIntervall.max - newIntervall.min) / (originalInterall.max - originalInterall.min);
-    originalPosition -= originalInterall.min;
+float Intervall::translateIntervallPostion(const Intervall& originalIntervall, const Intervall& newIntervall, float originalPosition){
+    float factor = (newIntervall.max - newIntervall.min) / (originalIntervall.max - originalIntervall.min);
+    originalPosition -= originalIntervall.min;
 
     return originalPosition * factor + newIntervall.min;
 }
@@ -247,7 +248,7 @@ cf::Color operator/ (float value, const cf::Color& c){
 
 
 
-void removeWindowsSpecificCarriageReturn(std::string& str){
+void _removeWindowsSpecificCarriageReturn(std::string& str){
     if (!str.size())
         return;
 

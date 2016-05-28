@@ -1,6 +1,6 @@
 
-#ifndef __WINDOW_2D_H_H__
-#define __WINDOW_2D_H_H__
+#ifndef WINDOW_2D_H_H
+#define WINDOW_2D_H_H
 
 #include <opencv2/opencv.hpp>
 #include "utils.h"
@@ -76,15 +76,23 @@ struct Point{
     float x;
     float y;
 
-    bool operator==(Point& p){
-        if (this->x == p.x && this->y == p.y)
-            return true;
+    bool operator==(const Point& p) const;
+    bool operator!=(const Point& p) const;
 
-        return false;
-    }
-    bool operator!=(Point& p){
-        return !(*this == p);
-    }
+    Point  operator+ (const Point& p) const;
+    Point& operator+=(const Point& p);
+
+    Point  operator- (const Point& p) const;
+    Point& operator-=(const Point& p);
+
+    Point  operator* (float factor) const;
+    Point& operator*=(float factor);
+
+    Point  operator/ (float rhs) const;
+    Point& operator/=(float rhs);
+
+    friend Point operator* (float  factor, const Point& p);
+    friend Point operator/ (float lhs, const Point& p);
 };
 
 

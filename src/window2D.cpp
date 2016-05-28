@@ -10,11 +10,11 @@ Window2D::Window2D(int width, int height, const char* windowName)
     if(!this->m_WindowName)
         this->m_WindowName = "";
 
-	cv::namedWindow(this->m_WindowName);
+    cv::namedWindow(this->m_WindowName);
     this->show();
 }
 
-Window2D::Window2D(const char *filename):m_IntervallX(0, 0), m_IntervallY(0, 0), m_WindowName(filename), m_WindowScale(1.f), m_InvertYAxis(false) {
+Window2D::Window2D(const char *filename):m_InvertYAxis(false), m_WindowName(filename), m_WindowScale(1.f), m_IntervallX(0, 0), m_IntervallY(0, 0) {
     this->m_Image = cv::imread(filename, CV_LOAD_IMAGE_COLOR);
     this->m_IntervallX.max = this->m_Image.cols - 1;
     this->m_IntervallY.max = this->m_Image.rows - 1;
@@ -38,7 +38,7 @@ unsigned char Window2D::waitKey(int delay) const{
 }
 
 
-void mouseCallBack(int event, int x, int y, int flags, void* userdata){
+void mouseCallBack(int event, int x, int y, int, void* userdata){
     if  (event == cv::EVENT_LBUTTONDOWN) {
         reinterpret_cast<float*>(userdata)[0] = x;
         reinterpret_cast<float*>(userdata)[1] = y;
@@ -80,12 +80,12 @@ Color Window2D::getColor(float x, float y) const{
     this->_correctYValue(y);
 
     //return this->m_Image.at<cf::Color>(int(y), int(x));
-	const auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
-	cf::Color c;
-	c.r = tmp[2];
-	c.g = tmp[1];
-	c.b = tmp[0];
-	return c;
+    const auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
+    cf::Color c;
+    c.r = tmp[2];
+    c.g = tmp[1];
+    c.b = tmp[0];
+    return c;
 }
 
 void Window2D::setWindowScale(float scale){
@@ -130,8 +130,8 @@ void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& int
     this->m_IntervallX = intervallX;
     this->m_IntervallY = intervallY;
 
-    if (intervallX.min != 0 || intervallX.max != this->m_Image.cols - 1 ||
-        intervallY.min != 0 || intervallY.max != this->m_Image.rows - 1)
+    if (intervallX.min != 0.f || intervallX.max != this->m_Image.cols - 1 ||
+        intervallY.min != 0.f || intervallY.max != this->m_Image.rows - 1)
     {
         this->m_IntervallChanged = true;
     }
@@ -174,16 +174,67 @@ void Window2D::_convertFromNewIntervall(T& x, T& y) const{
     if (!this->m_IntervallChanged)
         return;
 
-    x = Intervall::translateInterverllPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
-    y = Intervall::translateInterverllPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
+    x = Intervall::translateIntervallPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
+    y = Intervall::translateIntervallPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
 }
 template<typename T>
 void Window2D::_convertToNewIntervall(T& x, T& y) const{
     if (!this->m_IntervallChanged)
         return;
 
-    x = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
-    y = Intervall::translateInterverllPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
+    x = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
+    y = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
 }
+
+bool Point::operator==(const Point &p) const{
+    return this->x == p.x && this->y == p.y;
+}
+bool Point::operator!=(const Point &p) const{
+    return !(*this == p);
+}
+
+Point  Point::operator+ (const Point& p) const {
+    return { this->x + p.x, this->y + p.y };
+}
+Point& Point::operator+=(const Point& p){
+    this->x += p.x;
+    this->y += p.y;
+    return *this;
+}
+
+Point  Point::operator- (const Point& p) const{
+    return { this->x - p.x, this->y - p.y };
+}
+Point& Point::operator-=(const Point& p){
+    this->x -= p.x;
+    this->y -= p.y;
+    return *this;
+}
+
+Point  Point::operator* (float factor) const {
+    return { this->x * factor, this->y * factor };
+}
+Point& Point::operator*=(float factor){
+    this->x *= factor;
+    this->y *= factor;
+    return *this;
+}
+
+Point  Point::operator/ (float rhs) const{
+    return { this->x / rhs, this->y / rhs };
+}
+Point& Point::operator/=(float rhs){
+    this->x /= rhs;
+    this->y /= rhs;
+    return *this;
+}
+
+Point operator* (float factor, const Point& p){
+    return p * factor;
+}
+Point operator/ (float lhs, const Point& p){
+    return p * lhs;
+}
+
 
 }

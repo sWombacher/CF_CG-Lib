@@ -1,12 +1,16 @@
 
-#ifndef _ORBIT_H_H__
-#define _ORBIT_H_H__
+#ifndef ORBIT_H_H
+#define ORBIT_H_H
 
 
 #include "utils.h"
 
 namespace cf{
 
+/**
+ * @brief The Orbit class
+ * lazy people (like myself) may use the ORB tyepdef
+ */
 class Orbit{
 public:
     Orbit() = default;

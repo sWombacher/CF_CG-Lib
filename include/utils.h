@@ -1,6 +1,6 @@
 
-#ifndef _UTILS_H_H_
-#define _UTILS_H_H_
+#ifndef UTILS_H_H
+#define UTILS_H_H
 
 #include <string>
 #include <vector>
@@ -14,10 +14,6 @@
 
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-
-
-/// TODO:
-/// orb-files, dat-files
 
 // enable standard output for vec2, vec3 & vec4
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec);
@@ -43,7 +39,7 @@ float degree2radiant(float degreeValue);
 namespace Direction{
     enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
     enum RelativeDirection { LEFT, FORWARD, RIGHT };
-    static AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
+    AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
 };
 
 
@@ -53,7 +49,7 @@ struct Intervall{
     float min;
     float max;
 
-    static float translateInterverllPostion(const Intervall& originalInterall, const Intervall& newIntervall, float originalPosition);
+    static float translateIntervallPostion(const Intervall& originalIntervall, const Intervall& newIntervall, float originalPosition);
     friend std::ostream& operator<<(std::ostream& os, const Intervall& intervall);
 };
 
@@ -62,9 +58,6 @@ struct Intervall{
 struct Color{
     Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0) : b(blue), g(green), r(red){}
 
-    // NOTE:
-    // do not change the order of b, g, r in this struct!
-    // this order is required for some window2D functions
     uint8_t b;
     uint8_t g;
     uint8_t r;
@@ -101,7 +94,7 @@ struct Color{
     static const Color RED;
 };
 
-void removeWindowsSpecificCarriageReturn(std::string& str);
+void _removeWindowsSpecificCarriageReturn(std::string& str);
 }
 
 

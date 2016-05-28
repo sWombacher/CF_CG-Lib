@@ -12,7 +12,7 @@ void Orbit::read(const char *filename){
 
     std::string str;
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     this->m_Name = str.substr(str.rfind(' ') + 1);
 
     // remove white spaces
@@ -43,7 +43,7 @@ void Orbit::read(const char *filename){
     int startPointCount = std::stoi(str);
     for (int i = 0; i < startPointCount; ++i){
         std::getline(input, str);
-        removeWindowsSpecificCarriageReturn(str);
+        _removeWindowsSpecificCarriageReturn(str);
         sstr.clear();
         sstr << str;
 
@@ -62,7 +62,7 @@ void Orbit::read(const char *filename){
 
 
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     sstr.clear();
     sstr << str;
     std::vector<float> values;

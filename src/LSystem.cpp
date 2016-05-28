@@ -20,22 +20,22 @@ void LindenmayerSystem::read(const char* filename){
 
     // read filename
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     this->m_Name = str.substr(str.rfind(' ') + 1);
 
     // read axiom
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     this->m_Axiom = str;
 
     // read num productions
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     int productionCounter = std::stoi(str);
 
     for (int i = 0; i < productionCounter; ++i){
         std::getline(input, str);
-        removeWindowsSpecificCarriageReturn(str);
+        _removeWindowsSpecificCarriageReturn(str);
         char symbol = str[0];
         str = str.substr(str.find('>') + 1);
         //str = str.substr(0, str.size() -1);
@@ -44,7 +44,7 @@ void LindenmayerSystem::read(const char* filename){
     }
 
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
     std::stringstream sstream;
     sstream << str;
 
@@ -55,7 +55,7 @@ void LindenmayerSystem::read(const char* filename){
     auto readNext = [&str](std::stringstream& stream){
         do{
             std::getline(stream, str, ' ');
-            removeWindowsSpecificCarriageReturn(str);
+            _removeWindowsSpecificCarriageReturn(str);
         } while (!str.size());
     };
 
@@ -66,7 +66,7 @@ void LindenmayerSystem::read(const char* filename){
     this->m_Scale = std::stof(str);
 
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
 
     sstream.clear();
     sstream << str;
@@ -84,7 +84,7 @@ void LindenmayerSystem::read(const char* filename){
     this->m_RangeY.max = std::stof(str);
 
     std::getline(input, str);
-    removeWindowsSpecificCarriageReturn(str);
+    _removeWindowsSpecificCarriageReturn(str);
 
     if (str[str.size() - 1] == '0')
         this->m_ClearWindowEachTime = false;
