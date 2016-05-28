@@ -25,6 +25,9 @@ if (USE_SYSTEM_LIBS)
 else()
     message("Using provided 3rd party libs")
     include_directories(3rdparty/include)
+    if (NOT CMAKE_SIZEOF_VOID_P MATCHES "8")
+        message(SEND_ERROR "Error:\nProvided libraries are 64bit versions,\nif you have a 64bit system try changing your compiler to a x86_x64 compiler\nNote: you may have to delete the cmake cache to do so")
+    endif()	
 	
 	set(LIB_DIR 3rdparty/lib/${CMAKE_SYSTEM_NAME})
 	if (WIN32 OR CYGWIN)
@@ -121,6 +124,7 @@ foreach(example ${examples})
     # get file name without its path or extenstion
     get_filename_component(name ${example} NAME_WE)
 
-    add_executable(${name} ${example} ${HEADERS_FILES})
+    add_executable(${name} ${example})
     target_link_libraries(${name} ${PROJECT_NAME})
+    target_include_directories(${name} PUBLIC include)
 endforeach()
