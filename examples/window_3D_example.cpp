@@ -15,7 +15,11 @@ public:
         glm::vec4 dir(this->m_Length, 0, 0, 1);
         float radiantValue = cf::degree2radiant(this->m_Angle);
 
-        //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(1, 0, 0)); // rotation around x-axis
+        // rotation around x-axis,
+        // since dir lies on the x-axis the rotation doesn't do anything :)
+        // change dir to test this
+        // glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(1, 0, 0));
+
         //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 1, 0)); // rotation around y-axis
         glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1)); // rotation around z-axis
         dir = dir * rotMat;
@@ -42,7 +46,7 @@ public:
         case 'o': this->m_Angle -= 5.f; break;
         default : break;
         }
-        if (key >= '0' && key <= '9') // adjust the length by typing a number key
+        if (key > '0' && key <= '9') // adjust the length by typing a number key
             this->m_Length = key - '0';
     }
 
