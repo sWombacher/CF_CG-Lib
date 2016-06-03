@@ -57,6 +57,9 @@ void _DrawingFunction(){
     if (!windowPtr)
         throw "Error: window ptr not set!";
 
+    static const GLfloat position[] = { -10.f, 10.0f, -10.0f, 0.0f };
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
+
     windowPtr->draw();
     glutSwapBuffers();
     glFlush();
@@ -64,7 +67,6 @@ void _DrawingFunction(){
     if (windowPtr->m_MaxFPS > 0.f){
         using namespace std::chrono;
         system_clock::time_point current = system_clock::now(), next;
-
         int timePerFrameInMS = int((1.f / windowPtr->m_MaxFPS) * 1000.f);
         next = system_clock::now();
         int numMilliseconds = int(duration_cast<milliseconds>(next - current).count());
@@ -151,6 +153,12 @@ int Window3D::startDrawing(){
     windowPtr = this;
     glutKeyboardFunc(_KeyboardCallbackFunction);
     glutDisplayFunc(_DrawingFunction);
+
+    // enable lighting
+    glEnable(GL_LIGHTING);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHT0);
     glutMainLoop();
     return 0; // never reached
 }
@@ -163,15 +171,13 @@ void Window3D::clear(const Color& color){
 
 void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter, const Color color) const {
     // set drawing angles
-    const glm::vec3 startDir = glm::vec3(1.f, 0.f, 0.f);
+    const glm::vec3 startDir = glm::vec3(1.f, 0.f, 0.0001f);
     const glm::vec3 dir = glm::normalize(drawingDirection);
 
     const glm::vec3 rotVec = glm::normalize(glm::cross(startDir, dir));
 
     glPushMatrix();
     {
-        static GLUquadricObj* obj = gluNewQuadric();
-
         glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
         glTranslatef(position.x, position.y, position.z);
 
@@ -182,12 +188,7 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
         glRotatef(90, 0, 1.f, 0);
         glScalef(diameter, diameter, diameter);
 
-        glBegin(GL_POLYGON);
-        {
-            gluQuadricDrawStyle(obj, GLU_LINE);
-            gluCylinder(obj, 0.1, 0.1, glm::length(drawingDirection) / diameter, 10, 10);
-        }
-        glEnd();
+        glutSolidCylinder(0.1, glm::length(drawingDirection) / diameter, 10, 10);
     }
     glPopMatrix();
 }
