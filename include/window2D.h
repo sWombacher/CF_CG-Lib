@@ -12,8 +12,8 @@ struct Point;
 
 class Window2D{
 public:
-    Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals");
-    Window2D(const char* filename);
+    Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0});
+    Window2D(const char* filePath);
     ~Window2D();
 
     void show() const;

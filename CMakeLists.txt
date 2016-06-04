@@ -123,6 +123,9 @@ else()
 	target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
 endif()
 
+# add define
+add_definitions(-DCHAOS_FILE_PATH="${CMAKE_CURRENT_LIST_DIR}/chaos_files/")
+
 # add all example executeables
 file(GLOB examples ${CMAKE_CURRENT_LIST_DIR}/examples/*.cpp)
 foreach(example ${examples})
@@ -133,3 +136,8 @@ foreach(example ${examples})
     target_link_libraries(${name} ${PROJECT_NAME})
     target_include_directories(${name} PUBLIC include)
 endforeach()
+
+# add solutions to all practices
+set(DIRECTORIES_TO_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include)
+set(LIBRARIES_TO_LINK ${PROJECT_NAME})
+add_subdirectory(ChaosAndFractal_Solutions)

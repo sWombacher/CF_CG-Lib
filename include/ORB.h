@@ -14,7 +14,7 @@ namespace cf{
 class Orbit{
 public:
     Orbit() = default;
-    void read(const char* filename);
+    void read(const std::string& filename);
 
     const Intervall& getRangeX() const;
     const Intervall& getRangeY() const;

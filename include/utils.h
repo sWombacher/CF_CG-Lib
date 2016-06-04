@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 namespace cf{
 
 struct Color;
-std::vector<Color> readPaletteFromFile(const char* filename);
+std::vector<Color> readPaletteFromFile(const std::string& filename);
 std::string readAntString(const char* filename);
 
 
@@ -40,7 +40,7 @@ namespace Direction{
     enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
     enum RelativeDirection { LEFT, FORWARD, RIGHT };
     AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
-};
+}
 
 
 

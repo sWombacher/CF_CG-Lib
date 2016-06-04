@@ -45,7 +45,7 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat){
 
 namespace cf{
 
-std::vector<Color> readPaletteFromFile(const char* filename){
+std::vector<Color> readPaletteFromFile(const std::string& filename){
     std::fstream file(filename, std::fstream::in);
     if (!file)
         throw "File not found in function: \"readPaletteFromFile\"";

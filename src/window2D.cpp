@@ -2,8 +2,8 @@
 #include "window2D.h"
 namespace cf{
 
-Window2D::Window2D(int width, int height, const char* windowName)
-: m_Image(height, width, CV_8UC3, cv::Scalar(0, 0, 0)), m_InvertYAxis(false),
+Window2D::Window2D(int width, int height, const char* windowName, const cf::Color& c)
+: m_Image(height, width, CV_8UC3, cv::Scalar(c.b, c.g, c.r)), m_InvertYAxis(false),
   m_WindowName(windowName), m_WindowScale(1.f),
   m_IntervallX(0, this->m_Image.cols - 1), m_IntervallY(0, this->m_Image.rows -1)
 {
@@ -14,8 +14,8 @@ Window2D::Window2D(int width, int height, const char* windowName)
     this->show();
 }
 
-Window2D::Window2D(const char *filename):m_InvertYAxis(false), m_WindowName(filename), m_WindowScale(1.f), m_IntervallX(0, 0), m_IntervallY(0, 0) {
-    this->m_Image = cv::imread(filename, CV_LOAD_IMAGE_COLOR);
+Window2D::Window2D(const char *filePath):m_InvertYAxis(false), m_WindowName(filePath), m_WindowScale(1.f), m_IntervallX(0, 0), m_IntervallY(0, 0) {
+    this->m_Image = cv::imread(filePath, CV_LOAD_IMAGE_COLOR);
     this->m_IntervallX.max = this->m_Image.cols - 1;
     this->m_IntervallY.max = this->m_Image.rows - 1;
 }

@@ -2,14 +2,17 @@
 #include "IFS.h"
 
 int main(int argc, char** argv) {
+    std::string filePath;
     if (argc < 2){
-        std::cout << "Please provide a .ifs file" << std::endl;
-		getchar();
-        return -1;
+        std::cout << "Please provide a .ifs file, if you want a different ifs file\n\n\n";
+        filePath = CHAOS_FILE_PATH;
+        filePath += "Baum_3.ifs";
     }
+    else
+        filePath = argv[1];
 
     cf::IteratedFunctionSystem ifs; // alternative:    cf::IFS ifs;
-    ifs.read(argv[1]);
+    ifs.read(filePath);
 
     std::string align = " :  ";
     std::cout << "Name"               << align << ifs.getName()               << '\n'

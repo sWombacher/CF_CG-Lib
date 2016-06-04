@@ -1,17 +1,17 @@
-
 #include "LSystem.h"
 
-
 int main(int argc, char** argv) {
-
+    std::string filePath;
     if (argc < 2){
-        std::cout << "Please provide a .lin file" << std::endl;
-		getchar();
-        return -1;
+        std::cout << "Please provide a .lin file, if you want a different file\n\n\n";
+        filePath = CHAOS_FILE_PATH;
+        filePath += "Busch_1.lin";
     }
+    else
+        filePath = argv[1];
 
     cf::LindenmayerSystem ls;   // alternative:     cf::LSystem ls;
-    ls.read(argv[1]);
+    ls.read(filePath);
 
     std::string align = " :  ";
     std::cout << "Name"                    << align << ls.getName()                              << '\n'
@@ -30,7 +30,6 @@ int main(int argc, char** argv) {
     std::cout << "\nProductions to symbol: " << symbol << std::endl;
 
     const std::string* prod = ls.getProduction(symbol);
-
     if (prod)
         std::cout << *prod << std::endl;
     else

@@ -16,7 +16,7 @@ class IteratedFunctionSystem{
 
 public:
     IteratedFunctionSystem() = default;
-    void read(const char* fiilename);
+    void read(const std::string& fiilename);
 
     std::size_t getNumTransformations() const;
 

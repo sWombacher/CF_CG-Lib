@@ -11,7 +11,7 @@
 
 namespace cf{
 
-void LindenmayerSystem::read(const char* filename){
+void LindenmayerSystem::read(const std::string& filename){
     std::fstream input(filename, std::fstream::in);
     if (!input)
         throw "File not found in function: \"LindenmayerSystem::read\"";

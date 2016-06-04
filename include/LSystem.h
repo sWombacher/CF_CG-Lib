@@ -22,7 +22,7 @@ namespace cf{
 class LindenmayerSystem{
 
 public:
-    void read(const char* filename);
+    void read(const std::string& filename);
 
     const std::string& getName () const;
     const std::string& getAxiom() const;

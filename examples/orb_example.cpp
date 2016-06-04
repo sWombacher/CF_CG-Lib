@@ -1,13 +1,17 @@
 #include "ORB.h"
 
 int main(int argc, char** argv) {
+    std::string filePath;
     if (argc < 2){
-        std::cout << "Please provide a .orb file" << std::endl;
-		getchar();
-        return -1;
+        std::cout << "Please provide a .orb file, if you want a differnt orb file\n\n\n";
+        filePath = CHAOS_FILE_PATH;
+        filePath += "Brezel_1.orb";
     }
+    else
+        filePath = argv[1];
+
     cf::Orbit orb; // alternative:    cf::ORB orb;
-    orb.read(argv[1]);
+    orb.read(filePath);
 
     const std::string align = " :  ";
     std::cout << "Name"               << align << orb.getName()              << '\n'

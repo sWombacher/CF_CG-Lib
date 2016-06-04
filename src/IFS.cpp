@@ -8,7 +8,7 @@
 
 namespace cf{
 
-void IteratedFunctionSystem::read(const char* fiilename){
+void IteratedFunctionSystem::read(const std::string &fiilename){
     std::fstream input(fiilename, std::fstream::in);
     if (!input)
         throw "File not found in function: \"IteratedFunctionSystem::read\"";
