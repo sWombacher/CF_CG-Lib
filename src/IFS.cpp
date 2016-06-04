@@ -49,9 +49,9 @@ void IteratedFunctionSystem::read(const std::string &fiilename){
         mat[1][1] = transformation[3];
         mat[2][1] = transformation[5];
 
-        mat[0][2] = 0;
-        mat[1][2] = 0;
-        mat[2][2] = 1;
+        mat[0][2] = transformation[0];
+        mat[1][2] = transformation[0];
+        mat[2][2] = transformation[1];
 
         this->m_Transformations.push_back(mat);
     }
