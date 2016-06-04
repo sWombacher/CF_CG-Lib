@@ -153,6 +153,13 @@ void Window2D::saveImage(const char *filename) const{
     cv::imwrite(filename, this->m_Image);
 }
 
+void Window2D::flippHorizontal() {
+    cv::flip(this->m_Image, this->m_Image, 0);
+}
+void Window2D::flippVertical() {
+    cv::flip(this->m_Image, this->m_Image, 1);
+}
+
 int Window2D::getImageWidth() const{
     return this->m_Image.cols;
 }

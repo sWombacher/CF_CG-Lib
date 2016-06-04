@@ -41,6 +41,9 @@ public:
 
     void saveImage(const char* filename) const;
 
+    void flippHorizontal();
+    void flippVertical();
+
 
     int getImageWidth() const;
     int getImageHeight()const;
