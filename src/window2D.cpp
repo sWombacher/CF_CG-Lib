@@ -33,6 +33,9 @@ void Window2D::show() const{
     }
     cv::waitKey(10);
 }
+
+void Window2D::clear(const Color &c){ this->m_Image = cv::Scalar(c.b, c.g, c.r); }
+
 unsigned char Window2D::waitKey(int delay) const{
     return static_cast<unsigned char>(cv::waitKey(delay));
 }

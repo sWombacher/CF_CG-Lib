@@ -17,6 +17,7 @@ public:
     ~Window2D();
 
     void show() const;
+    void clear(const cf::Color& color = {0, 0, 0});
     unsigned char waitKey(int delay = 0) const;
 
     void waitMouseInput(float& x, float& y);
@@ -40,6 +41,7 @@ public:
 
 
     void saveImage(const char* filename) const;
+
 
     void flippHorizontal();
     void flippVertical();
