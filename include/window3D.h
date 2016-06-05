@@ -39,7 +39,7 @@ public:
 
     // Note:
     // scale does not affect the length
-    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color color = Color::WHITE) const;
+    void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color &color = Color::WHITE) const;
 
     void setMaxFPS(float maxFPS = 0.f); // value of 0 indicates "only draw after key-input"
 

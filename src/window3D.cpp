@@ -12,7 +12,7 @@ namespace cf{
 
 Window3D::Window3D(int* argc, char** argv, int width, int height, const char* title) : m_Width(width), m_Height(height) {
     glutInit(argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize(this->m_Width, this->m_Height);
 
     this->m_WindowID = glutCreateWindow(title);
@@ -159,6 +159,15 @@ int Window3D::startDrawing(){
     glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHT0);
+
+    // enable z buffer
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+
     glutMainLoop();
     return 0; // never reached
 }
@@ -169,7 +178,7 @@ void Window3D::clear(const Color& color){
 }
 
 
-void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter, const Color color) const {
+void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter, const Color& color) const {
     // set drawing angles
     const glm::vec3 startDir = glm::vec3(1.f, 0.f, 0.0001f);
     const glm::vec3 dir = glm::normalize(drawingDirection);
