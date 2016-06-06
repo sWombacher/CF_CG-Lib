@@ -168,6 +168,7 @@ int Window3D::startDrawing(){
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
 
+    this->clear();
     glutMainLoop();
     return 0; // never reached
 }

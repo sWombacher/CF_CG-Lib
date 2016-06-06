@@ -25,7 +25,7 @@ public:
     void read(const std::string& filename);
 
     const std::string& getName () const;
-    const std::string& getAxiom() const;
+    char getAxiom() const;
 
     const std::string* getProduction(char symbol) const;
 
@@ -45,7 +45,7 @@ public:
 private:
     std::string m_Name;
 
-    std::string m_Axiom;
+    char m_Axiom;
     std::vector<std::pair<const char, const std::string> > m_Productions;
 
 

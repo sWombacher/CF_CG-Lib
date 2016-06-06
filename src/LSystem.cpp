@@ -26,7 +26,7 @@ void LindenmayerSystem::read(const std::string& filename){
     // read axiom
     std::getline(input, str);
     _removeWindowsSpecificCarriageReturn(str);
-    this->m_Axiom = str;
+    this->m_Axiom = str[0];
 
     // read num productions
     std::getline(input, str);
@@ -97,7 +97,7 @@ void LindenmayerSystem::read(const std::string& filename){
 const std::string& LindenmayerSystem::getName () const{
     return this->m_Name;
 }
-const std::string& LindenmayerSystem::getAxiom() const{
+char LindenmayerSystem::getAxiom() const{
     return this->m_Axiom;
 }
 
