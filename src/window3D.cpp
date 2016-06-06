@@ -203,6 +203,11 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
     glPopMatrix();
 }
 
+void Window3D::drawCylinder(const glm::vec4 &drawingDirection, const glm::vec3 &position, float diameter, const Color &color) const {
+    glm::vec3 dir = {drawingDirection.x, drawingDirection.y, drawingDirection.z};
+    this->drawCylinder(dir, position, diameter, color);
+}
+
 void Window3D::_AdjustCamera(){
     glLoadIdentity();             // Reset
 
@@ -288,6 +293,10 @@ void Window3D::drawAxis(float len) const{
     glEnd();
 }
 
+void Window3D::forceDisplay() const {
+    glutSwapBuffers();
+    glFlush();
+}
 
 }
 

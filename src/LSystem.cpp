@@ -106,7 +106,7 @@ const std::string* LindenmayerSystem::getProduction(char symbol) const{
         if (this->m_Productions[i].first == symbol)
             return &this->m_Productions[i].second;
     }
-    return NULL;
+    return nullptr;
 }
 
 std::size_t LindenmayerSystem::getNumProductions() const{

@@ -36,10 +36,12 @@ public:
     void setCamera(CameraType type, glm::vec3 lookAt = glm::vec3(0, 0, 0), float distance = 10.f);
 
     void drawAxis(float length = 100.f) const;
+    void forceDisplay() const;
 
     // Note:
     // scale does not affect the length
     void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color &color = Color::WHITE) const;
+    void drawCylinder(const glm::vec4& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color &color = Color::WHITE) const;
 
     void setMaxFPS(float maxFPS = 0.f); // value of 0 indicates "only draw after key-input"
 
