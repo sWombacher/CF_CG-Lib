@@ -203,9 +203,10 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
     glPopMatrix();
 }
 
-void Window3D::drawCylinder(const glm::vec4 &drawingDirection, const glm::vec3 &position, float diameter, const Color &color) const {
+void Window3D::drawCylinder(const glm::vec4 &drawingDirection, const glm::vec4 &position, float diameter, const Color &color) const {
     glm::vec3 dir = {drawingDirection.x, drawingDirection.y, drawingDirection.z};
-    this->drawCylinder(dir, position, diameter, color);
+    glm::vec3 pos = {position.x, position.y, position.z};
+    this->drawCylinder(dir, pos, diameter, color);
 }
 
 void Window3D::_AdjustCamera(){

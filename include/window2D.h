@@ -22,26 +22,25 @@ public:
 
     void waitMouseInput(float& x, float& y);
 
-    void  setWindowScale(float scale);
-    float getWindowScale() const;
+    void  setWindowDisplayScale(float scale);
+    float getWindowDisplayScale() const;
 
     void setInvertYAxis(bool invert);
     bool getInvertYAxis() const;
 
     void  setColor(float x, float y, const Color& color);
     Color getColor(float x, float y) const;
+    void  colorWholeImage(const Color& color);
 
     void drawCircle   (cf::Point point ,       int radius, int lineWidth, const cf::Color& color);
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
     void drawLine     (cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
-
     void setNewIntervall(const cf::Intervall& intervallX, const cf::Intervall& intervallY);
     void  resetIntervall();
 
-
     void saveImage(const char* filename) const;
-
+    void resize(int pixelWidth, int pixelHeight);
 
     void flippHorizontal();
     void flippVertical();

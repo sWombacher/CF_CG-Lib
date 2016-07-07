@@ -1,6 +1,9 @@
 #include "ORB.h"
 
 int main(int argc, char** argv) {
+    // read provided *.orb file
+    // if no file is provided as a commandline argument
+    // use a default .orb file
     std::string filePath;
     if (argc < 2){
         std::cout << "Please provide a .orb file, if you want a differnt orb file\n\n\n";
@@ -13,6 +16,7 @@ int main(int argc, char** argv) {
     cf::Orbit orb; // alternative:    cf::ORB orb;
     orb.read(filePath);
 
+    // print file data
     const std::string align = " :  ";
     std::cout << "Name"               << align << orb.getName()              << '\n'
               << "Num Factors"        << align << orb.getNumFactors()        << '\n'
@@ -21,7 +25,7 @@ int main(int argc, char** argv) {
               << "Intervall X max"    << align << orb.getRangeX().max        << '\n'
               << "Intervall Y min"    << align << orb.getRangeY().min        << '\n'
               << "Intervall Y max"    << align << orb.getRangeY().max        << '\n'
-              << "\n\n" << std::endl;
+              << "\n\n\n" << std::flush;
 
     std::cout << "Startingpoints:\n";
     for (const auto& e : orb.getAllStartingPoints())

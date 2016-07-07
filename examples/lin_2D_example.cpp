@@ -1,18 +1,21 @@
 #include "LSystem.h"
 
 int main(int argc, char** argv) {
+    // receive file name/path
     std::string filePath;
     if (argc < 2){
         std::cout << "Please provide a .lin file, if you want a different file\n\n\n";
-        filePath = CHAOS_FILE_PATH;
+        filePath = CHAOS_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/chaos_files
         filePath += "Busch_1.lin";
     }
     else
         filePath = argv[1];
 
+    // create and parse *.lin file
     cf::LindenmayerSystem ls;   // alternative:     cf::LSystem ls;
     ls.read(filePath);
 
+    // print all data found in *.lin file
     std::string align = " :  ";
     std::cout << "Name"                    << align << ls.getName()                              << '\n'
               << "Axiom"                   << align << ls.getAxiom()                             << '\n'
@@ -29,6 +32,10 @@ int main(int argc, char** argv) {
     char symbol = 'F';
     std::cout << "\nProductions to symbol: " << symbol << std::endl;
 
+    // display production
+    // NOTE:
+    //  not every character has to be a production
+    //  in this case NULL will be returned
     const std::string* prod = ls.getProduction(symbol);
     if (prod)
         std::cout << *prod << std::endl;
@@ -37,7 +44,7 @@ int main(int argc, char** argv) {
 
     // print all productions
     std::cout << std::endl << std::endl << "All productions:" << std::endl << std::endl;
-    for (auto& e: ls.getAllProductions())
+    for (const auto& e: ls.getAllProductions())
         std::cout << "Symbol: " << e.first << "\nProduction: " << e.second << std::endl << std::endl;
 
     getchar();

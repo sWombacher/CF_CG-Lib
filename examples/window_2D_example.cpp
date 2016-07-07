@@ -20,6 +20,7 @@ int main(void) {
     while(w.getColor(0, 0) == cf::Color::WHITE){
         for (int i = 0; i < step_count; ++i){
             printf("Processing: %d%% \r", int(float(i) / float(step_count) * 100));
+            fflush(stdout);
 
 			// this algorithm might be slow (debug version) 
 			// so we might want to parallize this by using openmp

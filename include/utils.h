@@ -81,6 +81,7 @@ struct Color{
     bool operator!=(const Color& c);
 
     friend std::ostream& operator<<(std::ostream& os, const Color& c);
+    Color invert() const;
 
     static const Color MAGENTA;
     static const Color YELLOW;

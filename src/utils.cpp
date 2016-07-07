@@ -146,6 +146,12 @@ bool Color::operator!=(const Color& c){
     return !(*this == c);
 }
 
+Color Color::invert() const{
+    Color toReturn = cf::Color::WHITE;
+    toReturn -= *this;
+    return toReturn;
+}
+
 
 std::ostream& operator<<(std::ostream &os, const Color& c){
     os << "Red: " << c.r << "\tGreen: " << c.g << "\tBlue: " << c.b;

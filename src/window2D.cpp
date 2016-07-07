@@ -91,10 +91,14 @@ Color Window2D::getColor(float x, float y) const{
     return c;
 }
 
-void Window2D::setWindowScale(float scale){
+void Window2D::colorWholeImage(const Color &color){
+    this->m_Image = cv::Scalar(color.b, color.g, color.r);
+}
+
+void Window2D::setWindowDisplayScale(float scale){
     this->m_WindowScale = scale;
 }
-float Window2D::getWindowScale() const{
+float Window2D::getWindowDisplayScale() const{
     return this->m_WindowScale;
 }
 
@@ -154,6 +158,10 @@ void Window2D::resetIntervall(){
 
 void Window2D::saveImage(const char *filename) const{
     cv::imwrite(filename, this->m_Image);
+}
+
+void Window2D::resize(int pixelWidth, int pixelHeight){
+    cv::resize(this->m_Image, this->m_Image, {pixelWidth, pixelHeight});
 }
 
 void Window2D::flippHorizontal() {

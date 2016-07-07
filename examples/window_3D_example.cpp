@@ -55,7 +55,7 @@ private:
     float m_Angle = 0.f;
     float m_Diameter = 1.f;
     float m_Length = 1.f;
-    glm::vec3 m_StartPos = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec4 m_StartPos = glm::vec4(0.f, 0.f, 0.f, 0.f);
 };
 
 
