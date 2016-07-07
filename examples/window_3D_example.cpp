@@ -24,12 +24,18 @@ public:
         glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1)); // rotation around z-axis
         dir = dir * rotMat;
 
+        glm::mat4x4 rotMat2 = glm::rotate(cf::degree2radiant(90), glm::vec3(0, 0, 1));
+        glm::vec4 dir2 = rotMat2 * dir;
+        dir2 *= 0.5;
+
         // alternatively:
         //dir = glm::rotateZ(dir, -radiantValue);
 
-        //cf::Color color = Color(255, 255, 255);
-        cf::Color color = cf::Color::ORANGE;
-        this->drawCylinder(dir, this->m_StartPos, this->m_Diameter, color);
+        cf::Color color  = cf::Color::ORANGE;
+        cf::Color color2 = cf::Color(0, 0, 255);
+
+        this->drawCylinder(dir , this->m_StartPos      , this->m_Diameter        , color );
+        this->drawCylinder(dir2, this->m_StartPos + dir, this->m_Diameter * 0.75f, color2);
     }
     void handleKeyboardInput(unsigned char key, int x, int y) override{
         printf("Key: %c pressed at mouse position: %d, %d\r", key, x, y);
