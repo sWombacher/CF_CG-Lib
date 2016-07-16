@@ -1,4 +1,3 @@
-
 #include "window3D.h"
 
 #include <chrono>
@@ -6,9 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 
-
 namespace cf{
-
 
 Window3D::Window3D(int* argc, char** argv, int width, int height, const char* title) : m_Width(width), m_Height(height) {
     glutInit(argc, argv);
@@ -207,6 +204,14 @@ void Window3D::drawCylinder(const glm::vec4 &drawingDirection, const glm::vec4 &
     glm::vec3 dir = {drawingDirection.x, drawingDirection.y, drawingDirection.z};
     glm::vec3 pos = {position.x, position.y, position.z};
     this->drawCylinder(dir, pos, diameter, color);
+}
+void Window3D::drawCylinder(const glm::vec4& drawingDirection, const glm::vec3& position, float diameter, const Color &color) const {
+    glm::vec3 dir = {drawingDirection.x, drawingDirection.y, drawingDirection.z};
+    this->drawCylinder(dir, position, diameter, color);
+}
+void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec4& position, float diameter, const Color &color) const {
+    glm::vec3 pos = {position.x, position.y, position.z};
+    this->drawCylinder(drawingDirection, pos, diameter, color);
 }
 
 void Window3D::_AdjustCamera(){
