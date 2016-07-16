@@ -1,5 +1,4 @@
-
-#include "window2D.h"
+#include "windowVercorized.h"
 #include <iomanip> // set precision
 
 
@@ -16,7 +15,7 @@ int main(void) {
         window.setColor(x, y, cf::Color::ORANGE);
     }
     }
-    //window.colorWholeImage(cf::Color::ORANGE);
+    //window.clear(cf::Color::ORANGE);
     window.show();
     float x, y;
 

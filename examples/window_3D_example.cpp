@@ -10,23 +10,27 @@ public:
     }
     virtual ~MyWindow() = default;
     virtual void draw() override{
+        // clear all and redraw axis
         this->clear();
         this->drawAxis(2.f);
+
+        // create a cylinder direction
+        // direction and length of this vector will be drawn as a cylinder later on
         glm::vec4 dir(this->m_Length, 0, 0, 1);
-        float radiantValue = cf::degree2radiant(this->m_Angle);
+        float radiantValue = cf::degree2radiant(this->m_Angle); // glm library uses radiant format
 
         // rotation around x-axis,
-        // since dir lies on the x-axis the rotation doesn't do anything :)
-        // change dir to test this
+        // since 'dir' lies on the x-axis the rotation doesn't do anything :)
+        // change 'dir' to see a difference
         // glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(1, 0, 0));
 
-        //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 1, 0)); // rotation around y-axis
-        glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1)); // rotation around z-axis
-        dir = dir * rotMat;
+        glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 1, 0)); // rotation around y-axis
+        //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1)); // rotation around z-axis
+        dir = rotMat * dir;
 
         glm::mat4x4 rotMat2 = glm::rotate(cf::degree2radiant(90), glm::vec3(0, 0, 1));
         glm::vec4 dir2 = rotMat2 * dir;
-        dir2 *= 0.5;
+        dir2 *= 0.5; // half the length of cylinder2
 
         // alternatively:
         //dir = glm::rotateZ(dir, -radiantValue);
@@ -49,8 +53,8 @@ public:
         case 'n': this->m_Diameter *= 1.5f; break;
         case 'm': this->m_Diameter /= 1.5f; break;
 
-        case 'u': this->m_Angle += 5.f; break;
-        case 'o': this->m_Angle -= 5.f; break;
+        case 'u': this->m_Angle -= 5.f; break;
+        case 'o': this->m_Angle += 5.f; break;
         default : break;
         }
         if (key > '0' && key <= '9') // adjust the length by typing a number key

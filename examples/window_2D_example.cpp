@@ -1,10 +1,8 @@
-
-
-#include "window2D.h"
+#include "windowRasterized.h"
 
 
 int main(void) {
-    cf::Window2D w;
+    cf::WindowRasterized w;
 
     for (int y = 0; y < w.getImageHeight(); ++y){
         for (int x = 0; x < w.getImageWidth() / 2;  ++x)

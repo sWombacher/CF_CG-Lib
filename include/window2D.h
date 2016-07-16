@@ -10,11 +10,10 @@ namespace cf{
 
 struct Point;
 
-class Window2D{
-public:
+struct Window2D{
     Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0});
     Window2D(const char* filePath);
-    ~Window2D();
+    virtual ~Window2D();
 
     void show() const;
     void clear(const cf::Color& color = {0, 0, 0});
@@ -30,7 +29,6 @@ public:
 
     void  setColor(float x, float y, const Color& color);
     Color getColor(float x, float y) const;
-    void  colorWholeImage(const Color& color);
 
     void drawCircle   (cf::Point point ,       int radius, int lineWidth, const cf::Color& color);
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
@@ -50,7 +48,7 @@ public:
     int getImageHeight()const;
     cv::Mat& getImage();
 
-private:
+protected:
     template<typename T>
     void _correctYValue(T& y) const;
 
@@ -76,7 +74,7 @@ private:
 
 // Note: cv::Point only alows int positions NOT floatingpoint
 struct Point{
-    Point(float val_x, float val_y):x(val_x), y(val_y){}
+    Point(float val_x = 0.f, float val_y = 0.f):x(val_x), y(val_y){}
     float x;
     float y;
 
@@ -95,8 +93,8 @@ struct Point{
     Point  operator/ (float rhs) const;
     Point& operator/=(float rhs);
 
-    friend Point operator* (float  factor, const Point& p);
-    friend Point operator/ (float lhs, const Point& p);
+    friend Point operator*(float lhs, const Point& p);
+    friend Point operator/(float lhs, const Point& p);
 };
 
 

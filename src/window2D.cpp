@@ -91,10 +91,6 @@ Color Window2D::getColor(float x, float y) const{
     return c;
 }
 
-void Window2D::colorWholeImage(const Color &color){
-    this->m_Image = cv::Scalar(color.b, color.g, color.r);
-}
-
 void Window2D::setWindowDisplayScale(float scale){
     this->m_WindowScale = scale;
 }
