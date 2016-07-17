@@ -44,7 +44,10 @@ float radiant2degree(float radiantValue);
 float degree2radiant(float degreeValue);
 
 
-namespace Direction{
+/**
+ * @brief The Direction struct for getting absolute directions from a current direction and a relative direction
+ */
+struct Direction{
     enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
     enum RelativeDirection { LEFT, FORWARD, RIGHT };
 
@@ -54,8 +57,8 @@ namespace Direction{
      * @param relativeMovement relative movement
      * @return
      */
-    AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
-}
+    static AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
+};
 
 
 /**

@@ -100,8 +100,7 @@ std::string readAntString(const char* filePath){
 }
 
 
-namespace Direction{
-AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
+Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
     switch(relativeMovement){
     case RelativeDirection::LEFT:{
 
@@ -125,7 +124,7 @@ AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, Relative
         return currentDirection;
     }
     return AbsoluteDirection::NUM_ABS_DIRS; // this should not occur hopfully :)
-}}
+}
 
 
 float Intervall::translateIntervallPostion(const Intervall& originalIntervall, const Intervall& newIntervall, float originalPosition){
