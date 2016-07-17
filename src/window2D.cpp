@@ -178,6 +178,14 @@ cv::Mat& Window2D::getImage(){
 }
 
 
+const cf::Intervall& Window2D::getIntervallX() const{
+    return this->m_IntervallX;
+}
+const cf::Intervall& Window2D::getIntervallY() const{
+    return this->m_IntervallY;
+}
+
+
 template<typename T>
 void Window2D::_correctYValue(T& y) const{
     if (this->m_InvertYAxis)

@@ -44,6 +44,10 @@ struct Window2D{
     void flippVertical();
 
 
+    const cf::Intervall& getIntervallX() const;
+    const cf::Intervall& getIntervallY() const;
+
+
     int getImageWidth() const;
     int getImageHeight()const;
     cv::Mat& getImage();
