@@ -57,10 +57,10 @@ int main() {
     CLEAR_CONSOLE();
 
 // create window and print mouse input
-    cf::WindowRasterized window(800, range_x, range_y, "Hello world", cf::Color::ORANGE);
+    cf::WindowVectorized window(800, range_x, range_y, "Hello world", cf::Color::ORANGE);
     std::cout << "Created window size:\n"
-              << "Width : " << window.getImageWidth()  << std::endl
-              << "Height: " << window.getImageHeight() << std::endl
+              << "Width : " << window.getWidth()  << std::endl
+              << "Height: " << window.getHeight() << std::endl
                                                        << std::endl;
     window.show();
     cf::Point point;
@@ -100,11 +100,11 @@ int main() {
 
     cf::Point point2;
     std::cout << std::endl << std::endl;
-    std::cout << "Please provide a integer value within the intervall [0-" << window.getImageWidth() - 1 << "]:\n";
+    std::cout << "Please provide a integer value within the intervall [0-" << window.getWidth() - 1 << "]:\n";
     point2.x = readInt();
 
     std::cout << std::endl;
-    std::cout << "Please provide a integer value within the intervall [0-" << window.getImageHeight() - 1 << "]:\n";
+    std::cout << "Please provide a integer value within the intervall [0-" << window.getHeight() - 1 << "]:\n";
     point2.y = readInt();
 
     // translate position "point2" to intervall position
@@ -130,7 +130,7 @@ int main() {
     float intervallLength = std::sqrt(point2.x * point2.x + point2.y * point2.y);
 
     // convert length from intervall length to pixel length
-    int pixelLength = (intervallLength * window.getImageWidth()) / (window.getIntervallX().max - window.getIntervallX().min);
+    int pixelLength = (intervallLength * window.getWidth()) / (window.getIntervallX().max - window.getIntervallX().min);
 
     // draw
     std::cout << "\n\n\nPress enter to draw a circle\n";

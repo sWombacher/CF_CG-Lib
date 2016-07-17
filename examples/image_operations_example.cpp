@@ -21,13 +21,13 @@ int main(int argc, char** argv){
     std::cout << "Press keys on a window \"Result\", to blend image1 to image2";
 
     // blend image2 above image1
-    int minWidth = img1.getImageWidth();
-    if (minWidth > img2.getImageWidth())
-        minWidth = img2.getImageWidth();
+    int minWidth = img1.getWidth();
+    if (minWidth > img2.getWidth())
+        minWidth = img2.getWidth();
 
-    int minHeight = img1.getImageHeight();
-    if (minHeight > img2.getImageHeight())
-        minHeight = img2.getImageHeight();
+    int minHeight = img1.getHeight();
+    if (minHeight > img2.getHeight())
+        minHeight = img2.getHeight();
 
     Image toDisplay(minWidth, minHeight, "Result");
     const float blending_step = 0.1f;

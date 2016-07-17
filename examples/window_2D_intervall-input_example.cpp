@@ -10,8 +10,8 @@ int main(void) {
     // set pixel one by one
     // this method is slow and is only to show the API
     // prefer to use "window.colorWholeImage(cf::Color::ORANGE);"
-    for (int y = 0; y < window.getImageHeight(); ++y){
-    for (int x = 0; x < window.getImageWidth() ; ++x){
+    for (int y = 0; y < window.getHeight(); ++y){
+    for (int x = 0; x < window.getWidth() ; ++x){
         window.setColor(x, y, cf::Color::ORANGE);
     }
     }
