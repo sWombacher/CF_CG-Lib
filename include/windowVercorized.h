@@ -32,6 +32,8 @@ struct WindowRasterized : protected Window2D {
     using Window2D::setWindowDisplayScale;
     using Window2D::waitMouseInput;
     using Window2D::getImageHeight;
+    using Window2D::getIntervallX;
+    using Window2D::getIntervallY;
     using Window2D::getImageWidth;
     using Window2D::drawRectangle;
     using Window2D::drawCircle;
