@@ -89,6 +89,7 @@ struct Color{
     static const Color WHITE;
     static const Color BLACK;
     static const Color GREEN;
+    static const Color GREY;
     static const Color BLUE;
     static const Color CYAN;
     static const Color PINK;
