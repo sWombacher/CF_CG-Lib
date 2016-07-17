@@ -2,7 +2,7 @@
 
 
 int main(void) {
-    cf::WindowRasterized w;
+    cf::Window2D w;
 
     for (int y = 0; y < w.getImageHeight(); ++y){
         for (int x = 0; x < w.getImageWidth() / 2;  ++x)
