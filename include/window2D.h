@@ -1,4 +1,3 @@
-
 #ifndef WINDOW_2D_H_H
 #define WINDOW_2D_H_H
 
@@ -7,20 +6,40 @@
 
 
 namespace cf{
-
 struct Point;
 
+/**
+ * @brief The Window2D struct offers advanced features used by WindowRasterized/WindowVertorized
+ */
 struct Window2D{
     Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0});
     Window2D(const char* filePath);
     virtual ~Window2D();
 
+    /**
+     * @brief show show image, on first call it may require additional time to display content correctly (in those cases use waitKey(1000) )
+     */
     void show() const;
     void clear(const cf::Color& color = {0, 0, 0});
+
+    /**
+     * @brief waitKey block access until key input on window
+     * @param delay value > 0 -> wait till key input on window or 'delay'ms else wait till user input
+     * @return
+     */
     unsigned char waitKey(int delay = 0) const;
 
+    /**
+     * @brief waitMouseInput blocks until mouse input has been given
+     * @param x window position
+     * @param y window position
+     */
     void waitMouseInput(float& x, float& y);
 
+    /**
+     * @brief setWindowDisplayScale scales image before displaying
+     * @param scale
+     */
     void  setWindowDisplayScale(float scale);
     float getWindowDisplayScale() const;
 
@@ -30,14 +49,41 @@ struct Window2D{
     void  setColor(float x, float y, const Color& color);
     Color getColor(float x, float y) const;
 
+    /**
+     * @brief drawCircle
+     * @param point point within intervall_x and intervall_y
+     * @param radius circle radius in pixel (not effected by intervalls)
+     * @param lineWidth pixelwidth of line (not effected by intervalls)
+     * @param color
+     */
     void drawCircle   (cf::Point point ,       int radius, int lineWidth, const cf::Color& color);
+
+    /**
+     * @brief drawRectangle
+     * @param point1 point within intervall_x and intervall_y, has to be the diagonal point to point2
+     * @param point2 point within intervall_x and intervall_y, has to be the diagonal point to point1
+     * @param lineWidth lineWidth pixelwidth of line (not effected by intervalls)
+     * @param color
+     */
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
+
+    /**
+     * @brief drawLine
+     * @param point1 point within intervall_x and intervall_y
+     * @param point2 point within intervall_x and intervall_y
+     * @param lineWidth lineWidth pixelwidth of line (not effected by intervalls)
+     * @param color
+     */
     void drawLine     (cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
     void setNewIntervall(const cf::Intervall& intervallX, const cf::Intervall& intervallY);
     void  resetIntervall();
 
-    void saveImage(const char* filename) const;
+    /**
+     * @brief saveImage saves current image to harddrive
+     * @param filePath file path and name, format will be determind from file ending (*.png, *.jpeg, ...)
+     */
+    void saveImage(const char* filePath) const;
     void resize(int pixelWidth, int pixelHeight);
 
     void flippHorizontal();
@@ -48,8 +94,13 @@ struct Window2D{
     const cf::Intervall& getIntervallY() const;
 
 
-    int getImageWidth() const;
-    int getImageHeight()const;
+    int getWidth() const;
+    int getHeight()const;
+
+    /**
+     * @brief getImage
+     * @return direct access to underlying image
+     */
     cv::Mat& getImage();
 
 protected:
@@ -77,6 +128,9 @@ protected:
 
 
 // Note: cv::Point only alows int positions NOT floatingpoint
+/**
+ * @brief The Point struct is a simple class for positon access on 2D images (imilar to cv::Point, but uses floats instead of integer)
+ */
 struct Point{
     Point(float val_x = 0.f, float val_y = 0.f):x(val_x), y(val_y){}
     float x;
@@ -100,7 +154,6 @@ struct Point{
     friend Point operator*(float lhs, const Point& p);
     friend Point operator/(float lhs, const Point& p);
 };
-
 
 }
 
