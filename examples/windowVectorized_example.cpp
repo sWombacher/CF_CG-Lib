@@ -65,7 +65,7 @@ int main() {
     window.show();
     cf::Point point;
 
-    std::cout << "Please set 2 point on the window" << std::endl;
+    std::cout << "Please set a point on the window" << std::endl;
     window.waitMouseInput(point.x, point.y);
     window.drawCircle(point, 3, -1 /*fill circle*/, cf::Color::WHITE);
     window.show();
@@ -81,7 +81,7 @@ int main() {
               << "Pos y: " << int(point.y) << std::endl
                                            << std::endl;
 
-    std::cout << "\n\nPress enter to continue";
+    std::cout << "\n\nPress enter to continue\n";
     getchar();
     CLEAR_CONSOLE();
 
@@ -95,6 +95,8 @@ int main() {
     std::cout << std::endl;
     std::cout << "Please provide a floatingpoint value within the intervall " << range_y << ":\n";
     point.y = readFloat();
+    window.drawCircle(point, 3, -1, cf::Color::BLUE);
+    window.show();
 
     cf::Point point2;
     std::cout << std::endl << std::endl;
@@ -107,13 +109,36 @@ int main() {
 
     // translate position "point2" to intervall position
     point2 = window.transformPoint_toImgeIntervall(point2);
+    window.drawCircle(point2, 3, -1, cf::Color::BLUE);
+    window.show();
 
-    // draw line and rectangle
+// draw line and rectangle
+    CLEAR_CONSOLE();
+    std::cout << "Press enter to draw a line\n";
+    getchar();
     window.drawLine(point, point2, 2, cf::Color::BLACK);
+    window.show();
+
+    std::cout << "\n\n\nPress enter to draw a rectangle\n";
+    getchar();
     window.drawRectangle(point, point2, 2, cf::Color::GREEN);
     window.show();
 
-    std::cout << "Press enter to finish the process";
+// draw circle from point with radius to point2
+    // calculate radius using pytagora
+    point2 -= point;
+    float intervallLength = std::sqrt(point2.x * point2.x + point2.y * point2.y);
+
+    // convert length from intervall length to pixel length
+    int pixelLength = (intervallLength * window.getImageWidth()) / (window.getIntervallX().max - window.getIntervallX().min);
+
+    // draw
+    std::cout << "\n\n\nPress enter to draw a circle\n";
+    getchar();
+    window.drawCircle(point, pixelLength, 2, cf::Color(127, 27, 127));
+    window.show();
+
+    std::cout << "\n\n\nPress enter to finish the process\n";
     getchar();
     return 0;
 }
