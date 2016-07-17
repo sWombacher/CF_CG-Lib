@@ -45,14 +45,14 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat){
 
 namespace cf{
 
-std::vector<Color> readPaletteFromFile(const std::string& filename){
-    std::fstream file(filename, std::fstream::in);
+std::vector<Color> readPaletteFromFile(const std::string& filePath){
+    std::fstream file(filePath, std::fstream::in);
     if (!file)
         throw "File not found in function: \"readPaletteFromFile\"";
 
     std::string str;
     if (!file.good()){
-        str = filename;
+        str = filePath;
         str += ", file not found";
         throw std::runtime_error(str.c_str());
     }
@@ -70,7 +70,7 @@ std::vector<Color> readPaletteFromFile(const std::string& filename){
         }
 
         if (rgb.size() != 3){
-            str = filename;
+            str = filePath;
             str += ", wrong number of elements";
             throw std::runtime_error(str.c_str());
         }
@@ -80,14 +80,14 @@ std::vector<Color> readPaletteFromFile(const std::string& filename){
     return LUT;
 }
 
-std::string readAntString(const char* filename){
-    std::fstream file(filename, std::fstream::in);
+std::string readAntString(const char* filePath){
+    std::fstream file(filePath, std::fstream::in);
     if (!file)
         throw "File not found in function: \"readAntString\"";
 
     std::string str;
     if (!file.good()){
-        str = filename;
+        str = filePath;
         str += ", file not found";
         throw std::runtime_error(str.c_str());
     }

@@ -1,7 +1,5 @@
-
 #ifndef ORBIT_H_H
 #define ORBIT_H_H
-
 
 #include "utils.h"
 
@@ -11,9 +9,11 @@ namespace cf{
  * @brief The Orbit class
  * lazy people (like myself) may use the ORB tyepdef
  */
-class Orbit{
-public:
-    Orbit() = default;
+struct Orbit{
+    /**
+     * @brief read a *.orb file from path
+     * @param fiilename
+     */
     void read(const std::string& filename);
 
     const Intervall& getRangeX() const;

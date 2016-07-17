@@ -1,7 +1,5 @@
-
 #ifndef H_ITERATED_FUNCTION_SYSTEM_H_H
 #define H_ITERATED_FUNCTION_SYSTEM_H_H
-
 
 #include "utils.h"
 
@@ -12,11 +10,12 @@ namespace cf{
  * @brief The IteratedFunctionSystem class
  * lazy people (like myself) may use the IFS tyepdef
  */
-class IteratedFunctionSystem{
-
-public:
-    IteratedFunctionSystem() = default;
-    void read(const std::string& fiilename);
+struct IteratedFunctionSystem{
+    /**
+     * @brief read a *.ifs file from path
+     * @param fiilename
+     */
+    void read(const std::string& fiilePath);
 
     std::size_t getNumTransformations() const;
 
@@ -26,7 +25,6 @@ public:
     const Intervall& getRangeY() const;
     const std::string& getName() const;
     const std::vector<glm::mat3x3>& getAllTransformation() const;
-
 
 private:
     std::string m_Name;
@@ -39,6 +37,5 @@ private:
 typedef IteratedFunctionSystem IFS; // short version for lazy people like myself :)
 
 }
-
 
 #endif

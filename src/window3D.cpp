@@ -52,7 +52,7 @@ void Window3D::showWindowUsage(){
 static Window3D* windowPtr = nullptr;
 void _DrawingFunction(){
     if (!windowPtr)
-        throw "Error: window ptr not set!";
+        throw std::runtime_error("Error: window ptr not set!");
 
     static const GLfloat position[] = { -10.f, 10.0f, -10.0f, 0.0f };
     glLightfv(GL_LIGHT0, GL_POSITION, position);
@@ -75,7 +75,7 @@ void _DrawingFunction(){
 }
 void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     if (!windowPtr)
-        throw "Error: window ptr not set!";
+        throw std::runtime_error("Error: window ptr not set!");
 
     // user specified function
     if (windowPtr->m_AdditionalKeyboardCallback)

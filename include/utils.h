@@ -1,4 +1,3 @@
-
 #ifndef UTILS_H_H
 #define UTILS_H_H
 
@@ -8,10 +7,8 @@
 
 #include <inttypes.h>
 
-
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -26,10 +23,21 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 
 
 namespace cf{
-
 struct Color;
-std::vector<Color> readPaletteFromFile(const std::string& filename);
-std::string readAntString(const char* filename);
+
+/**
+ * @brief readPaletteFromFile
+ * @param filePath read *.pal file from path
+ * @return
+ */
+std::vector<Color> readPaletteFromFile(const std::string& filePath);
+
+/**
+ * @brief readAntString
+ * @param filePath read *.ant file from path
+ * @return
+ */
+std::string readAntString(const char* filePath);
 
 
 float radiant2degree(float radiantValue);
@@ -39,11 +47,20 @@ float degree2radiant(float degreeValue);
 namespace Direction{
     enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
     enum RelativeDirection { LEFT, FORWARD, RIGHT };
+
+    /**
+     * @brief getNextiDirection receive absolute direction by providing a relative directon
+     * @param currentDirection current absolute direction
+     * @param relativeMovement relative movement
+     * @return
+     */
     AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
 }
 
 
-
+/**
+ * @brief The Intervall struct provides functionallity to translate values from one intervall into another
+ */
 struct Intervall{
     Intervall(float _min = 0, float _max = 0):min(_min), max(_max){}
     float min;
@@ -53,8 +70,9 @@ struct Intervall{
     friend std::ostream& operator<<(std::ostream& os, const Intervall& intervall);
 };
 
-
-
+/**
+ * @brief The Color struct offers a class for rgb access
+ */
 struct Color{
     Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0) : b(blue), g(green), r(red){}
 
@@ -96,6 +114,10 @@ struct Color{
     static const Color RED;
 };
 
+/**
+ * @brief _removeWindowsSpecificCarriageReturn removes '\r' characters in strings ('\r' may be read from unix system with windows files)
+ * @param str string containing '\r', which will be removed
+ */
 void _removeWindowsSpecificCarriageReturn(std::string& str);
 }
 

@@ -152,8 +152,8 @@ void Window2D::resetIntervall(){
     this->m_IntervallChanged = false;
 }
 
-void Window2D::saveImage(const char *filename) const{
-    cv::imwrite(filename, this->m_Image);
+void Window2D::saveImage(const char *filePath) const{
+    cv::imwrite(filePath, this->m_Image);
 }
 
 void Window2D::resize(int pixelWidth, int pixelHeight){
@@ -167,10 +167,10 @@ void Window2D::flippVertical() {
     cv::flip(this->m_Image, this->m_Image, 1);
 }
 
-int Window2D::getImageWidth() const{
+int Window2D::getWidth() const{
     return this->m_Image.cols;
 }
-int Window2D::getImageHeight() const{
+int Window2D::getHeight() const{
     return this->m_Image.rows;
 }
 cv::Mat& Window2D::getImage(){

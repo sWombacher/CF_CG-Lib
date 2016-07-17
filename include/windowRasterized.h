@@ -1,13 +1,24 @@
+#ifndef WINDOW_RASTERIZED_H_H
+#define WINDOW_RASTERIZED_H_H
+
 #include "window2D.h"
 
 namespace cf{
 
+/**
+ * @brief The WindowRasterized struct Default struct for verctorized operations within a costum intervall
+ */
 struct WindowRasterized final : protected Window2D {
     WindowRasterized(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0})
         : Window2D(width, height, windowName, startColor)
     {
         this->setInvertYAxis(false);
     }
+
+    /**
+     * @brief WindowRasterized load image from file path
+     * @param filePath path to file
+     */
     WindowRasterized(const char* filePath) : Window2D(filePath) {}
     virtual ~WindowRasterized() = default;
 
@@ -16,12 +27,12 @@ struct WindowRasterized final : protected Window2D {
     using Window2D::setWindowDisplayScale;
     using Window2D::flippHorizontal;
     using Window2D::waitMouseInput;
-    using Window2D::getImageHeight;
-    using Window2D::flippVertical;
-    using Window2D::getImageWidth;
     using Window2D::drawRectangle;
+    using Window2D::flippVertical;
     using Window2D::drawCircle;
     using Window2D::saveImage;
+    using Window2D::getHeight;
+    using Window2D::getWidth;
     using Window2D::drawLine;
     using Window2D::getImage;
     using Window2D::getColor;
@@ -33,3 +44,5 @@ struct WindowRasterized final : protected Window2D {
 };
 
 }
+
+#endif // WINDOW_RASTERIZED_H_H

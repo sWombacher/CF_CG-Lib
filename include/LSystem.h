@@ -1,5 +1,3 @@
-
-
 #ifndef LSYSTEM_H_H
 #define LSYSTEM_H_H
 
@@ -9,9 +7,7 @@
 
 #include <glm/glm.hpp>
 
-
 #include "utils.h"
-
 
 namespace cf{
 
@@ -19,9 +15,12 @@ namespace cf{
  * @brief The LindenmayerSystem class
  * lazy people (like myself) may use the IFS tyepdef
  */
-class LindenmayerSystem{
+struct LindenmayerSystem{
 
-public:
+    /**
+     * @brief read a *.lin file from path
+     * @param fiilename
+     */
     void read(const std::string& filename);
 
     const std::string& getName () const;
@@ -59,8 +58,6 @@ private:
     Intervall m_RangeX;
     Intervall m_RangeY;
 };
-
-
 
 typedef LindenmayerSystem LSystem; // short version for lazy people like myself :)
 }
