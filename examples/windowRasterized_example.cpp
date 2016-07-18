@@ -67,8 +67,8 @@ int main(int argc, char** argv){
     std::uniform_int_distribution<int> colorDistribution(0, 255);
 
     // example for floating point generator:
-    //std::uniform_real_distribution<float> name(-1.f, 10.f);
-    //name(gen);
+    //std::uniform_real_distribution<float> distribution(-1.f, 10.f);
+    //distribution(gen);
 
     for (unsigned int i = 0; i < LUT.size(); ++i){
         LUT[i].r = colorDistribution(gen);
@@ -79,9 +79,8 @@ int main(int argc, char** argv){
     // short version from above
     #pragma omp parallel for // parallize work load
     for (int y = 0; y < image.getHeight(); ++y){
-    for (int x = 0; x < image.getHeight(); ++x){
+    for (int x = 0; x < image.getHeight(); ++x)
         image.setColor(x, y, LUT[image.getColor(x, y).r]);
-    }
     }
     image.show();
 
