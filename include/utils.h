@@ -49,7 +49,7 @@ float degree2radiant(float degreeValue);
  */
 struct Direction{
     enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
-    enum RelativeDirection { LEFT, FORWARD, RIGHT };
+    enum RelativeDirection { LEFT, FORWARD, RIGHT, NUM_REL_DIRS };
 
     /**
      * @brief getNextiDirection receive absolute direction by providing a relative directon

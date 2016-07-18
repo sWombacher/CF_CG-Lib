@@ -103,7 +103,6 @@ std::string readAntString(const char* filePath){
 Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
     switch(relativeMovement){
     case RelativeDirection::LEFT:{
-
         int dir = currentDirection;
         --dir;
         if (dir < 0)
@@ -112,7 +111,6 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
         return static_cast<AbsoluteDirection>(dir);
     }
     case RelativeDirection::RIGHT:{
-
         int dir = currentDirection;
         ++dir;
         if (dir >= AbsoluteDirection::NUM_ABS_DIRS)
@@ -122,6 +120,8 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
     }
     case RelativeDirection::FORWARD:
         return currentDirection;
+    default:
+        break;
     }
     return AbsoluteDirection::NUM_ABS_DIRS; // this should not occur hopfully :)
 }
