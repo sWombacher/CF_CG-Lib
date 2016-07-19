@@ -46,7 +46,7 @@ struct Window3D{
 	virtual void handleKeyboardInput(unsigned char key, int x, int y);
 
     /**
-     * @brief startDrawing start drawing, this function does NOT return
+     * @brief startDrawing start drawing, this function only returns afer 'ESC'-key press
      * @return
      */
     int startDrawing();

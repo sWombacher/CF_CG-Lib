@@ -1,8 +1,7 @@
 #include "windowRasterized.h"
 
-
 int main(void) {
-    cf::Window2D w;
+    cf::WindowRasterized w;
 
     for (int y = 0; y < w.getHeight(); ++y){
         for (int x = 0; x < w.getWidth() / 2;  ++x)

@@ -78,10 +78,10 @@ private:
 
 
 int main(int argc, char** argv){
-    // print camera usage
+// print camera usage
     MyWindow::showWindowUsage();
 
-	// print object movement options
+// print object movement options
 	std::cout << std::endl << std::endl
 		      << "Object movement:\n"
 			  << "press:\ti/j/k/l\t to translate the object\n"
@@ -90,16 +90,20 @@ int main(int argc, char** argv){
 			  << "press:\tm/n    \t to   change  the objects diameter\n"
 		      << std::endl;
 
-    // create window and set up camera
+// create window and set up camera
     MyWindow window(&argc, argv);
+
     //window.setCamera(MyWindow::CameraType::NONE);
     //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Y_AXIS);
     //window.setCamera(MyWindow::CameraType::STATIC_Z_AXIS);
     window.setCamera(MyWindow::CameraType::ROTATION); // default value, you propably want to use this
 
-    // set draw type
+// set draw type
     // default: 0 - draw after each key-input
     //window.setMaxFPS(60.f);
-    return window.startDrawing(); // function returns when the "esc-key" is pressed
+
+// start drawing
+    // function returns when the "esc-key" is pressed
+    return window.startDrawing();
 }

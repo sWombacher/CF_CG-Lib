@@ -1,10 +1,9 @@
-
-#include "window2D.h"
+#include "windowRasterized.h"
 
 int main(int argc, char** argv){
     // window2D provides a lot of image operations
     // additional operations can be utilized by using opencv directly
-    typedef cf::Window2D Image;
+    typedef cf::WindowRasterized Image;
 
     if (argc < 3){
         std::cout << "Please provide two image files";

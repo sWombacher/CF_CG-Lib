@@ -1,35 +1,51 @@
+#include "windowRasterized.h"
 #include "window3D.h"
-#include <opencv2/opencv.hpp>
 
-class MyWindow : public cf::Window3D{
-public:
-    MyWindow(int* argc, char** argv, cv::Mat heightMap) : cf::Window3D(argc, argv), m_HeightMap(heightMap){ }
+struct MyWindow : public cf::Window3D {
+    MyWindow(int* argc, char** argv, const cf::WindowRasterized& heightMap)
+        : cf::Window3D(argc, argv), m_HeightMap(heightMap){}
+
     virtual void draw() override{
         this->clear();
-        const float minHeight = 0.1f;
-        const float maxHeight = 10.f;
-        const float cubeSize  = 0.5f;
+        static const float minHeight = 0.1f;
+        static const float maxHeight = 10.f;
+        static const float cubeSize  = 0.5f;
 
-        for (int y = 0; y < this->m_HeightMap.rows; ++y){
-        for (int x = 0; x < this->m_HeightMap.cols; ++x){
-            glPushMatrix();
+        // this loop could be paralllized,
+        // however opengl has to syncronize these calls -> no performance gains
+        for (int y = 0; y < this->m_HeightMap.getHeight(); ++y){
+        for (int x = 0; x < this->m_HeightMap.getWidth() ; ++x){
+            //
+            // reminder opengl 1.x:
+            //  reading direction from bottom to top
+            //  here:
+            //      1. cube will be drawn
+            //      2. cube will be scaled
+            //      3. cube will be translated
+            //
+            glPushMatrix(); // save current state
             {
-                float tmp = this->m_HeightMap.at<uchar>(y, x);
-                tmp /= 255.f;
-                tmp *= maxHeight - minHeight;
-                tmp += minHeight;
+                // calculate cube height
+                float cubeHeight = this->m_HeightMap.getColor(x, y).r;
+                cubeHeight /= 255.f;
+                cubeHeight *= maxHeight - minHeight;
+                cubeHeight += minHeight;
 
-                glColor3f(tmp / maxHeight, tmp / maxHeight, tmp / maxHeight);
-                glTranslatef((x - this->m_HeightMap.cols / 2) * cubeSize, (y - this->m_HeightMap.rows / 2) * cubeSize, 1.f);
-                glScalef(1.f, 1.f, tmp);
+                // colorize each cube based on its height
+                glColor3f(cubeHeight / maxHeight, cubeHeight / maxHeight, cubeHeight / maxHeight);
+                glTranslatef((x - this->m_HeightMap.getWidth()  / 2) * cubeSize,
+                             (y - this->m_HeightMap.getHeight() / 2) * cubeSize,
+                             1.f);
+
+                glScalef(1.f, 1.f, cubeHeight);
                 glutSolidCube(cubeSize);
             }
-            glPopMatrix();
+            glPopMatrix(); // load original state
         }
         }
     }
 private:
-    cv::Mat m_HeightMap;
+    const cf::WindowRasterized& m_HeightMap;
 };
 
 int main(int argc, char** argv){
@@ -40,11 +56,9 @@ int main(int argc, char** argv){
         getchar();
         return -1;
     }
-
-    cv::Mat img = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
-    cv::resize(img, img, cv::Size(255, 255));
-    cv::imshow("HeightMap", img);
-    cv::waitKey(1000);
+    cf::WindowRasterized img = cf::WindowRasterized(argv[1]);
+    img.show();
+    img.waitKey(1000);
 
     MyWindow::showWindowUsage();
     MyWindow window(&argc, argv, img);
