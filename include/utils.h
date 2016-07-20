@@ -40,7 +40,18 @@ std::vector<Color> readPaletteFromFile(const std::string& filePath);
 std::string readAntString(const char* filePath);
 
 
+/**
+ * @brief radiant2degree converts from radiant value to degree values
+ * @param radiantValue
+ * @return degree value
+ */
 float radiant2degree(float radiantValue);
+
+/**
+ * @brief degree2radiant converts from degree value to radiant values
+ * @param degreeValue
+ * @return radiant value
+ */
 float degree2radiant(float degreeValue);
 
 
@@ -122,9 +133,7 @@ struct Color{
  * @param str string containing '\r', which will be removed
  */
 void _removeWindowsSpecificCarriageReturn(std::string& str);
+
 }
-
-
-
 
 #endif
