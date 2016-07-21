@@ -1,4 +1,4 @@
-#include "windowVercorized.h"
+#include "windowVercorized.hpp"
 #include <iomanip> // set precision
 
 

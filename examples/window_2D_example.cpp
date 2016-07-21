@@ -1,4 +1,4 @@
-#include "windowRasterized.h"
+#include "windowRasterized.hpp"
 
 int main(void) {
     cf::WindowRasterized w;
