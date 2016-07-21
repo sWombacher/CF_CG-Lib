@@ -111,7 +111,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
         up   = glm::vec3( 0.f, 1.f, 0.f);
         break;
     default:
-        throw "Unknown camera type";
+        throw std::runtime_error("Unknown camera type");
     }
 
     // adjust left/up vectors to correct length
@@ -261,7 +261,7 @@ void Window3D::_AdjustCamera(){
                   0, 1, 0);
         break;
     default:
-        throw "Error: Unknown CameraType";
+        throw std::runtime_error("Error: Unknown CameraType");
     }
 }
 

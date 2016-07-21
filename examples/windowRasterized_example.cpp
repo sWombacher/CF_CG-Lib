@@ -1,4 +1,4 @@
-#include "windowRasterized.h"
+#include "windowRasterized.hpp"
 #include <iostream>
 #include <random>
 #include <string>
@@ -36,7 +36,8 @@ int main(int argc, char** argv){
     //  it is possible that "show" function finishes to fast (most likely on first show call)
     //  in those cases the image might not be displayed correctly
     //  this issue can be solved by calling "waitKey"
-    image.waitKey(1000);
+    //image.waitKey(1000);
+
     std::cout << "Press any key to continue\n";
     getchar();
 
