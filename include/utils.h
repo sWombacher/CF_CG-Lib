@@ -37,7 +37,7 @@ std::vector<Color> readPaletteFromFile(const std::string& filePath);
  * @param filePath read *.ant file from path
  * @return
  */
-std::string readAntString(const char* filePath);
+std::string readAntString(const std::string& filePath);
 
 
 /**

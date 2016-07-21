@@ -5,13 +5,12 @@
 #include <sstream>
 
 
-
 namespace cf{
 
 void IteratedFunctionSystem::read(const std::string &fiilePath){
     std::fstream input(fiilePath, std::fstream::in);
     if (!input)
-        throw "File not found in function: \"IteratedFunctionSystem::read\"";
+        throw std::runtime_error("File not found in function: \"IteratedFunctionSystem::read\"");
 
     std::string str;
     std::getline(input, str);
@@ -38,7 +37,7 @@ void IteratedFunctionSystem::read(const std::string &fiilePath){
         }
 
         if (transformation.size() != 6)
-            throw "Error in file format (transformation), size: " + std::to_string(transformation.size());
+            throw std::runtime_error("Error in file format (transformation), size: " + std::to_string(transformation.size()));
 
         glm::mat3x3 mat;
         mat[0][0] = transformation[0];
@@ -70,7 +69,7 @@ void IteratedFunctionSystem::read(const std::string &fiilePath){
     }
 
     if (values.size() != 4)
-        throw "Error in file format (bonds): wrong number of elements";
+        throw std::runtime_error("Error in file format (bonds): wrong number of elements");
 
     this->m_RangeX.min = values[0];
     this->m_RangeX.max = values[1];
@@ -79,7 +78,7 @@ void IteratedFunctionSystem::read(const std::string &fiilePath){
     this->m_RangeY.max = values[3];
 
     if (this->m_RangeX.min >= this->m_RangeX.max || this->m_RangeY.min >= this->m_RangeY.max)
-        throw "Error in file format (bonds), bound values have to be in ascending order";
+        throw std::runtime_error("Error in file format (bonds), bound values have to be in ascending order");
 
     input.close();
 }

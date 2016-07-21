@@ -1,4 +1,4 @@
-#include "windowRasterized.h"
+#include "windowRasterized.hpp"
 #include "window3D.h"
 
 struct MyWindow : public cf::Window3D {

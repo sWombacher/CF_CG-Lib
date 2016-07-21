@@ -8,7 +8,7 @@ namespace cf{
 void Orbit::read(const std::string &filename){
     std::fstream input(filename, std::fstream::in);
     if (!input)
-        throw "File not found in function: \"Orbit::read\"";
+        throw std::runtime_error("File not found in function: \"Orbit::read\"");
 
     std::string str;
     std::getline(input, str);
@@ -55,7 +55,7 @@ void Orbit::read(const std::string &filename){
             values.push_back(std::stof(s));
         }
         if (values.size() != 3)
-            throw "Wrong format in Orb-File (starting point format)";
+            throw std::runtime_error("Wrong format in Orb-File (starting point format)");
 
         this->m_StartPoints.push_back(glm::vec3(values[0], values[1], values[2]));
     }
@@ -73,7 +73,7 @@ void Orbit::read(const std::string &filename){
         values.push_back(std::stof(s));
     }
     if (values.size() != 4)
-        throw "Wrong format in Orb-File (intervall format)";
+        throw std::runtime_error("Wrong format in Orb-File (intervall format)");
 
     this->m_IntervallX.min = values[0];
     this->m_IntervallX.max = values[1];

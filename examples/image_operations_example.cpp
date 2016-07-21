@@ -1,4 +1,4 @@
-#include "windowRasterized.h"
+#include "windowRasterized.hpp"
 
 int main(int argc, char** argv){
     // window2D provides a lot of image operations

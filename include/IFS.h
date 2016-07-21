@@ -1,5 +1,5 @@
-#ifndef H_ITERATED_FUNCTION_SYSTEM_H_H
-#define H_ITERATED_FUNCTION_SYSTEM_H_H
+#ifndef ITERATED_FUNCTION_SYSTEM_H_H
+#define ITERATED_FUNCTION_SYSTEM_H_H
 
 #include "utils.h"
 
@@ -38,4 +38,4 @@ typedef IteratedFunctionSystem IFS; // short version for lazy people like myself
 
 }
 
-#endif
+#endif // ITERATED_FUNCTION_SYSTEM_H_H
