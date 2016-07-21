@@ -20,7 +20,7 @@ struct Window2D{
      * @brief show show image, on first call it may require additional time to display content correctly (in those cases use waitKey(1000) )
      */
     void show() const;
-    void clear(const cf::Color& color = {0, 0, 0});
+    void clear(const cf::Color& color = cf::Color::WHITE);
 
     /**
      * @brief waitKey block access until key input on window
@@ -43,6 +43,10 @@ struct Window2D{
     void  setWindowDisplayScale(float scale);
     float getWindowDisplayScale() const;
 
+    /**
+     * @brief setInvertYAxis Invert y values on all 'cf::Point' functions
+     * @param invert
+     */
     void setInvertYAxis(bool invert);
     bool getInvertYAxis() const;
 
@@ -56,7 +60,7 @@ struct Window2D{
      * @param lineWidth pixelwidth of line (not effected by intervalls)
      * @param color
      */
-    void drawCircle   (cf::Point point ,       int radius, int lineWidth, const cf::Color& color);
+    void drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& color);
 
     /**
      * @brief drawRectangle
@@ -74,9 +78,17 @@ struct Window2D{
      * @param lineWidth lineWidth pixelwidth of line (not effected by intervalls)
      * @param color
      */
-    void drawLine     (cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
+    void drawLine(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
+    /**
+     * @brief setNewIntervall Set new intervall
+     * @param intervallX Intervall in x direction
+     * @param intervallY Intervall in y direction
+     */
     void setNewIntervall(const cf::Intervall& intervallX, const cf::Intervall& intervallY);
+    /**
+     * @brief resetIntervall Set default intervall (intervall x: [0, image widht - 1], intervall y: [0, image height - 1])
+     */
     void  resetIntervall();
 
     /**
@@ -84,24 +96,68 @@ struct Window2D{
      * @param filePath file path and name, format will be determind from file ending (*.png, *.jpeg, ...)
      */
     void saveImage(const char* filePath) const;
+    /**
+     * @brief resize resize underlying image
+     * @param pixelWidth New width
+     * @param pixelHeight New height
+     */
     void resize(int pixelWidth, int pixelHeight);
 
+    /**
+     * @brief flippHorizontal flipp image horizontally
+     */
     void flippHorizontal();
+    /**
+     * @brief flippHorizontal flipp image vertically
+     */
     void flippVertical();
 
 
+    /**
+     * @brief getIntervallX Const access to intervall in x direction
+     * @return
+     */
     const cf::Intervall& getIntervallX() const;
+    /**
+     * @brief getIntervallY Const access to intervall in y direction
+     * @return
+     */
     const cf::Intervall& getIntervallY() const;
 
-
+    /**
+     * @brief getWidth Acess to underlying image width
+     * @return Width
+     */
     int getWidth() const;
+    /**
+     * @brief getHeight Acess to underlying image height
+     * @return Height
+     */
     int getHeight()const;
 
     /**
-     * @brief getImage
-     * @return direct access to underlying image
+     * @brief getImage direct access to the underlying image
+     * @return Image handle
      */
     cv::Mat& getImage();
+
+    /**
+     * @brief drawAxis This function draws x and y axis based on Intervall
+     * @param color Axis color, default is white
+     * @param stepSize_x Dynamially set step size (x-axis), negative numbers indicate 10 steps for intervall x
+     * @param stepSize_y Dynamially set step size (y-axis), negative numbers indicate 10 steps for intervall y
+     */
+    void drawAxis(const cf::Color& color = cf::Color::BLACK, float stepSize_x = 1.f, float stepSize_y = 1.f, float interceptLength = 3.f);
+
+    /**
+     * @brief drawCriclePart
+     * @param center
+     * @param radius
+     * @param startAngle
+     * @param endAngle
+     * @param color
+     */
+    void drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color = cf::Color::BLACK);
 
 protected:
     template<typename T>
@@ -124,6 +180,8 @@ protected:
 
     float m_MouseCallBackStorage[2];
     bool m_IntervallChanged = false;
+
+    mutable bool m_FristShowCall = true;
 };
 
 
@@ -150,6 +208,8 @@ struct Point{
 
     Point  operator/ (float rhs) const;
     Point& operator/=(float rhs);
+
+    operator cv::Point () const;
 
     friend Point operator*(float lhs, const Point& p);
     friend Point operator/(float lhs, const Point& p);

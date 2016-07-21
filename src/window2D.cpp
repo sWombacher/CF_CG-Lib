@@ -11,17 +11,17 @@ Window2D::Window2D(int width, int height, const char* windowName, const cf::Colo
         this->m_WindowName = "";
 
     cv::namedWindow(this->m_WindowName);
-    this->show();
 }
 
 Window2D::Window2D(const char *filePath):m_InvertYAxis(false), m_WindowName(filePath), m_WindowScale(1.f), m_IntervallX(0, 0), m_IntervallY(0, 0) {
+    if (!filePath)
+        throw std::runtime_error("Error: filePath musn't be a nullpointer");
+
     this->m_Image = cv::imread(filePath, CV_LOAD_IMAGE_COLOR);
     this->m_IntervallX.max = this->m_Image.cols - 1;
     this->m_IntervallY.max = this->m_Image.rows - 1;
 }
-Window2D::~Window2D(){
-    cv::destroyWindow(this->m_WindowName);
-}
+Window2D::~Window2D(){ cv::destroyWindow(this->m_WindowName); }
 
 void Window2D::show() const{
     if (this->m_WindowScale == 1.f)
@@ -31,7 +31,13 @@ void Window2D::show() const{
         cv::resize(this->m_Image, tmp, cv::Size(int(this->m_Image.cols * this->m_WindowScale), int(this->m_Image.rows * this->m_WindowScale)));
         cv::imshow(this->m_WindowName, tmp);
     }
-    cv::waitKey(10);
+
+    if (!this->m_FristShowCall)
+        cv::waitKey(10);
+    else {
+        this->m_FristShowCall = false;
+        cv::waitKey(1000);
+    }
 }
 
 void Window2D::clear(const Color &c){ this->m_Image = cv::Scalar(c.b, c.g, c.r); }
@@ -105,12 +111,17 @@ bool Window2D::getInvertYAxis() const{
     return this->m_InvertYAxis;
 }
 
+void Window2D::drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color &c){
+    this->_convertFromNewIntervall(center.x, center.y);
+    this->_correctYValue(center.y);
 
-void Window2D::drawCircle(cf::Point point, int radius, int lineWidth, const cf::Color& c){
-    this->_convertFromNewIntervall(point.x, point.y);
-    this->_correctYValue(point.y);
+    cv::ellipse(this->m_Image, center, cv::Size(radius, radius), 0.f, -startAngle, -endAngle, cv::Scalar(c.b, c.g, c.r), lineWidth);
+}
+void Window2D::drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& c){
+    this->_convertFromNewIntervall(center.x, center.y);
+    this->_correctYValue(center.y);
 
-    cv::circle(this->m_Image, cv::Point(int(point.x), int(point.y)), radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::circle(this->m_Image, center, radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
     this->_convertFromNewIntervall(p1.x, p1.y);
@@ -118,7 +129,7 @@ void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
-    cv::rectangle(this->m_Image, cv::Point(int(p1.x), int(p1.y)), cv::Point(int(p2.x), int(p2.y)), cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::rectangle(this->m_Image, p1, p2, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
     this->_convertFromNewIntervall(p1.x, p1.y);
@@ -126,7 +137,7 @@ void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Col
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
-    cv::line(this->m_Image, cv::Point(int(p1.x), int(p1.y)), cv::Point(int(p2.x), int(p2.y)), cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::line(this->m_Image, p1, p2, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 
 void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& intervallY){
@@ -175,6 +186,52 @@ int Window2D::getHeight() const{
 }
 cv::Mat& Window2D::getImage(){
     return this->m_Image;
+}
+
+void Window2D::drawAxis(const cf::Color& color, float stepSize_x, float stepSize_y, float interceptLength){
+    static const int lineWidth = 1;
+    static const int helperLines_occurence = 4;
+    static const float helperLine_adjustment = 2.5f;
+
+    // draw complete x- and y-axis
+    //
+    // Note:
+    //  opencv takes care of pixel positions out of image
+    this->drawLine({this->m_IntervallX.min, 0.f}, {this->m_IntervallX.max, 0.f}, lineWidth, color);
+    this->drawLine({0.f, this->m_IntervallY.min}, {0.f, this->m_IntervallY.max}, lineWidth, color);
+
+    if (stepSize_x < 0.f)
+        stepSize_x = (this->m_IntervallX.max - this->m_IntervallX.min) / 10.f;
+    if (stepSize_y < 0.f)
+        stepSize_y = (this->m_IntervallY.max - this->m_IntervallY.min) / 10.f;
+
+    auto drawAxisInterceptions = [&](bool horizontalLine){
+        float stepSize = horizontalLine ? stepSize_x : stepSize_y;
+        int pixelLength = horizontalLine ? this->m_Image.rows : this->m_Image.cols;
+        const cf::Intervall& intervall = horizontalLine ? this->m_IntervallX : this->m_IntervallY;
+
+        int startPos = int(intervall.min / stepSize);
+        int iterationCounter = helperLines_occurence - std::abs(startPos % helperLines_occurence);
+
+        float verticalLineHeight = (intervall.max - intervall.min) / float(pixelLength) * interceptLength * lineWidth;
+        for (float start = startPos * stepSize_x;
+             start <= intervall.max;
+             start += stepSize_x)
+        {
+            // draw vertical line
+            float adjusted_lineWidth = verticalLineHeight;
+            if (iterationCounter++ == helperLines_occurence){
+                iterationCounter = 0;
+                adjusted_lineWidth *= helperLine_adjustment;
+            }
+            if (horizontalLine)
+                this->drawLine({start, adjusted_lineWidth}, {start, -adjusted_lineWidth}, 1, color);
+            else
+                this->drawLine({adjusted_lineWidth, start}, {-adjusted_lineWidth, start}, 1, color);
+        }
+    };
+    drawAxisInterceptions(true);  // draw horizontal intercepts
+    drawAxisInterceptions(false); // draw  vertical  intercepts
 }
 
 
@@ -249,6 +306,10 @@ Point& Point::operator/=(float rhs){
     this->x /= rhs;
     this->y /= rhs;
     return *this;
+}
+
+Point::operator cv::Point() const {
+    return cv::Point(std::round(this->x), std::round(this->y));
 }
 
 Point operator* (float factor, const Point& p){
