@@ -1,4 +1,4 @@
-#include "computerGeometry.h"
+#include "computerGeometry.hpp"
 #include "windowVercorized.hpp"
 #include <iostream>
 
@@ -14,7 +14,7 @@ int main(int argc, char** argv){
         filePath = argv[1];
     std::vector<cf::PointVector> points = cf::readDATFile(filePath);
 
-// print all points to console
+    // print all points to console
     for (const auto& point : points)
         std::cout << point << std::endl;
 
@@ -27,7 +27,6 @@ int main(int argc, char** argv){
 
     for (const auto& point : points)
         coordinateSystem.drawPoint(point);
-
     coordinateSystem.show();
 
     cf::PointVector straight(10.f, 10.f);
@@ -37,7 +36,8 @@ int main(int argc, char** argv){
     coordinateSystem.drawPoint(straight);
     coordinateSystem.show();
 
-    coordinateSystem.drawCircle(cf::PointVector(), 5.0f);
+    // draw example circle with radius 10
+    coordinateSystem.drawCircle(cf::PointVector(), 10.0f);
     coordinateSystem.show();
 
 // draw circle part from first point in vector 'points' towards axis (first quadrant)
@@ -47,6 +47,13 @@ int main(int argc, char** argv){
 
     coordinateSystem.drawCriclePart(cf::Point(), radius, 0.f, 90.f);
     coordinateSystem.show();
+
+    cf::PointVector point(10.f, 10.f);
+    cf::DirectionVector dir(2.f, 1.f);
+
+    point += point;
+    point.normalize();
+    std::cout << point << std::endl;
 
     std::cout << "Press enter to finish" << std::endl;
     getchar();
