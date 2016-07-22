@@ -11,7 +11,11 @@ struct Point;
 /**
  * @brief The Window2D struct offers advanced features used by WindowRasterized/WindowVertorized
  */
-struct Window2D{
+class Window2D{
+    static const int  DOT_VALUE = 4;
+    static const int DASH_VALUE = 8;
+
+public:
     Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0});
     Window2D(const char* filePath);
     virtual ~Window2D();
@@ -76,9 +80,28 @@ struct Window2D{
      * @param point1 point within intervall_x and intervall_y
      * @param point2 point within intervall_x and intervall_y
      * @param lineWidth lineWidth pixelwidth of line (not effected by intervalls)
-     * @param color
+     * @param color Line color
      */
     void drawLine(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
+
+    /**
+     * @brief The LineType enum Special line type used by one function of 'drawLine'
+     *
+     */
+    enum class LineType{    DEFAULT = 0 /* normal line */ ,
+                              DOT_0 = Window2D::DOT_VALUE                          | 1,      DOT_1,      DOT_2,
+                             DASH_0 = Window2D::DASH_VALUE                         | 1,     DASH_1,     DASH_2,
+                         DOT_DASH_0 = Window2D::DOT_VALUE  | Window2D:: DASH_VALUE | 1, DOT_DASH_1, DOT_DASH_2
+                       };
+
+    /**
+     * @brief drawSpecializedLine Draws specialized line of width 1 (dotted and/or dashed lines)
+     * @param point1 point within intervall_x and intervall_y
+     * @param point2 point within intervall_x and intervall_y
+     * @param lineType Type of line to be drawn
+     * @param color Line color
+     */
+    void drawSpecializedLine(cf::Point point1, cf::Point point2, LineType lineType, const cf::Color& color);
 
     /**
      * @brief setNewIntervall Set new intervall
@@ -158,6 +181,13 @@ struct Window2D{
      * @param color
      */
     void drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color = cf::Color::BLACK);
+
+    /**
+     * @brief floodFill Fills an area
+     * @param startingPoint First point to be colored
+     * @param color Fill color
+     */
+    void floodFill(cf::Point startingPoint, const cf::Color& color);
 
 protected:
     template<typename T>

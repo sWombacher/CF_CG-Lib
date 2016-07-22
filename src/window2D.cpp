@@ -36,7 +36,7 @@ void Window2D::show() const{
         cv::waitKey(10);
     else {
         this->m_FristShowCall = false;
-        cv::waitKey(1000);
+        cv::waitKey(300);
     }
 }
 
@@ -117,6 +117,13 @@ void Window2D::drawCriclePart(cf::Point center, int radius, float startAngle, fl
 
     cv::ellipse(this->m_Image, center, cv::Size(radius, radius), 0.f, -startAngle, -endAngle, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
+
+void Window2D::floodFill(Point startingPoint, const Color &c) {
+    this->_convertFromNewIntervall(startingPoint.x, startingPoint.y);
+    this->_correctYValue(startingPoint.y);
+
+    cv::floodFill(this->m_Image, startingPoint, cv::Scalar(c.b, c.g, c.r));
+}
 void Window2D::drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& c){
     this->_convertFromNewIntervall(center.x, center.y);
     this->_correctYValue(center.y);
@@ -138,6 +145,53 @@ void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Col
     this->_correctYValue(p2.y);
 
     cv::line(this->m_Image, p1, p2, cv::Scalar(c.b, c.g, c.r), lineWidth);
+}
+
+void Window2D::drawSpecializedLine(cf::Point p1, cf::Point p2, cf::Window2D::LineType lineType, const cf::Color& c) {
+    if (lineType == cf::Window2D::LineType::DEFAULT)
+        return this->drawLine(p1, p2, 1, c);
+
+    // * 3 + 1  are just "better looking", change if you like :)
+    static const int FREQ_SCALE = 3;
+    static const int FREQ_OFFSET = 1;
+
+    this->_convertFromNewIntervall(p1.x, p1.y);
+    this->_convertFromNewIntervall(p2.x, p2.y);
+    this->_correctYValue(p1.y);
+    this->_correctYValue(p2.y);
+
+    const int type =  int(lineType) & (~int(3));
+    const int freq = (int(lineType) &   int(3)) * FREQ_SCALE + FREQ_OFFSET;
+    const cv::Vec3b col = cv::Vec3b(c.b, c.g, c.r);
+
+    cv::LineIterator iter = cv::LineIterator(this->m_Image, p1, p2);
+    for (int i = 0; i < iter.count; ++i, ++iter){
+        if (!(i % freq)){
+            if (type & Window2D::DOT_VALUE){
+                // draw dot
+                cv::circle(this->m_Image, iter.pos(), 1, cv::Scalar(c.b, c.g, c.r), -1);
+            }
+            if (type == (Window2D::DOT_VALUE | Window2D::DASH_VALUE)){
+                // dot dash
+                // draw some space between dot and dash
+                for (int f = 0; f < freq && i < iter.count; ++f){
+                    ++i;
+                    ++iter;
+                }
+            }
+            if (type & Window2D::DASH_VALUE){
+                // draw dash
+                for (int lengthCounter = 0;
+                     lengthCounter < 2 * freq && i < iter.count;
+                     ++lengthCounter, ++iter, ++i)
+                {
+                    this->m_Image.at<cv::Vec3b>(iter.pos()) = col;
+                }
+            }
+            if (i >= iter.count)
+                break;
+        }
+    }
 }
 
 void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& intervallY){
