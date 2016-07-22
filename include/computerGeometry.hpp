@@ -63,7 +63,7 @@ struct Vec3{
     template<bool RHS>
     Vec3<POINTVECTOR>& operator%=(const Vec3<RHS>& rhs){
         static_assert(POINTVECTOR || !RHS, "Error: Inplace crossproduct of Drection and Point is a Point, (Direction %= Point  is not allowed)");
-        this->m_Data = glm::cross(this->m_Data, rhs);
+        this->m_Data = glm::cross(this->m_Data, rhs.m_Data);
         return *this;
     }
 
@@ -75,8 +75,9 @@ struct Vec3{
     }
 
     bool isPointVector() const{ return POINTVECTOR; }
+
     template<bool RHS>
-    float scalarProduct(const Vec3<RHS>& rhs) const{ return glm::dot(this->m_Data, rhs.m_Data); }
+    float operator*(const Vec3<RHS>& rhs) const{ return glm::dot(this->m_Data, rhs.m_Data); }
 
     float getX() const{ return this->m_Data.x; }
     float getY() const{ return this->m_Data.y; }
@@ -91,15 +92,23 @@ struct Vec3{
 
     float  operator[](int idx) const { return this->m_Data[idx]; }
     float& operator[](int idx) {
-        if (idx == 3 && POINTVECTOR)
+        if (idx == 2 && !POINTVECTOR)
             throw std::runtime_error("Error: Write acces to DirectionVector's w component is not allowed");
         return this->m_Data[idx];
     }
 
-    operator glm::vec3 () const { return this->m_Data; }
+    operator       glm::vec3 () const { return this->m_Data; }
+    operator const glm::vec3&() const { return this->m_Data; }
+
     operator cf::Point () const {
         static_assert(POINTVECTOR, "Error: No convertion right from cf::DirectionVector to cf::Point, try changing type to cf::PointVector");
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
+    }
+
+    operator cf::Vec3<false> () const {
+        if (this->m_Data.z)
+            throw std::runtime_error("Error: Convertion from PointVector not possible (weight != 0)");
+        return cf::Vec3<false>(this->m_Data.x, this->m_Data.y);
     }
 
 private:
