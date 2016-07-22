@@ -25,6 +25,7 @@ struct WindowRasterized : protected Window2D {
     // publicly available functions  from class Window2D
     using Window2D::getWindowDisplayScale;
     using Window2D::setWindowDisplayScale;
+    using Window2D::drawSpecializedLine;
     using Window2D::flippHorizontal;
     using Window2D::waitMouseInput;
     using Window2D::drawRectangle;
@@ -37,6 +38,7 @@ struct WindowRasterized : protected Window2D {
     using Window2D::getImage;
     using Window2D::getColor;
     using Window2D::setColor;
+    using Window2D::LineType;
     using Window2D::waitKey;
     using Window2D::resize;
     using Window2D::clear;

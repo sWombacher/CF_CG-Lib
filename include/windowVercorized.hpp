@@ -10,7 +10,7 @@ namespace cf{
  */
 struct WindowVectorized : protected Window2D {
     /**
-     * @brief WindowRasterized constructor
+     * @brief WindowVectorized constructor
      * @param range_x intervall in x direction
      * @param range_y intervall in y direction
      * @param width image width in pixel (hight will be determind automatically)
@@ -78,6 +78,7 @@ struct WindowVectorized : protected Window2D {
     // publicly available functions from class Window2D
     using Window2D::getWindowDisplayScale;
     using Window2D::setWindowDisplayScale;
+    using Window2D::drawSpecializedLine;
     using Window2D::drawCriclePart;
     using Window2D::waitMouseInput;
     using Window2D::getIntervallX;
@@ -91,6 +92,7 @@ struct WindowVectorized : protected Window2D {
     using Window2D::getColor;
     using Window2D::setColor;
     using Window2D::drawAxis;
+    using Window2D::LineType;
     using Window2D::waitKey;
     using Window2D::clear;
     using Window2D::show;
