@@ -1,28 +1,28 @@
-#ifndef WINDOW_VECTORIZED_H_H
-#define WINDOW_VECTORIZED_H_H
+#ifndef WINDOW_COORDINATE_SYSTEM_H_H
+#define WINDOW_COORDINATE_SYSTEM_H_H
 
 #include "window2D.h"
 
 namespace cf{
 
 /**
- * @brief The WindowVectorized struct Default class for images and raster operations
+ * @brief The WindowCoordinateSystem struct Default class for images and raster operations
  */
-struct WindowVectorized : protected Window2D {
+struct WindowCoordinateSystem : protected Window2D {
     /**
-     * @brief WindowRasterized constructor
+     * @brief WindowCoordinateSystem constructor
      * @param range_x intervall in x direction
      * @param range_y intervall in y direction
      * @param width image width in pixel (hight will be determind automatically)
      */
-    WindowVectorized(int width, const cf::Intervall& range_x, const cf::Intervall& range_y,
+    WindowCoordinateSystem(int width, const cf::Intervall& range_x, const cf::Intervall& range_y,
                      const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::WHITE)
         : Window2D(1, 1, windowName, startColor)
     {
         this->setInvertYAxis(true);
         this->setIntervall(range_x, range_y, width);
     }
-    virtual ~WindowVectorized() = default;
+    virtual ~WindowCoordinateSystem() = default;
 
     /**
      * @brief setIntervall set new intervall
@@ -32,7 +32,7 @@ struct WindowVectorized : protected Window2D {
      */
     void setIntervall(const cf::Intervall& range_x, const cf::Intervall& range_y, int width){
         this->setNewIntervall(range_x, range_y);
-        this->resize(width, WindowVectorized::_CALCULATE_HEIGHT(range_x, range_y, width));
+        this->resize(width, WindowCoordinateSystem::_CALCULATE_HEIGHT(range_x, range_y, width));
     }
 
     /**
@@ -52,18 +52,40 @@ struct WindowVectorized : protected Window2D {
     }
 
     /**
+     * @brief drawLine Draw a simple line of width 1
+     * @param p1 First point
+     * @param p2 Second point
+     * @param color Line color
+     * @param type Line type
+     */
+    void drawLine(const cf::Point& p1, const cf::Point& p2, const cf::Color& color = cf::Color::BLACK,
+                  cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
+    {
+        if (type == cf::Window2D::LineType::DEFAULT)
+            cf::Window2D::drawLine(p1, p2, lineWidth, color);
+        else {
+            if (lineWidth > 1)
+                std::cerr << "Warning: Only default line type may use lineWidth parameter" << std::endl;
+            cf::Window2D::drawSpecializedLine(p1, p2, type, color);
+        }
+    }
+
+    /**
      * @brief drawLinearEquation Draws line from a point on line and direction vector
      * @param pointVector Point on the line
      * @param drawingDirection Line direction
      * @param color line color
+     * @param type Change line type to dot/dash/dot-dash
      */
-    void drawLinearEquation(const cf::Point pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK){
+    void drawLinearEquation(const cf::Point pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
+                            cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
+    {
         if (drawingDirection.z)
             throw std::runtime_error("Error: direction vector may only have values != 0 onf x and y coordinates");
 
         float slope = drawingDirection.y / drawingDirection.x;
         float yIntercept = pointVector.y - pointVector.x * slope;
-        this->drawLinearEquation(slope, yIntercept, color);
+        this->drawLinearEquation(slope, yIntercept, color, type, lineWidth);
     }
 
     /**
@@ -72,12 +94,27 @@ struct WindowVectorized : protected Window2D {
      * @param b coefficent of y
      * @param c constant
      * @param color line color
+     * @param type Change line type to dot/dash/dot-dash
      */
-    void drawLinearEquation(float a, float b, float c, const cf::Color& color = cf::Color::BLACK){
+    void drawLinearEquation(float a, float b, float c, const cf::Color& color = cf::Color::BLACK,
+                            cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
+    {
         //       0 =  ax + by + c
         // <=>  by = -ax -c
         //  =>   y = -a/b x -c/b
-        this->drawLinearEquation(-a/b, -c/b, color);
+        this->drawLinearEquation(-a/b, -c/b, color, type, lineWidth);
+    }
+
+    /**
+     * @brief drawLinearEquation draw line from linear equation: ax + by + c = 0, where a b and c are part of the vector v(a, b, c)
+     * @param vec Vector of cooefficents a b and see
+     * @param color line color
+     * @param type Change line type to dot/dash/dot-dash
+     */
+    void drawLinearEquation(const glm::vec3& vec, const cf::Color& color = cf::Color::BLACK,
+                            cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
+    {
+        this->drawLinearEquation(vec[0], vec[1], vec[2], color, type, lineWidth);
     }
 
     /**
@@ -85,12 +122,21 @@ struct WindowVectorized : protected Window2D {
      * @param slope m of equation y = m*x + t
      * @param yIntercept t of equation y = m*x + t
      * @param color line color
+     * @param type Change line type to dot/dash/dot-dash
      */
-    void drawLinearEquation(float slope, float yIntercept, const cf::Color& color = cf::Color::BLACK){
+    void drawLinearEquation(float slope, float yIntercept, const cf::Color& color = cf::Color::BLACK,
+                            cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
+    {
         // calculate points from min/max x-intervall
         float y_min = this->m_IntervallX.min * slope + yIntercept;
         float y_max = this->m_IntervallX.max * slope + yIntercept;
-        cf::Window2D::drawLine({this->m_IntervallX.min, y_min}, {this->m_IntervallX.max, y_max}, 1, color);
+        if (type == cf::Window2D::LineType::DEFAULT)
+            cf::Window2D::drawLine({this->m_IntervallX.min, y_min}, {this->m_IntervallX.max, y_max}, lineWidth, color);
+        else {
+            if (lineWidth > 1)
+                std::cerr << "Warning: Only default line type may use lineWidth parameter" << std::endl;
+            cf::Window2D::drawSpecializedLine({this->m_IntervallX.min, y_min}, {this->m_IntervallX.max, y_max}, type, color);
+        }
     }
 
     /**
@@ -99,11 +145,11 @@ struct WindowVectorized : protected Window2D {
      * @param radius Circle radius
      * @param color  Curcle color
      */
-    void drawCircle(const cf::Point& center, float radius, const cf::Color& color = cf::Color::BLACK){
+    void drawCircle(const cf::Point& center, float radius, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
         int pixelRadius = std::round(this->convert_intervallLength_to_pixelLength(radius));
         if (pixelRadius <= 0)
             pixelRadius = 1;
-        cf::Window2D::drawCircle(center, pixelRadius, 1, color);
+        cf::Window2D::drawCircle(center, pixelRadius, lineWidth, color);
     }
 
     /**
@@ -138,10 +184,12 @@ struct WindowVectorized : protected Window2D {
     using Window2D::getIntervallY;
     using Window2D::saveImage;
     using Window2D::getHeight;
+    using Window2D::floodFill;
     using Window2D::getWidth;
     using Window2D::getColor;
     using Window2D::setColor;
     using Window2D::drawAxis;
+    using Window2D::LineType;
     using Window2D::waitKey;
     using Window2D::clear;
     using Window2D::show;
@@ -156,4 +204,4 @@ private:
 
 }
 
-#endif // WINDOW_VECTORIZED_H_H
+#endif // WINDOW_COORDINATE_SYSTEM_H_H
