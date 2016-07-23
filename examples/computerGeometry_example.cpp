@@ -1,5 +1,4 @@
 #include "computerGeometry.hpp"
-#include "windowVercorized.hpp"
 #include <iostream>
 
 int main(int argc, char** argv){

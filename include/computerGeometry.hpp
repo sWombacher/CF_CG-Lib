@@ -11,6 +11,7 @@ namespace cf{
 template<bool POINTVECTOR>
 struct Vec3{
     Vec3(float x = 0.f, float y = 0.f) : m_Data(x, y, POINTVECTOR ? 1.f : 0.f) {}
+    Vec3(float x, float y, float w) : m_Data(x, y, w) {}
 
     template<bool RHS>
     Vec3<RHS | POINTVECTOR> operator+ (const Vec3<RHS>& rhs) const{
