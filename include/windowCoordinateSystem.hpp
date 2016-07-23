@@ -80,10 +80,12 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawLinearEquation(const cf::Point pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
-        if (drawingDirection.z)
+        //if (drawingDirection.z != 0.f)
+        if (this->_compareZero_3val(drawingDirection.z, drawingDirection.x, drawingDirection.y) == false)
             throw std::runtime_error("Error: direction vector may only have values != 0 onf x and y coordinates");
 
-        if (drawingDirection.x == 0.f)
+        //if (drawingDirection.x == 0.f)
+        if (this->_compareZero_3val(drawingDirection.x, drawingDirection.y, drawingDirection.z))
             this->drawLine({pointVector.x, this->m_IntervallY.min}, {pointVector.x, this->m_IntervallY.max}, color, type, lineWidth);
         else{
             float slope = drawingDirection.y / drawingDirection.x;
@@ -103,7 +105,8 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawLinearEquation(float a, float b, float c, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
-        if (b == 0.f) {
+        //if (b == 0.f) {
+        if (this->_compareZero_3val(b, a, c)){
             // 0*y = 0
             // <=>  ax + c = 0
             // <=>  x = -c/a
@@ -211,6 +214,24 @@ private:
         float diff_y = range_y.max - range_y.min;
         float diff_x = range_x.max - range_x.min;
         return int(width * (diff_y / diff_x));
+    }
+
+    // com will be compared to zero
+    // _1 and _2 are used for "normalization"
+    bool _compareZero_3val(float com, float _1, float _2){
+        com = std::abs(com);
+        _1 = std::abs(_1);
+        _2 = std::abs(_2);
+
+        float max = com > _1 ? com : _1;
+        max = max > _2 ? max : _2;
+        if (max == 0.f)
+            return true;
+
+        com /= max;
+        _1 /= max;
+        _2 /= max;
+        return std::abs(com) < 1.e-4f;
     }
 };
 
