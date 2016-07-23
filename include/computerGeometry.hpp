@@ -141,6 +141,16 @@ std::vector<cf::PointVector> readDATFile(const std::string& filePath){
         std::getline(file, str);
         cf::_removeWindowsSpecificCarriageReturn(str);
 
+        // remove non numbers, and non . ' '
+        for (size_t i = 0; i < str.size(); ++i){
+            char c = str[i];
+            if (c != ' ' && c != '.' && (c < '0' || c > '9')){
+                std::cout << "Warning: Unknown symbol detected, ASCII code: '" << (int)str[i] << "'" << std::endl;
+                str.erase(i, 1);
+                --i;
+            }
+        }
+
         glm::vec3 tmp;
         std::stringstream sstr(str);
         int valueCounter = 0;
