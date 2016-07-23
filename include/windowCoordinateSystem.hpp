@@ -83,9 +83,13 @@ struct WindowCoordinateSystem : protected Window2D {
         if (drawingDirection.z)
             throw std::runtime_error("Error: direction vector may only have values != 0 onf x and y coordinates");
 
-        float slope = drawingDirection.y / drawingDirection.x;
-        float yIntercept = pointVector.y - pointVector.x * slope;
-        this->drawLinearEquation(slope, yIntercept, color, type, lineWidth);
+        if (drawingDirection.x == 0.f)
+            this->drawLine({pointVector.x, this->m_IntervallY.min}, {pointVector.x, this->m_IntervallY.max}, color, type, lineWidth);
+        else{
+            float slope = drawingDirection.y / drawingDirection.x;
+            float yIntercept = pointVector.y - pointVector.x * slope;
+            this->drawLinearEquation(slope, yIntercept, color, type, lineWidth);
+        }
     }
 
     /**
@@ -99,10 +103,18 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawLinearEquation(float a, float b, float c, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
-        //       0 =  ax + by + c
-        // <=>  by = -ax -c
-        //  =>   y = -a/b x -c/b
-        this->drawLinearEquation(-a/b, -c/b, color, type, lineWidth);
+        if (b == 0.f) {
+            // 0*y = 0
+            // <=>  ax + c = 0
+            // <=>  x = -c/a
+            this->drawLine({-c/a, this->m_IntervallY.min}, {-c/a, this->m_IntervallY.max}, color, type, lineWidth);
+        }
+        else {
+            //       0 =  ax + by + c
+            // <=>  by = -ax -c
+            //  =>   y = -a/b x -c/b
+            this->drawLinearEquation(-a/b, -c/b, color, type, lineWidth);
+        }
     }
 
     /**
