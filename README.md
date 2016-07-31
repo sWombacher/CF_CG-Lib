@@ -1,7 +1,7 @@
 ChaosAndFractal_Lib
 ================
 This library is intented to be used in 'Chaos und Fraktale', a course from 'Hochschule Darmstadt'.
-If you want to use it in a differnt way, you may do so under the terms of the MIT license.
+If you want to use it in a different way, you may do so under the terms of the MIT license.
   
   
   The MIT License (MIT)
