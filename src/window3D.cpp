@@ -137,7 +137,9 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     case 'r': windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; break;
     case 'f': windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment; break;
 
+#ifndef __APPLE__
     case 27 /*esc key*/: glutLeaveMainLoop(); break;
+#endif
     default: break;
     }
     glutPostRedisplay();
@@ -195,7 +197,13 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
         glRotatef(90, 0, 1.f, 0);
         glScalef(diameter, diameter, diameter);
 
+#ifndef __APPLE__
         glutSolidCylinder(1.f, glm::length(drawingDirection) / diameter, 10, 10);
+#else
+        glScalef(1.f, 1.f, glm::length(drawingDirection) / diameter);
+        glTranslatef(0.f, 0.f, 0.5f);
+        glutSolidCube(1.f);
+#endif
     }
     glPopMatrix();
 }

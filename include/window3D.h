@@ -1,7 +1,11 @@
 #ifndef WINDOW_3D_H_H
 #define WINDOW_3D_H_H
 
+#ifndef __APPLE__
 #include <GL/freeglut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 #include <functional>
 #include <vector>

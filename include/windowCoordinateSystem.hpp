@@ -186,9 +186,9 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
 
-    void drawCriclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK){
+    void drawCriclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
         float pixelRadius = this->convert_intervallLength_to_pixelLength(radius);
-        Window2D::drawCriclePart(center, pixelRadius, startAngle, endAngle, 1, color);
+        Window2D::drawCriclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
     }
 
     // publicly available functions from class Window2D
