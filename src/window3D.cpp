@@ -203,6 +203,8 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
         glScalef(1.f, 1.f, glm::length(drawingDirection) / diameter);
         glTranslatef(0.f, 0.f, 0.5f);
         glutSolidCube(1.f);
+        glRotatef(45.f, 0.f, 0.f, 1.f);
+        glutSolidCube(1.f);
 #endif
     }
     glPopMatrix();
