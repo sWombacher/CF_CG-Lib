@@ -75,7 +75,7 @@ int main() {
     std::cout << "Read intervall position:\n"
               << "Pos x: " << point1.x << std::endl
               << "Pos y: " << point1.y << std::endl
-                                      << std::endl;
+                                       << std::endl;
 
     point1 = window.transformPoint_fromImageIntervall(point1);
     std::cout << "Read image position (in pixel):\n"

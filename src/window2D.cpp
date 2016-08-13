@@ -244,7 +244,7 @@ cv::Mat& Window2D::getImage(){
 
 void Window2D::drawAxis(const cf::Color& color, float stepSize_x, float stepSize_y, float interceptLength){
     static const int lineWidth = 1;
-    static const int helperLines_occurence = 4;
+    static const int helperLines_occurence = 5;
     static const float helperLine_adjustment = 2.5f;
 
     // draw complete x- and y-axis
@@ -268,13 +268,13 @@ void Window2D::drawAxis(const cf::Color& color, float stepSize_x, float stepSize
         int iterationCounter = helperLines_occurence - std::abs(startPos % helperLines_occurence);
 
         float verticalLineHeight = (intervall.max - intervall.min) / float(pixelLength) * interceptLength * lineWidth;
-        for (float start = startPos * stepSize_x;
+        for (float start = startPos * stepSize;
              start <= intervall.max;
-             start += stepSize_x)
+             start += stepSize, ++iterationCounter)
         {
             // draw vertical line
             float adjusted_lineWidth = verticalLineHeight;
-            if (iterationCounter++ == helperLines_occurence){
+            if (iterationCounter == helperLines_occurence){
                 iterationCounter = 0;
                 adjusted_lineWidth *= helperLine_adjustment;
             }
