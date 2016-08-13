@@ -81,11 +81,12 @@ int main() {
     std::cout << "Read image position (in pixel):\n"
               << "Pos x: " << int(point1.x) << std::endl
               << "Pos y: " << int(point1.y) << std::endl
-                                           << std::endl;
+                                            << std::endl;
 
     std::cout << "\n\nPress enter to continue\n";
     getchar();
     CLEAR_CONSOLE();
+
 
 // take 2 points from console and draw a line and a rectangle
 //
