@@ -296,22 +296,18 @@ const cf::Intervall& Window2D::getIntervallY() const{
     return this->m_IntervallY;
 }
 
-
-template<typename T>
-void Window2D::_correctYValue(T& y) const{
+void Window2D::_correctYValue(float& y) const{
     if (this->m_InvertYAxis)
         y = (this->m_Image.rows - 1) - y;
 }
-template<typename T>
-void Window2D::_convertFromNewIntervall(T& x, T& y) const{
+void Window2D::_convertFromNewIntervall(float& x, float& y) const{
     if (!this->m_IntervallChanged)
         return;
 
     x = Intervall::translateIntervallPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
     y = Intervall::translateIntervallPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
 }
-template<typename T>
-void Window2D::_convertToNewIntervall(T& x, T& y) const{
+void Window2D::_convertToNewIntervall(float &x, float &y) const{
     if (!this->m_IntervallChanged)
         return;
 

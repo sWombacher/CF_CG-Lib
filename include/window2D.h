@@ -190,14 +190,9 @@ public:
     void floodFill(cf::Point startingPoint, const cf::Color& color);
 
 protected:
-    template<typename T>
-    void _correctYValue(T& y) const;
-
-    template<typename T>
-    void _convertFromNewIntervall(T& x, T& y) const;
-
-    template<typename T>
-    void _convertToNewIntervall(T& x, T& y) const;
+    void _correctYValue(float& y) const;
+    void _convertFromNewIntervall(float& x, float& y) const;
+    void _convertToNewIntervall(float& x, float& y) const;
 
     cv::Mat m_Image;
 
