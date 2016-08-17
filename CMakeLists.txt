@@ -1,6 +1,7 @@
 # in case you want to change your compiler in unix systems
 #set(CMAKE_C_COMPILER   "/usr/bin/clang"  )
 #set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+#set(CMAKE_C_COMPILER_ID "Clang")
 
 project(chaos)
 cmake_minimum_required(VERSION 3.1)
@@ -79,10 +80,13 @@ else()
 endif()
 
 # endable openmp support
-find_package(OpenMP)
-if (OPENMP_FOUND)
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
+    find_package(OpenMP)
+    if (OPENMP_FOUND)
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        add_definitions(-DOPENMP_ENABLED)
+    endif()
 endif()
 
 # find all header and source files

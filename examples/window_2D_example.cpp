@@ -19,10 +19,15 @@ int main(void) {
             printf("Processing: %d%% \r", int(float(i) / float(step_count) * 100));
             fflush(stdout);
 
+#ifdef OPENMP_ENABLED
 			// this algorithm might be slow (debug version) 
 			// so we might want to parallize this by using openmp
 			// by default openmp uses number of processor cores, however you may specify this yourself
+            //
+            // Currently supported compilers: visual studio compiler (MSVC) and GCC
+            // not supported: clang
             #pragma omp parallel for
+#endif
             for (int y = 0; y < w.getHeight()   ; ++y){
             for (int x = 0; x < w.getWidth() - 1; ++x){
 				cf::Color col = w.getColor(x + 1, y);

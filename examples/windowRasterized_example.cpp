@@ -42,11 +42,8 @@ int main(int argc, char** argv){
     getchar();
 
 // transform image into pseudo color image
-    // parallize work load
-    #pragma omp parallel for
     for (int y = 0; y < image.getHeight(); ++y){
     for (int x = 0; x < image.getHeight(); ++x){
-
         // a grey image has been loaded
         // -> r/g/b values are equal
         // use the r channel as a reference grey channel
@@ -78,7 +75,6 @@ int main(int argc, char** argv){
     }
 
     // short version from above
-    #pragma omp parallel for // parallize work load
     for (int y = 0; y < image.getHeight(); ++y){
     for (int x = 0; x < image.getHeight(); ++x)
         image.setColor(x, y, LUT[image.getColor(x, y).r]);
