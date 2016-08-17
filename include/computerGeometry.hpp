@@ -8,6 +8,11 @@
 
 namespace cf{
 
+template<bool POINTVECTOR> struct Vec3;
+typedef Vec3<true > PointVector;
+typedef Vec3<false> DirectionVector;
+std::vector<PointVector> readDATFile(const std::string& filePath);
+
 template<bool POINTVECTOR>
 struct Vec3{
     Vec3(float x = 0.f, float y = 0.f) : m_Data(x, y, POINTVECTOR ? 1.f : 0.f) {}
@@ -121,8 +126,6 @@ private:
 
     glm::vec3 m_Data;
 };
-typedef Vec3<true > PointVector;
-typedef Vec3<false> DirectionVector;
 
 std::vector<cf::PointVector> readDATFile(const std::string& filePath){
     std::fstream file(filePath, std::fstream::in);
