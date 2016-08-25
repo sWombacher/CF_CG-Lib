@@ -17,6 +17,7 @@ template<bool POINTVECTOR>
 struct Vec3{
     Vec3(float x = 0.f, float y = 0.f) : m_Data(x, y, POINTVECTOR ? 1.f : 0.f) {}
     Vec3(float x, float y, float w) : m_Data(x, y, w) {}
+    Vec3(const cf::Point& p) : m_Data(p.x, p.y, 1.f){}
 
     template<bool RHS>
     Vec3<RHS | POINTVECTOR> operator+ (const Vec3<RHS>& rhs) const{
@@ -87,13 +88,13 @@ struct Vec3{
 
     float getX() const{ return this->m_Data.x; }
     float getY() const{ return this->m_Data.y; }
-    float getW() const{ return this->m_Data.w; }
+    float getW() const{ return this->m_Data.z; }
 
     void setX(float value){ this->m_Data.x = value; }
     void setY(float value){ this->m_Data.y = value; }
     void setW(float value){
         static_assert(POINTVECTOR, "Error: Write acces to DirectionVector's w component is not allowed");
-        this->m_Data.w = value;
+        this->m_Data.z = value;
     }
 
     float  operator[](int idx) const { return this->m_Data[idx]; }
@@ -109,6 +110,13 @@ struct Vec3{
     operator cf::Point () const {
         static_assert(POINTVECTOR, "Error: No convertion right from cf::DirectionVector to cf::Point, try changing type to cf::PointVector");
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
+    }
+
+    cf::PointVector& operator=(const cf::Point p){
+        this->m_Data[0] = p.x;
+        this->m_Data[1] = p.y;
+        this->m_Data[2] = 1.f;
+        return *this;
     }
 
     operator cf::Vec3<false> () const {
