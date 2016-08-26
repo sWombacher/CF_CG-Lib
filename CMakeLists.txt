@@ -1,6 +1,6 @@
 # in case you want to change your compiler in unix systems
-#set(CMAKE_C_COMPILER   "/usr/bin/clang"  )
-#set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+#set(CMAKE_C_COMPILER   "clang"  )
+#set(CMAKE_CXX_COMPILER "clang++")
 #set(CMAKE_C_COMPILER_ID "Clang")
 
 project(chaos)

@@ -6,11 +6,20 @@
 #include <fstream>
 #include <string>
 
+
+namespace cf {
+	template<bool POINTVECTOR> struct Vec3;
+	typedef Vec3<true > PointVector;
+	typedef Vec3<false> DirectionVector;
+}
+
+template<bool b>
+std::ostream& operator<<(std::ostream& os, const cf::Vec3<b>& rhs);
+
+
+
 namespace cf{
 
-template<bool POINTVECTOR> struct Vec3;
-typedef Vec3<true > PointVector;
-typedef Vec3<false> DirectionVector;
 std::vector<PointVector> readDATFile(const std::string& filePath);
 
 template<bool POINTVECTOR>
@@ -119,6 +128,11 @@ struct Vec3{
         return *this;
     }
 
+	cf::Vec3<POINTVECTOR>& operator=(const glm::vec3& rhs) {
+		this->m_Data = rhs;
+		return *this;
+	}
+
     operator cf::Vec3<false> () const {
         if (this->m_Data.z)
             throw std::runtime_error("Error: Convertion from PointVector not possible (weight != 0)");
@@ -130,7 +144,6 @@ private:
 
     template<bool b>
     friend std::ostream& (::operator<<)(std::ostream&, const Vec3<b>&);
-    friend std::vector<cf::Vec3<true>> cf::readDATFile(const std::string&);
 
     glm::vec3 m_Data;
 };
@@ -177,7 +190,7 @@ std::vector<cf::PointVector> readDATFile(const std::string& filePath){
         }
         if (valueCounter == 3){
             PointVector point;
-            point.m_Data = tmp;
+            point = tmp;
             points.push_back(point);
         }
     }
