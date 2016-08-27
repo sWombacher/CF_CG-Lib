@@ -20,7 +20,7 @@ int readInt(){
     int value;
     std::stringstream sstr(readString());
     sstr >> value;
-    while (sstr.bad()) {
+    while (!sstr.good()) {
         std::cout << "\nError: provided value is not of type integer, please enter a valid value" << std::endl;
         sstr.clear();
         sstr << readString();
@@ -32,7 +32,7 @@ float readFloat(){
     float value;
     std::stringstream sstr(readString());
     sstr >> value;
-    while (sstr.bad()) {
+    while (!sstr.good()) {
         std::cout << "\nError: provided value is not of type floatingpoint, please enter a valid value" << std::endl;
         sstr.clear();
         sstr << readString();
