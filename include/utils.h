@@ -129,8 +129,8 @@ struct Color{
 };
 
 /**
- * @brief _removeWindowsSpecificCarriageReturn removes '\r' characters in strings ('\r' may be read from unix system with windows files)
- * @param str string containing '\r', which will be removed
+ * @brief _removeWindowsSpecificCarriageReturn removes 'carriage return' characters in strings ('carriage return' may be read from unix system with windows files)
+ * @param str string containing 'carriage return', which will be removed
  */
 void _removeWindowsSpecificCarriageReturn(std::string& str);
 
