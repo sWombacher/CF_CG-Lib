@@ -34,6 +34,11 @@ std::ostream& operator<<(std::ostream& os, const cf::Vec3<b>& rhs);
 
 namespace cf{
 
+/**
+ * @brief readDATFile Reads a *.dat file
+ * @param filePath
+ * @return
+ */
 std::vector<PointVector> readDATFile(const std::string& filePath);
 
 /**
@@ -179,6 +184,12 @@ struct Vec3{
     }
 
     float  operator[](int idx) const { return this->m_Data[idx]; }
+
+    /**
+     * @brief operator[] Access to each component of the Vector, Note: no write access for index 2 on DirectionVectors
+     * @param idx Acess index, idx = 0 -> x, idx = 1 -> y, idx = 2 -> w
+     * @return
+     */
     float& operator[](int idx) {
         if (idx == 2 && !POINTVECTOR)
             throw std::runtime_error("Error: Write acces to DirectionVector's w component is not allowed");

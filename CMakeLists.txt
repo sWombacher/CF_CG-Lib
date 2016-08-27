@@ -1,4 +1,4 @@
-# in case you want to change your compiler in unix systems
+# in case you want to change your compiler on unix systems
 #set(CMAKE_C_COMPILER   "clang"  )
 #set(CMAKE_CXX_COMPILER "clang++")
 #set(CMAKE_C_COMPILER_ID "Clang")
@@ -128,7 +128,8 @@ else()
 endif()
 
 # add define
-add_definitions(-DCHAOS_FILE_PATH="${CMAKE_CURRENT_LIST_DIR}/chaos_files/")
+add_definitions(   -DCHAOS_FILE_PATH="${CMAKE_CURRENT_LIST_DIR}/chaos_files/")
+add_definitions(-DGEOMETRY_FILE_PATH="${CMAKE_CURRENT_LIST_DIR}/geometry_files/")
 
 # add all example executeables
 file(GLOB examples ${CMAKE_CURRENT_LIST_DIR}/examples/*.cpp)

@@ -6,7 +6,7 @@ int main(int argc, char** argv){
     std::string filePath;
     if (argc < 2){
         std::cout << "Please provide a .dat file, if you want a different ifs file\n\n\n";
-        filePath = CHAOS_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/chaos_files
+        filePath = GEOMETRY_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/geometry_files/
         filePath += "FIRST.DAT";
     }
     else
