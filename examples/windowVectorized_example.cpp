@@ -4,57 +4,19 @@
 #include <sstream>
 #include <iostream>
 
-#ifdef _WIN32
-#define CLEAR_CONSOLE() system("cls");
-#else
-#define CLEAR_CONSOLE() system("clear");
-#endif
-
-// console input
-std::string readString(){
-    std::string tmp;
-    std::getline(std::cin, tmp);
-    return tmp;
-}
-int readInt(){
-    int value;
-    std::stringstream sstr(readString());
-    sstr >> value;
-    while (!sstr.good()) {
-        std::cout << "\nError: provided value is not of type integer, please enter a valid value" << std::endl;
-        sstr.clear();
-        sstr << readString();
-        sstr >> value;
-    }
-    return value;
-}
-float readFloat(){
-    float value;
-    std::stringstream sstr(readString());
-    sstr >> value;
-    while (!sstr.good()) {
-        std::cout << "\nError: provided value is not of type floatingpoint, please enter a valid value" << std::endl;
-        sstr.clear();
-        sstr << readString();
-        sstr >> value;
-    }
-    return value;
-}
-
-
 int main() {
 // read intervalls from console
     cf::Intervall range_x;
     std::cout << "Please provide a Intervall for the x-axes:\n";
-    std::cout << "Intervall min: "; range_x.min = readFloat();
-    std::cout << "Intervall max: "; range_x.max = readFloat();
+    std::cout << "Intervall min: "; range_x.min = cf::Console::readFloat();
+    std::cout << "Intervall max: "; range_x.max = cf::Console::readFloat();
     std::cout << std::endl;
 
     cf::Intervall range_y;
     std::cout << "Please provide a Intervall for the y-axes:\n";
-    std::cout << "Intervall min: "; range_y.min = readFloat();
-    std::cout << "Intervall max: "; range_y.max = readFloat();
-    CLEAR_CONSOLE();
+    std::cout << "Intervall min: "; range_y.min = cf::Console::readFloat();
+    std::cout << "Intervall max: "; range_y.max = cf::Console::readFloat();
+    cf::Console::clearConsole();
 
 
 // create window and print mouse input
@@ -84,8 +46,8 @@ int main() {
                                             << std::endl;
 
     std::cout << "\n\nPress enter to continue\n";
-    getchar();
-    CLEAR_CONSOLE();
+	cf::Console::waitKey();
+    cf::Console::clearConsole();
 
 
 // take 2 points from console and draw a line and a rectangle
@@ -93,22 +55,22 @@ int main() {
 // first   point: use interval position
 // second  point: use pixel position
     std::cout << "Please provide a floatingpoint value within the intervall " << range_x << ":\n";
-    point1.x = readFloat();
+    point1.x = cf::Console::readFloat();
 
     std::cout << std::endl;
     std::cout << "Please provide a floatingpoint value within the intervall " << range_y << ":\n";
-    point1.y = readFloat();
+    point1.y = cf::Console::readFloat();
     window.drawCircle(point1, 3, -1, cf::Color::BLUE);
     window.show();
 
     cf::Point point2;
     std::cout << std::endl << std::endl;
     std::cout << "Please provide a integer value within the intervall [0-" << window.getWidth() - 1 << "]:\n";
-    point2.x = readInt();
+    point2.x = cf::Console::readInt();
 
     std::cout << std::endl;
     std::cout << "Please provide a integer value within the intervall [0-" << window.getHeight() - 1 << "]:\n";
-    point2.y = readInt();
+    point2.y = cf::Console::readInt();
 
     // translate position "point2" to intervall position
     point2 = window.transformPoint_toImgeIntervall(point2);
@@ -117,14 +79,14 @@ int main() {
 
 
 // draw line and rectangle
-    CLEAR_CONSOLE();
+	cf::Console::clearConsole();
     std::cout << "Press enter to draw a line\n";
-    getchar();
+	cf::Console::waitKey();
     window.drawLine(point1, point2, 2, cf::Color::BLACK);
     window.show();
 
     std::cout << "\n\n\nPress enter to draw a rectangle\n";
-    getchar();
+	cf::Console::waitKey();
     window.drawRectangle(point1, point2, 2, cf::Color::GREEN);
     window.show();
 
@@ -139,7 +101,7 @@ int main() {
 
     // draw
     std::cout << "\n\n\nPress enter to draw a circle (point1 as center, point2 on circle line)\n";
-    getchar();
+	cf::Console::waitKey();
     window.drawCircle(point1, pixelLength, 2, cf::Color(127, 27, 127));
     window.show();
 
@@ -161,10 +123,10 @@ int main() {
     window.drawCriclePart(point2, pixelLength, angle - 60.f, angle + 60.f, 2, cf::Color::GREY);
 
     std::cout << "\n\n\nPress enter to draw a circle part (point2 center, point1 on circle line)\n";
-    getchar();
+	cf::Console::waitKey();
     window.show();
 
     std::cout << "\n\n\nPress enter to finish the process\n";
-    getchar();
+	cf::Console::waitKey();
     return 0;
 }

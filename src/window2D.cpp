@@ -43,6 +43,7 @@ void Window2D::show() const{
 void Window2D::clear(const Color &c){ this->m_Image = cv::Scalar(c.b, c.g, c.r); }
 
 unsigned char Window2D::waitKey(int delay) const{
+	this->_window2foreground();
     return static_cast<unsigned char>(cv::waitKey(delay));
 }
 
@@ -55,6 +56,8 @@ void mouseCallBack(int event, int x, int y, int, void* userdata){
 }
 
 void Window2D::waitMouseInput(float &x, float &y) {
+	this->_window2foreground();
+
     this->m_MouseCallBackStorage[0] = -1;
     this->m_MouseCallBackStorage[1] = -1;
     cv::setMouseCallback(this->m_WindowName, mouseCallBack, &this->m_MouseCallBackStorage[0]);
@@ -315,6 +318,20 @@ void Window2D::_convertToNewIntervall(float &x, float &y) const{
     y = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
 }
 
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+void Window2D::_window2foreground() const {
+#ifdef _WIN32
+	static HWND windowHandle = (HWND)cvGetWindowHandle(this->m_WindowName);
+	SetForegroundWindow(windowHandle);
+#else
+#endif
+}
+
+
 bool Point::operator==(const Point &p) const{
     return this->x == p.x && this->y == p.y;
 }
@@ -369,5 +386,5 @@ Point operator/ (float lhs, const Point& p){
     return p * lhs;
 }
 
-
 }
+

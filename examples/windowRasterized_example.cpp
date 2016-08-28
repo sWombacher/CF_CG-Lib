@@ -39,7 +39,7 @@ int main(int argc, char** argv){
     //image.waitKey(1000);
 
     std::cout << "Press any key to continue\n";
-    getchar();
+	cf::Console::waitKey();
 
 // transform image into pseudo color image
     for (int y = 0; y < image.getHeight(); ++y){
@@ -54,11 +54,11 @@ int main(int argc, char** argv){
     image.show();
 
     std::cout << "Press any key to continue\n";
-    getchar();
+	cf::Console::waitKey();
 
 // generate a LUT of random numbers
     // initialize random generator with seed
-    std::mt19937 gen((std::random_device())()); // more "random" generator
+    std::mt19937 gen(std::random_device().operator()()); // more "random" generator
     //std::mt19937 gen(10); // pseudo random geneartor
 
     // we want values in the range of [0, 255]
@@ -82,6 +82,6 @@ int main(int argc, char** argv){
     image.show();
 
     std::cout << "Press any key to finish\n";
-    getchar();
+	cf::Console::waitKey();
     return 0;
 }

@@ -41,6 +41,6 @@ int main(int argc, char** argv) {
     // print simple transformation
     v = m * v;
     std::cout << "Vector after  transformation: " << v << std::endl << std::endl;
-    getchar();
+	cf::Console::waitKey();
     return 0;
 }

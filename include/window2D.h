@@ -194,6 +194,8 @@ protected:
     void _convertFromNewIntervall(float& x, float& y) const;
     void _convertToNewIntervall(float& x, float& y) const;
 
+	void _window2foreground() const;
+
     cv::Mat m_Image;
 
     bool  m_InvertYAxis;

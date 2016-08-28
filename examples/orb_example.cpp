@@ -35,6 +35,6 @@ int main(int argc, char** argv) {
     for (const auto& e : orb.getAllFactors())
         std::cout << e << std::endl;
 
-    getchar();
+	cf::Console::waitKey();
     return 0;
 }

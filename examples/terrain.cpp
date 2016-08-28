@@ -53,7 +53,7 @@ int main(int argc, char** argv){
     // (image file of any format opencv does support, tested formats: jpeg, png, bmp)
     if (argc < 2){
         std::cout << "Please provide a heightmap";
-        getchar();
+		cf::Console::waitKey();
         return -1;
     }
     cf::WindowRasterized img = cf::WindowRasterized(argv[1]);

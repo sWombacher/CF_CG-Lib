@@ -291,5 +291,66 @@ float degree2radiant(float degreeValue){
 }
 
 
+std::string Console::readString() {
+	Console::_console2foreground();
+	std::string tmp;
+	std::getline(std::cin, tmp);
+	return tmp;
 }
+float Console::readFloat() {
+	float value;
+	std::stringstream sstr(Console::readString());
+	sstr >> value;
+	while (!sstr.good()) {
+		std::cout << "\nError: provided value is not of type floatingpoint, please enter a valid value" << std::endl;
+		sstr.clear();
+		sstr << Console::readString();
+		sstr >> value;
+	}
+	return value;
+}
+int Console::readInt() {
+	int value;
+	std::stringstream sstr(Console::readString());
+	sstr >> value;
+	while (!sstr.good()) {
+		std::cout << "\nError: provided value is not of type integer, please enter a valid value" << std::endl;
+		sstr.clear();
+		sstr << Console::readString();
+		sstr >> value;
+	}
+	return value;
+}
+
+void Console::waitKey() {
+	Console::_console2foreground();
+	getchar();
+}
+
+void Console::clearConsole() {
+	Console::_console2foreground();
+
+#ifdef _WIN32
+	system("cls");
+#else
+	system("clear");
+#endif
+}
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+void Console::_console2foreground() {
+#ifdef _WIN32
+	static HWND consoleHandle = GetConsoleWindow();
+	SetForegroundWindow(consoleHandle);
+#else
+	/// currently only supported on windows
+#endif
+}
+
+};
+
+
 

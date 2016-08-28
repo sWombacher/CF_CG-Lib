@@ -76,7 +76,7 @@ int main(){
     auto continueFunction = [&system](){
         system.show();
         std::cout << "Press enter to continue";
-        getchar();
+		cf::Console::waitKey();
     };
 
     system.drawLinearEquation(line_halfAngle, cf::Color::BLUE);
@@ -96,6 +96,6 @@ int main(){
     system.drawCircle(intercept_2, radius_2, cf::Color::GREEN);
     system.show();
     std::cout << "Press enter to finish the process\n";
-    getchar();
+	cf::Console::waitKey();
     return 0;
 }

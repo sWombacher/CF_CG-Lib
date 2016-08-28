@@ -134,6 +134,19 @@ struct Color{
  */
 void _removeWindowsSpecificCarriageReturn(std::string& str);
 
+
+struct Console {
+	static std::string readString();
+	static float readFloat();
+	static int readInt();
+
+	static void waitKey();
+	static void clearConsole();
+
+private:
+	static void _console2foreground();
+};
+
 }
 
 #endif

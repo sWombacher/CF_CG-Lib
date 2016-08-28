@@ -47,6 +47,6 @@ int main(int argc, char** argv) {
     for (const auto& e: ls.getAllProductions())
         std::cout << "Symbol: " << e.first << "\nProduction: " << e.second << std::endl << std::endl;
 
-    getchar();
+	cf::Console::waitKey();
     return 0;
 }
