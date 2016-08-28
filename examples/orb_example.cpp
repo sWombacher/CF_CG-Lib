@@ -32,8 +32,9 @@ int main(int argc, char** argv) {
         std::cout << e << std::endl;
 
     std::cout << "\n\nFactors:\n";
-    for (const auto& e : orb.getAllFactors())
+    for (const auto& e : orb.getAllFactors()){
         std::cout << e << std::endl;
+    }
 
 	cf::Console::waitKey();
     return 0;

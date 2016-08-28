@@ -135,12 +135,36 @@ struct Color{
 void _removeWindowsSpecificCarriageReturn(std::string& str);
 
 
+/**
+ * @brief The Console struct offers utility functions for 'console'
+ */
 struct Console {
+    /**
+     * @brief readString Read a line into a std::string (includes spaces)
+     * @return Read line
+     */
 	static std::string readString();
+
+    /**
+     * @brief readFloat Reads a floatingpoint value
+     * @return Read value
+     */
 	static float readFloat();
+
+    /**
+     * @brief readInt Reads a integer value
+     * @return Read value
+     */
 	static int readInt();
 
+    /**
+     * @brief waitKey Wait until key input (on windows also sets the console window active)
+     */
 	static void waitKey();
+
+    /**
+     * @brief clearConsole Clears the console
+     */
 	static void clearConsole();
 
 private:
