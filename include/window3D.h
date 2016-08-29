@@ -4,7 +4,7 @@
 #ifndef __APPLE__
 #include <GL/freeglut.h>
 #else
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #endif
 
 #include <functional>
