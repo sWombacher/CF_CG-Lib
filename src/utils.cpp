@@ -301,7 +301,7 @@ float Console::readFloat() {
 	float value;
 	std::stringstream sstr(Console::readString());
 	sstr >> value;
-	while (!sstr.good()) {
+    while (sstr.fail()) {
 		std::cout << "\nError: provided value is not of type floatingpoint, please enter a valid value" << std::endl;
 		sstr.clear();
 		sstr << Console::readString();
@@ -313,7 +313,7 @@ int Console::readInt() {
 	int value;
 	std::stringstream sstr(Console::readString());
 	sstr >> value;
-	while (!sstr.good()) {
+    while (sstr.fail()) {
 		std::cout << "\nError: provided value is not of type integer, please enter a valid value" << std::endl;
 		sstr.clear();
 		sstr << Console::readString();
@@ -350,7 +350,7 @@ void Console::_console2foreground() {
 #endif
 }
 
-};
+}
 
 
 

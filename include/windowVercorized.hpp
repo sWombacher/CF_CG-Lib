@@ -19,7 +19,7 @@ struct WindowVectorized : protected Window2D {
                      const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::WHITE)
         : Window2D(1, 1, windowName, startColor)
     {
-        this->setInvertYAxis(true);
+        this->setInvertYAxis(false);
         this->setIntervall(range_x, range_y, width);
     }
     virtual ~WindowVectorized() = default;

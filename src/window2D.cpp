@@ -117,8 +117,12 @@ bool Window2D::getInvertYAxis() const{
 void Window2D::drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color &c){
     this->_convertFromNewIntervall(center.x, center.y);
     this->_correctYValue(center.y);
+    if (this->m_InvertYAxis){
+        startAngle *= -1.f;
+        endAngle *= -1.f;
+    }
 
-    cv::ellipse(this->m_Image, center, cv::Size(radius, radius), 0.f, -startAngle, -endAngle, cv::Scalar(c.b, c.g, c.r), lineWidth);
+    cv::ellipse(this->m_Image, center, cv::Size(radius, radius), 0.f, startAngle, endAngle, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 
 void Window2D::floodFill(Point startingPoint, const Color &c) {

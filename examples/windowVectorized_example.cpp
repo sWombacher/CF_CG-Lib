@@ -41,9 +41,9 @@ int main() {
 
     point1 = window.transformPoint_fromImageIntervall(point1);
     std::cout << "Read image position (in pixel):\n"
-              << "Pos x: " << int(point1.x) << std::endl
-              << "Pos y: " << int(point1.y) << std::endl
-                                            << std::endl;
+              << "Pos x: " << std::round(point1.x) << std::endl
+              << "Pos y: " << std::round(point1.y) << std::endl
+                                                   << std::endl;
 
     std::cout << "\n\nPress enter to continue\n";
 	cf::Console::waitKey();
