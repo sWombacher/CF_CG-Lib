@@ -129,6 +129,10 @@ struct Vec3{
      */
     void normalize(){
         static_assert(POINTVECTOR, "Error: DirectionVector cannot be normalized!");
+        if (this->m_Data.z == 0.f){
+            std::cout << "WARNING: PointVector cannot be normalized (w is 0)" << std::endl;
+            return;
+        }
         this->m_Data.x /= this->m_Data.z;
         this->m_Data.y /= this->m_Data.z;
         this->m_Data.z = 1.f; // this->m_Data.z /= this->m_Data.z;

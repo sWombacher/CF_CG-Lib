@@ -8,7 +8,7 @@ struct MyWindow : public cf::Window3D {
     virtual void draw() override{
         this->clear();
         static const float minHeight = 0.1f;
-        static const float maxHeight = 10.f;
+        static const float maxHeight = 20.f;
         static const float cubeSize  = 0.5f;
 
         // this loop could be paralllized,
@@ -38,6 +38,7 @@ struct MyWindow : public cf::Window3D {
                              1.f);
 
                 glScalef(1.f, 1.f, cubeHeight);
+                glTranslatef(0.f, 0.f, 0.5f);
                 glutSolidCube(cubeSize);
             }
             glPopMatrix(); // load original state
@@ -51,17 +52,26 @@ private:
 int main(int argc, char** argv){
     // read command line parameter
     // (image file of any format opencv does support, tested formats: jpeg, png, bmp)
+    std::string filePath;
     if (argc < 2){
-        std::cout << "Please provide a heightmap";
-		cf::Console::waitKey();
-        return -1;
+        std::cout << "Please provide a heightmap file, if you want a different hightmap";
+        filePath = CHAOS_FILE_PATH;
+        filePath += "x1.png";
     }
-    cf::WindowRasterized img = cf::WindowRasterized(argv[1]);
+    else
+        filePath = argv[1];
+
+    cf::WindowRasterized img = cf::WindowRasterized(filePath.c_str());
     img.show();
     img.waitKey(1000);
 
     MyWindow::showWindowUsage();
     MyWindow window(&argc, argv, img);
-    window.setCamera(MyWindow::CameraType::ROTATION);
+
+    // setup camera
+    //  Type: Rotation (you probably want this)
+    //  Look at origin
+    //  look at distance of 50
+    window.setCamera(MyWindow::CameraType::ROTATION, glm::vec3(0, 0, 0), 50.f);
     return window.startDrawing();
 }

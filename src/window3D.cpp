@@ -142,7 +142,6 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
 #endif
     default: break;
     }
-    glutPostRedisplay();
     windowPtr->_AdjustCamera();
 }
 
@@ -273,6 +272,7 @@ void Window3D::_AdjustCamera(){
     default:
         throw std::runtime_error("Error: Unknown CameraType");
     }
+    glutPostRedisplay();
 }
 
 void Window3D::setMaxFPS(float maxFPS){

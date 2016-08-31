@@ -111,6 +111,7 @@ protected:
     float   m_DistAdjustment = 1.f;
     float  m_AngleAdjustment = 1.f;
     float m_CameraAdjustment = 1.f;
+    void _AdjustCamera();
 
     // you may change this parameters to the center of your object / you own distance
     glm::vec3 m_LookAt = glm::vec3(0.f, 0.f, 0.f);
@@ -119,7 +120,6 @@ protected:
 private:
     friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
     friend void _DrawingFunction();
-    void _AdjustCamera();
 
     float m_MaxFPS = 0.f;
 
