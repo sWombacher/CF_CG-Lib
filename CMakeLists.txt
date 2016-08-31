@@ -10,8 +10,11 @@ cmake_minimum_required(VERSION 3.1)
 #set(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_BUILD_TYPE "Debug")
 
-set(USE_SYSTEM_LIBS FALSE)
-#set(USE_SYSTEM_LIBS TRUE )
+if (WIN32 OR CYGWIN)
+	set(USE_SYSTEM_LIBS FALSE)
+else()
+	set(USE_SYSTEM_LIBS TRUE )
+endif()
 
 # enable compiler warnings for gcc/clang
 if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} EQUAL "Clang")
