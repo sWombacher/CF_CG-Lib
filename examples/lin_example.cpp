@@ -48,6 +48,7 @@ int main(int argc, char** argv) {
         std::cout << "Symbol: " << e.first << "\nProduction: " << e.second << std::endl << std::endl;
     }
 
+    std::cout << "Press enter to finish the process";
 	cf::Console::waitKey();
     return 0;
 }
