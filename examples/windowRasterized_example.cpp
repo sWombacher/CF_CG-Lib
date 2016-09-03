@@ -38,7 +38,7 @@ int main(int argc, char** argv){
     //  this issue can be solved by calling "waitKey"
     //image.waitKey(1000);
 
-    std::cout << "Press any key to continue\n";
+    std::cout << "Press enter to continue";
 	cf::Console::waitKey();
 
 // transform image into pseudo color image
@@ -53,13 +53,13 @@ int main(int argc, char** argv){
     }
     image.show();
 
-    std::cout << "Press any key to continue\n";
+    std::cout << "Press enter to continue";
 	cf::Console::waitKey();
 
 // generate a LUT of random numbers
     // initialize random generator with seed
     std::mt19937 gen(std::random_device().operator()()); // more "random" generator
-    //std::mt19937 gen(10); // pseudo random geneartor
+    //std::mt19937 gen(42); // pseudo random geneartor
 
     // we want values in the range of [0, 255]
     std::uniform_int_distribution<int> colorDistribution(0, 255);
@@ -81,7 +81,43 @@ int main(int argc, char** argv){
     }
     image.show();
 
-    std::cout << "Press any key to finish\n";
+    std::cout << "Press enter to continue";
+    cf::Console::waitKey();
+
+    // invert diagonal pixels
+    for (int x = 0, y = 0;
+         x < image.getWidth() && y < image.getHeight();
+         ++x, ++y)
+    {
+        cf::Color c = image.getColor(x, y);
+        c = c.invert();
+        image.setColor(x, y, c);
+    }
+    image.show();
+
+    std::cout << "Press enter to continue";
+    cf::Console::waitKey();
+
+    // color diagonal pixels black/white based on brightness
+    for (int y = image.getHeight() - 1, x = 0;
+         y >= 0 && x < image.getWidth();
+         --y, ++x)
+    {
+        cf::Color c = image.getColor(x, y);
+
+        // calculate simple average of RGB for brightness
+        // a more preceise solution:
+        // 0.21 R + 0.72 G + 0.07 B, source: http://www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/
+        int brightness = c.r + c.g + c.b;
+        brightness /= 3;
+        if (brightness < 128)
+            image.setColor(x, y, cf::Color::WHITE);
+        else
+            image.setColor(x, y, cf::Color::BLACK);
+    }
+    image.show();
+
+    std::cout << "Press enter to finish\n";
 	cf::Console::waitKey();
     return 0;
 }
