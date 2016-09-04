@@ -142,6 +142,9 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
 #endif
     default: break;
     }
+    if (windowPtr->m_LookAtDistance == 0.f)
+        windowPtr->m_LookAtDistance = 0.0001f;
+
     windowPtr->_AdjustCamera();
 }
 
@@ -255,18 +258,18 @@ void Window3D::_AdjustCamera(){
         }
         break;
     case CameraType::STATIC_X_AXIS:
-        gluLookAt(this->m_LookAt.x + this->m_LookAtDistance, this->m_LookAt.y, this->m_LookAt.z,
-                  this->m_LookAt.x                         , this->m_LookAt.y, this->m_LookAt.z,
+        gluLookAt(this->m_LookAt.x + this->m_LookAtDistance      , this->m_LookAt.y, this->m_LookAt.z,
+                  this->m_LookAt.x + this->m_LookAtDistance - 1.f, this->m_LookAt.y, this->m_LookAt.z,
                   0, 1, 0);
         break;
     case CameraType::STATIC_Y_AXIS:
-        gluLookAt(this->m_LookAt.x, this->m_LookAt.y + this->m_LookAtDistance, this->m_LookAt.z,
-                  this->m_LookAt.x, this->m_LookAt.y                         , this->m_LookAt.z,
+        gluLookAt(this->m_LookAt.x, this->m_LookAt.y + this->m_LookAtDistance      , this->m_LookAt.z,
+                  this->m_LookAt.x, this->m_LookAt.y + this->m_LookAtDistance - 1.f, this->m_LookAt.z,
                   1, 0, 0);
         break;
     case CameraType::STATIC_Z_AXIS:
-        gluLookAt(this->m_LookAt.x, this->m_LookAt.y, this->m_LookAt.z + this->m_LookAtDistance,
-                  this->m_LookAt.x, this->m_LookAt.y, this->m_LookAt.z,
+        gluLookAt(this->m_LookAt.x, this->m_LookAt.y, this->m_LookAt.z + this->m_LookAtDistance      ,
+                  this->m_LookAt.x, this->m_LookAt.y, this->m_LookAt.z + this->m_LookAtDistance - 1.f,
                   0, 1, 0);
         break;
     default:
