@@ -59,8 +59,8 @@ float degree2radiant(float degreeValue);
  * @brief The Direction struct for getting absolute directions from a current direction and a relative direction
  */
 struct Direction{
-    enum AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
-    enum RelativeDirection { LEFT, FORWARD, RIGHT, NUM_REL_DIRS };
+    enum class AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
+    enum class RelativeDirection { LEFT, FORWARD, RIGHT, NUM_REL_DIRS };
 
     /**
      * @brief getNextiDirection receive absolute direction by providing a relative directon
@@ -69,6 +69,8 @@ struct Direction{
      * @return
      */
     static AbsoluteDirection getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement);
+    static std::string toString(AbsoluteDirection absDir);
+    static std::string toString(RelativeDirection relDir);
 };
 
 

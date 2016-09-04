@@ -103,18 +103,18 @@ std::string readAntString(const std::string& filePath){
 Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
     switch(relativeMovement){
     case RelativeDirection::LEFT:{
-        int dir = currentDirection;
+        int dir = int(currentDirection);
         --dir;
         if (dir < 0)
-            dir += AbsoluteDirection::NUM_ABS_DIRS;
+            dir += int(AbsoluteDirection::NUM_ABS_DIRS);
 
         return static_cast<AbsoluteDirection>(dir);
     }
     case RelativeDirection::RIGHT:{
-        int dir = currentDirection;
+        int dir = int(currentDirection);
         ++dir;
-        if (dir >= AbsoluteDirection::NUM_ABS_DIRS)
-            dir -= AbsoluteDirection::NUM_ABS_DIRS;
+        if (dir >= int(AbsoluteDirection::NUM_ABS_DIRS))
+            dir -= int(AbsoluteDirection::NUM_ABS_DIRS);
 
         return static_cast<AbsoluteDirection>(dir);
     }
@@ -124,6 +124,25 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
         break;
     }
     return AbsoluteDirection::NUM_ABS_DIRS; // this should not occur hopfully :)
+}
+std::string Direction::toString(AbsoluteDirection absDir){
+    switch(absDir){
+    case AbsoluteDirection::WEST : return "WEST";
+    case AbsoluteDirection::EAST : return "EAST";
+    case AbsoluteDirection::NORTH: return "NORTH";
+    case AbsoluteDirection::SOUTH: return "SOUTH";
+    default:
+        return "UNKOWN DIRECTION";
+    }
+}
+std::string Direction::toString(RelativeDirection relDir){
+    switch(relDir){
+    case RelativeDirection::LEFT   : return "LEFT";
+    case RelativeDirection::FORWARD: return "FORWARD";
+    case RelativeDirection::RIGHT  : return "RIGHT";
+    default:
+        return "UNKOWN DIRECTION";
+    }
 }
 
 

@@ -26,8 +26,8 @@ int main(){
     // Note: OpenGL uses degree, glm radians (see 'window_3D_example.cpp')
     float deg = cf::degree2radiant(180.f);
     float rad = cf::radiant2degree(glm::pi<float>() / 2.f);
-    std::cout << "180 degree in radiant:    " << deg << std::endl
-              << "    Pi half in degree:    " << rad << std::endl
+    std::cout << "180 degree in radiant:  " << deg << std::endl
+              << " Pi half   in  degree:  " << rad << std::endl
               << std::endl << std::endl;
 
 
@@ -38,6 +38,14 @@ int main(){
               << std::setprecision(9) << pi_approx << std::endl
               << std::fixed << std::setprecision(5) << pi_approx << std::endl
               << std::setprecision(9) << pi_approx << std::endl
+              << std::endl
+              << std::endl;
+
+
+    // Direction example
+    cf::Direction::AbsoluteDirection west = cf::Direction::AbsoluteDirection::WEST;
+    std::cout << "If you current direction is 'WEST'\nAnd you take a right turn your new direction will be:\n'"
+              << cf::Direction::toString(cf::Direction::getNextiDirection(west, cf::Direction::RelativeDirection::RIGHT)) << "'\n"
               << std::endl
               << std::endl;
 
