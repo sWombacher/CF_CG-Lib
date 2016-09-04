@@ -41,7 +41,7 @@ struct MyWindow : public cf::Window3D {
                              (y - this->m_HeightMap.getHeight() / 2) * cubeSize);
 
                 glScalef(1.f, cubeHeight, 1.f);
-                glTranslatef(0.f, 0.5f, 0.f);
+                glTranslatef(0.f, cubeSize, 0.f);
                 glutSolidCube(cubeSize);
             }
             glPopMatrix(); // load original state

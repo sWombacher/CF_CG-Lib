@@ -3,7 +3,7 @@
 #set(CMAKE_CXX_COMPILER "clang++")
 #set(CMAKE_C_COMPILER_ID "Clang")
 
-project(chaos)
+project(cf_cg)
 cmake_minimum_required(VERSION 3.1)
 
 # this is case sensitive!
@@ -105,6 +105,7 @@ if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "MS
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         add_definitions(-DOPENMP_ENABLED)
+        message("OpenMP enabled")
     endif()
 endif()
 
@@ -164,4 +165,4 @@ endforeach()
 # add solutions to all practices
 set(DIRECTORIES_TO_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include)
 set(LIBRARIES_TO_LINK ${PROJECT_NAME})
-add_subdirectory(ChaosAndFractal_Solutions)
+add_subdirectory(Solutions)
