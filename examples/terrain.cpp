@@ -61,9 +61,7 @@ int main(int argc, char** argv){
     if (argc < 3){
         std::cout << "Please provide a heightmap and a *.pal file, if you want to use your own files";
         filePath_heightMap = CHAOS_FILE_PATH;
-        filePath_heightMap += "x2.png";
-
-        filePath_heightMap = "/home/bloodyangel/Desktop/Heightmap.png";
+        filePath_heightMap += "Heightmap.png";
 
         filePath_palFile = CHAOS_FILE_PATH;
         filePath_palFile += "Topo.pal";
@@ -74,7 +72,8 @@ int main(int argc, char** argv){
     }
 
     cf::WindowRasterized img = cf::WindowRasterized(filePath_heightMap.c_str());
-    img.resize(255, 255);
+    // if you have very large images, you may want to resize that image for performance
+    //img.resize(255, 255);
 
     std::vector<cf::Color> col = cf::readPaletteFromFile(filePath_palFile.c_str());
     img.show();
