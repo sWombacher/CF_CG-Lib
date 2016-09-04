@@ -16,10 +16,10 @@ struct WindowVectorized : protected Window2D {
      * @param width image width in pixel (hight will be determind automatically)
      */
     WindowVectorized(int width, const cf::Intervall& range_x, const cf::Intervall& range_y,
-                     const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::WHITE)
+                     const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::BLACK)
         : Window2D(1, 1, windowName, startColor)
     {
-        this->setInvertYAxis(false);
+        this->setInvertYAxis(true);
         this->setIntervall(range_x, range_y, width);
     }
     virtual ~WindowVectorized() = default;

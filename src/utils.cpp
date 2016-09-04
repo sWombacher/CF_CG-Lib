@@ -153,7 +153,7 @@ Color Color::invert() const{
 
 
 std::ostream& operator<<(std::ostream &os, const Color& c){
-    os << "Red: " << c.r << "\tGreen: " << c.g << "\tBlue: " << c.b;
+    os << "Red: " << int(c.r) << "   Green: " << int(c.g) << "   Blue: " << int(c.b);
     return os;
 }
 
