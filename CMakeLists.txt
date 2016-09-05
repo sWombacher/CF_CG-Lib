@@ -23,6 +23,7 @@ endif()
 
 
 include_directories(include)
+include_directories(required_include)
 add_definitions(-D${CMAKE_SYSTEM_NAME})
 
 if (USE_SYSTEM_LIBS)
@@ -169,3 +170,4 @@ endforeach()
 set(DIRECTORIES_TO_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include)
 set(LIBRARIES_TO_LINK ${PROJECT_NAME})
 add_subdirectory(Solutions)
+
