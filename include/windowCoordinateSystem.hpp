@@ -80,13 +80,14 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawLinearEquation(const cf::Point pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
-        //if (drawingDirection.z != 0.f)
-        if (this->_compareZero_3val(drawingDirection.z, drawingDirection.x, drawingDirection.y) == false)
-            throw std::runtime_error("Error: direction vector may only have values != 0 onf x and y coordinates");
+        if (std::abs(drawingDirection.z) > cf::WindowCoordinateSystem::ZERO_COMPARE)
+            throw std::runtime_error("Error: Direction vector may only have values != 0 onf x and y coordinates");
 
-        //if (drawingDirection.x == 0.f)
-        if (this->_compareZero_3val(drawingDirection.x, drawingDirection.y, drawingDirection.z))
+        if (std::abs(drawingDirection.x) < cf::WindowCoordinateSystem::ZERO_COMPARE){
+            if (std::abs(drawingDirection.y) < cf::WindowCoordinateSystem::ZERO_COMPARE)
+                throw std::runtime_error("Error: At least one direction component (x/y) must be set!");
             this->drawLine({pointVector.x, this->m_IntervallY.min}, {pointVector.x, this->m_IntervallY.max}, color, type, lineWidth);
+        }
         else{
             float slope = drawingDirection.y / drawingDirection.x;
             float yIntercept = pointVector.y - pointVector.x * slope;
@@ -105,8 +106,18 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawLinearEquation(float a, float b, float c, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
-        //if (b == 0.f) {
-        if (this->_compareZero_3val(b, a, c)){
+        if (std::abs(b) < cf::WindowCoordinateSystem::ZERO_COMPARE) {
+            if (std::abs(a) < cf::WindowCoordinateSystem::ZERO_COMPARE){
+                if (std::abs(c) < cf::WindowCoordinateSystem::ZERO_COMPARE){
+                    std::cerr << "Warning: " << __func__ << " called with a=b=c=0, this is ALSWAYS TRUE for all x/y pairs" << std::endl;
+                    this->clear(color);
+                }
+                else{
+                    std::cerr << "Warning: " << __func__ << " called with with a=b=0 and c != 0, this is ALWAYS FALSE for all x/y pairs" << std::endl;
+                    return;
+                }
+            }
+
             // 0*y = 0
             // <=>  ax + c = 0
             // <=>  x = -c/a
@@ -142,15 +153,63 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawLinearEquation(float slope, float yIntercept, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
-        // calculate points from min/max x-intervall
-        float y_min = this->m_IntervallX.min * slope + yIntercept;
-        float y_max = this->m_IntervallX.max * slope + yIntercept;
+        cf::Point p1, p2;
+        std::vector<cf::Point> points;
+
+        // check crossing points with x min/max
+        auto addPoint_horizontal = [&](float xValue){
+            cf::Point point(xValue, 0.f);
+            point.y = slope * point.x + yIntercept;
+            if (point.y >= this->m_IntervallY.min && point.y <= this->m_IntervallY.max)
+                points.push_back(point);
+        };
+        addPoint_horizontal(this->m_IntervallX.min);
+        addPoint_horizontal(this->m_IntervallX.max);
+
+        // check crossing points with y min/max
+        auto addPoint_vertical = [&](float yValue){
+            cf::Point point(0.f, yValue);
+            point.x = (point.y - yIntercept) / slope;
+            if (point.x >= this->m_IntervallX.min && point.x <= this->m_IntervallX.max)
+                points.push_back(point);
+        };
+        addPoint_vertical(this->m_IntervallY.min);
+        addPoint_vertical(this->m_IntervallY.max);
+
+        // get actual points
+        if (points.size() <= 1){
+            if (points.size())
+                this->drawPoint(points[0], color);
+            return;
+        }
+        if (points.size() > 2){
+            // remove all duplicate points
+            for (size_t i = 0; i < points.size(); ++i){
+                const cf::Point& current = points[i];
+                for (const auto& e : points){
+                    if (&current == &e)
+                        continue;
+
+                    if (current == e){
+                        points.erase(points.begin() + i);
+                        --i;
+                        break;
+                    }
+                }
+            }
+            if (points.size() <= 1)
+                throw std::runtime_error(std::string("Error: In function \"") + __func__ + "\" this shouldn't have happened :)");
+        }
+        p1 = points[0];
+        p2 = points[1];
+
+        // draw
         if (type == cf::Window2D::LineType::DEFAULT)
-            cf::Window2D::drawLine({this->m_IntervallX.min, y_min}, {this->m_IntervallX.max, y_max}, lineWidth, color);
+            cf::Window2D::drawLine(p1, p2, lineWidth, color);
         else {
             if (lineWidth > 1)
                 std::cerr << "Warning: Only default line type may use lineWidth parameter" << std::endl;
-            cf::Window2D::drawSpecializedLine({this->m_IntervallX.min, y_min}, {this->m_IntervallX.max, y_max}, type, color);
+            cf::Window2D::drawSpecializedLine(p1, p2, type, color);
         }
     }
 
@@ -215,25 +274,9 @@ private:
         float diff_x = range_x.max - range_x.min;
         return int(width * (diff_y / diff_x));
     }
-
-    // com will be compared to zero
-    // _1 and _2 are used for "normalization"
-    bool _compareZero_3val(float com, float _1, float _2){
-        com = std::abs(com);
-        _1 = std::abs(_1);
-        _2 = std::abs(_2);
-
-        float max = com > _1 ? com : _1;
-        max = max > _2 ? max : _2;
-        if (max == 0.f)
-            return true;
-
-        com /= max;
-        _1 /= max;
-        _2 /= max;
-        return std::abs(com) < 1.e-4f;
-    }
+    static const float ZERO_COMPARE;
 };
+const float cf::WindowCoordinateSystem::ZERO_COMPARE = 0.000001f;
 
 }
 

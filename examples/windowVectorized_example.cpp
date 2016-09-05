@@ -7,13 +7,18 @@
 int main() {
 // read intervalls from console
     cf::Intervall range_x;
+    std::cout << "Part 1: Demonstration of the correspondence between an \n";
+    std::cout << "user defined float 2D-interval and an image matrix\n\n";
+
     std::cout << "Please provide a Intervall for the x-axes:\n";
+    std::cout << "(Min and max values between -10 and 10!)\n";
     std::cout << "Intervall min: "; range_x.min = cf::Console::readFloat();
     std::cout << "Intervall max: "; range_x.max = cf::Console::readFloat();
     std::cout << std::endl;
 
     cf::Intervall range_y;
     std::cout << "Please provide a Intervall for the y-axes:\n";
+    std::cout << "(Min and max values between -10 and 10!)\n";
     std::cout << "Intervall min: "; range_y.min = cf::Console::readFloat();
     std::cout << "Intervall max: "; range_y.max = cf::Console::readFloat();
     cf::Console::clearConsole();
@@ -35,17 +40,17 @@ int main() {
     window.show();
 
     std::cout << "Read intervall position:\n"
-              << "Pos x: " << point1.x << std::endl
-              << "Pos y: " << point1.y << std::endl
+              << "Interval x-position: " << point1.x << std::endl
+              << "Interval y-position: " << point1.y << std::endl
                                        << std::endl;
 
-    point1 = window.transformPoint_fromImageIntervall(point1);
+    point1 = window.transformPoint_fromInterval_toImage(point1);
     std::cout << "Read image position (in pixel):\n"
-              << "Pos x: " << std::round(point1.x) << std::endl
-              << "Pos y: " << std::round(point1.y) << std::endl
-                                                   << std::endl;
+              << "Image: i-position: " << std::round(point1.x) << std::endl
+              << "Image: j-position: " << std::round(point1.y) << std::endl
+              << std::endl;
 
-    std::cout << "\n\nPress enter to continue\n";
+    std::cout << "\n\nActivate console window and press enter to continue with part 2: drawing \n";
 	cf::Console::waitKey();
     cf::Console::clearConsole();
 
@@ -54,17 +59,21 @@ int main() {
 //
 // first   point: use interval position
 // second  point: use pixel position
-    std::cout << "Please provide a floatingpoint value within the intervall " << range_x << ":\n";
+    std::cout << "Enter float coordinates within interval for first point! \n";
+    std::cout << "Please provide a float value for x within the intervall: " << range_x << ":\n";
     point1.x = cf::Console::readFloat();
 
     std::cout << std::endl;
     std::cout << "Please provide a floatingpoint value within the intervall " << range_y << ":\n";
     point1.y = cf::Console::readFloat();
+
+    std::cout << "Circle around first user-point\n";
     window.drawCircle(point1, 3, -1, cf::Color::BLUE);
     window.show();
 
     cf::Point point2;
     std::cout << std::endl << std::endl;
+    std::cout << "Enter integer coordinates within image for second point! \n";
     std::cout << "Please provide a integer value within the intervall [0-" << window.getWidth() - 1 << "]:\n";
     point2.x = cf::Console::readInt();
 
@@ -73,7 +82,7 @@ int main() {
     point2.y = cf::Console::readInt();
 
     // translate position "point2" to intervall position
-    point2 = window.transformPoint_toImgeIntervall(point2);
+    point2 = window.transformPoint_fromImage_toIntervall(point2);
     window.drawCircle(point2, 3, -1, cf::Color::BLUE);
     window.show();
 

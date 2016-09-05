@@ -19,7 +19,7 @@ struct WindowVectorized : protected Window2D {
                      const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::BLACK)
         : Window2D(1, 1, windowName, startColor)
     {
-        this->setInvertYAxis(true);
+        this->setInvertYAxis(false);
         this->setIntervall(range_x, range_y, width);
     }
     virtual ~WindowVectorized() = default;
@@ -36,22 +36,22 @@ struct WindowVectorized : protected Window2D {
     }
 
     /**
-     * @brief transformPoint_fromImageIntervall transform point from intervall position to pixel position
+     * @brief transformPoint_fromInterval_toImage transform point from intervall position to pixel position
      * @param p point to be transformed
      * @return transformed point
      */
-    cf::Point transformPoint_fromImageIntervall(const cf::Point p){
+    cf::Point transformPoint_fromInterval_toImage(const cf::Point p){
         cf::Point tmp = p;
         this->_convertFromNewIntervall(tmp.x, tmp.y);
         return tmp;
     }
 
     /**
-     * @brief transformPoint_fromImageIntervall transform point from pixel position to intervall position
+     * @brief transformPoint_fromImage_toIntervall transform point from pixel position to intervall position
      * @param p point to be transformed
      * @return transformed point
      */
-    cf::Point transformPoint_toImgeIntervall(const cf::Point p){
+    cf::Point transformPoint_fromImage_toIntervall(const cf::Point p){
         cf::Point tmp = p;
         this->_convertToNewIntervall(tmp.x, tmp.y);
         return tmp;
