@@ -169,5 +169,9 @@ endforeach()
 # add solutions to all practices
 set(DIRECTORIES_TO_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include)
 set(LIBRARIES_TO_LINK ${PROJECT_NAME})
-add_subdirectory(Solutions)
 
+if (EXISTS Solutions)
+	add_subdirectory(Solutions)
+else()
+	message("Warning: Solutions directory not found")
+endif()
