@@ -5,7 +5,6 @@ If you want to use it in differnt way, you may do so under the terms of the MIT 
 
 The best way to find ALL functions is by going to 'namespaces @ref cf' (Note: register 'classes' doesn't show 'namespace global' functions)
 
-
   The MIT License (MIT)
 =======================
 
@@ -31,3 +30,17 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
+
+
+3rd party licenses:
+===================
+
+- GLM: MIT
+- OpenCV: 3-clause BSD License
+- InfInt: LGPL
+- FreeGlut: X-Consortium
+
+Note:
+OpenCV utilizes 3rd party libraries like libpng, these licenes are NOT covered in this segment
+
+

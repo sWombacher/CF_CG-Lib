@@ -211,7 +211,7 @@ struct Vec3{
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }
 
-    cf::PointVector& operator=(const cf::Point p){
+    cf::PointVector& operator=(const cf::Point& p){
         this->m_Data[0] = p.x;
         this->m_Data[1] = p.y;
         this->m_Data[2] = 1.f;
