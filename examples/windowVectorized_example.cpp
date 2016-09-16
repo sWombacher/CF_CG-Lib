@@ -118,7 +118,7 @@ int main() {
 // draw half circle from point2 towards point
     // calculate angle of straigt line from point to point2 and the positive x-axis
     // this can be calculated by 'tan(slope)'
-    float angle = cf::radiant2degree(std::atan(vec_1_2.y / vec_1_2.x)); // atan returns radiant, we need degree :)
+    float angle = cf::radian2degree(std::atan(vec_1_2.y / vec_1_2.x)); // atan returns radiant, we need degree :)
 
     // if point2 is on the right side of point1 we have to adjust the angle by 180
     // reason:

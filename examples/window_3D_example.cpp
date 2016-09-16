@@ -17,7 +17,7 @@ public:
 // create a cylinder
 // direction and length of this vector will be drawn as a cylinder later on
         glm::vec4 dir(this->m_Length, 0, 0, 1);
-        float radiantValue = cf::degree2radiant(this->m_Angle); // glm library uses radiant format
+        float radiantValue = cf::degree2radian(this->m_Angle); // glm library uses radiant format
 
         // rotation around x-axis,
         // since 'dir' lies on the x-axis the rotation doesn't do anything :)
@@ -30,7 +30,7 @@ public:
 
 // create a 2nd cylinder
 // and rotate it 90° around z-axis and half its size
-        glm::mat4x4 rotMat2 = glm::rotate(cf::degree2radiant(90), glm::vec3(0, 0, 1)); // degree
+        glm::mat4x4 rotMat2 = glm::rotate(cf::degree2radian(90), glm::vec3(0, 0, 1)); // degree
         //glm::mat4x4 rotMat2 = glm::rotate(glm::pi<float>() / 2.f, glm::vec3(0, 0, 1)); // radiant
 
         glm::vec4 dir2 = rotMat2 * dir;

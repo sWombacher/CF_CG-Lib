@@ -24,8 +24,8 @@ int main(){
 
     // convert between degrees/radiants
     // Note: OpenGL uses degree, glm radians (see 'window_3D_example.cpp')
-    float deg = cf::degree2radiant(180.f);
-    float rad = cf::radiant2degree(glm::pi<float>() / 2.f);
+    float deg = cf::degree2radian(180.f);
+    float rad = cf::radian2degree(glm::pi<float>() / 2.f);
     std::cout << "180 degree in radiant:  " << deg << std::endl
               << " Pi half   in  degree:  " << rad << std::endl
               << std::endl << std::endl;

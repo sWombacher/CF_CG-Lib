@@ -301,11 +301,11 @@ void _removeWindowsSpecificCarriageReturn(std::string& str){
     }
 }
 
-float radiant2degree(float radiantValue){
+float radian2degree(float radiantValue){
     return radiantValue / glm::pi<float>() * 180.f;
 }
 
-float degree2radiant(float degreeValue){
+float degree2radian(float degreeValue){
     return degreeValue / 180.f * glm::pi<float>();
 }
 

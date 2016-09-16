@@ -90,7 +90,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
             glm::vec3 cameraPos(0.f, 0.f, windowPtr->m_LookAtDistance);
             up = glm::vec3(0.f, 1.f, 0.f);
 
-            glm::vec3 angles(cf::degree2radiant(windowPtr->m_RotationAngle_Y), cf::degree2radiant(windowPtr->m_RotationAngle_Z), 0.f);
+            glm::vec3 angles(cf::degree2radian(windowPtr->m_RotationAngle_Y), cf::degree2radian(windowPtr->m_RotationAngle_Z), 0.f);
             glm::quat rot(angles);
 
             cameraPos = glm::rotate(rot, cameraPos);
@@ -246,7 +246,7 @@ void Window3D::_AdjustCamera(){
         break;
     case CameraType::ROTATION:{
         glm::vec4 cameraPos(0, 0, this->m_LookAtDistance, 1);
-        glm::vec3 angles(cf::degree2radiant(this->m_RotationAngle_Y), cf::degree2radiant(this->m_RotationAngle_Z), 0.f);
+        glm::vec3 angles(cf::degree2radian(this->m_RotationAngle_Y), cf::degree2radian(this->m_RotationAngle_Z), 0.f);
         glm::quat rot(angles);
         cameraPos = glm::rotate(rot, cameraPos);
 

@@ -45,14 +45,14 @@ std::string readAntString(const std::string& filePath);
  * @param radiantValue
  * @return degree value
  */
-float radiant2degree(float radiantValue);
+float radian2degree(float radiantValue);
 
 /**
  * @brief degree2radiant converts from degree value to radiant values
  * @param degreeValue
  * @return radiant value
  */
-float degree2radiant(float degreeValue);
+float degree2radian(float degreeValue);
 
 
 /**
