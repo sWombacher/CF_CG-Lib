@@ -23,7 +23,7 @@ endif()
 
 
 include_directories(include)
-include_directories(required_include)
+include_directories(3rdparty/required_include)
 add_definitions(-D${CMAKE_SYSTEM_NAME})
 
 if (USE_SYSTEM_LIBS)
@@ -170,8 +170,8 @@ endforeach()
 set(DIRECTORIES_TO_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include)
 set(LIBRARIES_TO_LINK ${PROJECT_NAME})
 
-if (EXISTS Solutions)
-	add_subdirectory(Solutions)
+if (EXISTS ${CMAKE_CURRENT_LIST_DIR}/Solutions)
+        add_subdirectory(Solutions)
 else()
 	message("Warning: Solutions directory not found")
 endif()
