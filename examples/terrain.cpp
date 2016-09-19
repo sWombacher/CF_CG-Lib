@@ -3,7 +3,10 @@
 
 struct MyWindow : public cf::Window3D {
     MyWindow(int* argc, char** argv, const cf::WindowRasterized& heightMap, const std::vector<cf::Color>& colorMapping)
-        : cf::Window3D(argc, argv), m_HeightMap(heightMap), m_ColorMapping(colorMapping){}
+        : cf::Window3D(argc, argv), m_HeightMap(heightMap), m_ColorMapping(colorMapping)
+    {
+        this->m_FreeCamera_position = glm::vec3(0.f, 20.f, -127.f);
+    }
 
     virtual void draw() override{
         this->clear();

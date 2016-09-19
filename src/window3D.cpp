@@ -200,9 +200,10 @@ int Window3D::startDrawing(){
 
     // enable lighting
     glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
     glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
     glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHT0);
 
     // enable z buffer
     glEnable(GL_DEPTH_TEST);

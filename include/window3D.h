@@ -117,6 +117,17 @@ protected:
     glm::vec3 m_LookAt = glm::vec3(0.f, 0.f, 0.f);
     float m_LookAtDistance = 10.f;
 
+
+    float m_RotationAngle_Z = 0.f;
+    float m_RotationAngle_Y = 0.f;
+
+    CameraType m_CameraType = Window3D::CameraType::ROTATION;
+
+/// CameraType::FREE_MOVEMENT specific member variables
+    glm::vec3 m_FreeCamera_position      = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec3 m_FreeCamera_UpVector      = glm::vec3(0.f, 1.f, 0.f);
+    glm::vec3 m_FreeCamera_LookDirection = glm::vec3(0.f, 0.f, 1.f);
+
 private:
     friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
     friend void _DrawingFunction();
@@ -127,16 +138,7 @@ private:
     int m_Width;
     int m_Height;
 
-    float m_RotationAngle_Z = 0.f;
-    float m_RotationAngle_Y = 0.f;
-
     int m_WindowID = -1;
-    CameraType m_CameraType = Window3D::CameraType::ROTATION;
-
-/// CameraType::FREE_MOVEMENT specific member variables
-    glm::vec3 m_FreeCamera_position      = glm::vec3(0.f, 0.f, 0.f);
-    glm::vec3 m_FreeCamera_UpVector      = glm::vec3(0.f, 1.f, 0.f);
-    glm::vec3 m_FreeCamera_LookDirection = glm::vec3(0.f, 0.f, 1.f);
 };
 
 }
