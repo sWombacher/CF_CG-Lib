@@ -30,6 +30,9 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
 	this->m_AdditionalKeyboardCallback = [this](unsigned char key, int x, int y) {
 		this->handleKeyboardInput(key, x, y);
 	};
+
+    // enable lighting by default
+    glEnable(GL_LIGHTING);
 }
 Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
@@ -44,7 +47,7 @@ void Window3D::showWindowUsage(){
               << "f/r: move camera closer/further away\n\n"
               << "Rotation-Type specific movements:\n"
               << "q/e: rotation y-axis\n"
-              << "y/c: rotation z-axis\n"
+              << "y/c: rotation x-axis\n"
               << std::endl;
 }
 
@@ -90,7 +93,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
             glm::vec3 cameraPos(0.f, 0.f, windowPtr->m_LookAtDistance);
             up = glm::vec3(0.f, 1.f, 0.f);
 
-            glm::vec3 angles(cf::degree2radian(windowPtr->m_RotationAngle_Y), cf::degree2radian(windowPtr->m_RotationAngle_Z), 0.f);
+            glm::vec3 angles(cf::degree2radian(windowPtr->m_RotationAngle_X), cf::degree2radian(windowPtr->m_RotationAngle_Y), 0.f);
             glm::quat rot(angles);
 
             cameraPos = glm::rotate(rot, cameraPos);
@@ -145,7 +148,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
 
     case 'c':
     {
-        windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
+        windowPtr->m_RotationAngle_X += windowPtr->m_AngleAdjustment;
 
         glm::vec3 rotAxis = glm::cross(windowPtr->m_FreeCamera_UpVector, windowPtr->m_FreeCamera_LookDirection);
         windowPtr->m_FreeCamera_UpVector = glm::rotate(windowPtr->m_FreeCamera_UpVector, cf::degree2radian(+windowPtr->m_AngleAdjustment), rotAxis);
@@ -154,7 +157,7 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
         break;
     case 'y':
     {
-        windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
+        windowPtr->m_RotationAngle_X -= windowPtr->m_AngleAdjustment;
 
         glm::vec3 rotAxis = glm::cross(windowPtr->m_FreeCamera_UpVector, windowPtr->m_FreeCamera_LookDirection);
         windowPtr->m_FreeCamera_UpVector = glm::rotate(windowPtr->m_FreeCamera_UpVector, cf::degree2radian(-windowPtr->m_AngleAdjustment), rotAxis);
@@ -163,11 +166,11 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
         break;
 
     case 'e':
-        windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
+        windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
         windowPtr->m_FreeCamera_LookDirection = glm::rotate(windowPtr->m_FreeCamera_LookDirection, cf::degree2radian(-windowPtr->m_AngleAdjustment), windowPtr->m_FreeCamera_UpVector);
         break;
     case 'q':
-        windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
+        windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
         windowPtr->m_FreeCamera_LookDirection = glm::rotate(windowPtr->m_FreeCamera_LookDirection, cf::degree2radian(+windowPtr->m_AngleAdjustment), windowPtr->m_FreeCamera_UpVector);
         break;
 
@@ -198,8 +201,8 @@ int Window3D::startDrawing(){
     glutKeyboardFunc(_KeyboardCallbackFunction);
     glutDisplayFunc(_DrawingFunction);
 
-    // enable lighting
-    glEnable(GL_LIGHTING);
+    // enable light 0
+    // this only works if 'GL_LIGHTING' is enabled (default)
     glEnable(GL_LIGHT0);
 
     glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
@@ -290,7 +293,7 @@ void Window3D::_AdjustCamera(){
         break;
     case CameraType::ROTATION:{
         glm::vec4 cameraPos(0, 0, this->m_LookAtDistance, 1);
-        glm::vec3 angles(cf::degree2radian(this->m_RotationAngle_Y), cf::degree2radian(this->m_RotationAngle_Z), 0.f);
+        glm::vec3 angles(cf::degree2radian(this->m_RotationAngle_X), cf::degree2radian(this->m_RotationAngle_Y), 0.f);
         glm::quat rot(angles);
         cameraPos = glm::rotate(rot, cameraPos);
 

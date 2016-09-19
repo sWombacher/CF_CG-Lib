@@ -107,6 +107,9 @@ struct Window3D{
      */
     void setMaxFPS(float maxFPS = 0.f);
 
+    void  enableLighting(){  glEnable(GL_LIGHTING); }
+    void disableLighting(){ glDisable(GL_LIGHTING); }
+
 protected:
     float   m_DistAdjustment = 1.f;
     float  m_AngleAdjustment = 1.f;
@@ -118,8 +121,8 @@ protected:
     float m_LookAtDistance = 10.f;
 
 
-    float m_RotationAngle_Z = 0.f;
     float m_RotationAngle_Y = 0.f;
+    float m_RotationAngle_X = 0.f;
 
     CameraType m_CameraType = Window3D::CameraType::ROTATION;
 
