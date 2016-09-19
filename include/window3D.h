@@ -26,7 +26,7 @@ struct Window3D{
      * @brief The CameraType enum providing access to camera types, default: 'CameraType::ROTATION'
      */
     enum class CameraType{
-        NONE, ROTATION, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
+        NONE, ROTATION, FREE_MOVEMENT, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
     };
 
     /**
@@ -132,6 +132,11 @@ private:
 
     int m_WindowID = -1;
     CameraType m_CameraType = Window3D::CameraType::ROTATION;
+
+/// CameraType::FREE_MOVEMENT specific member variables
+    glm::vec3 m_FreeCamera_position      = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec3 m_FreeCamera_UpVector      = glm::vec3(0.f, 1.f, 0.f);
+    glm::vec3 m_FreeCamera_LookDirection = glm::vec3(0.f, 0.f, 1.f);
 };
 
 }

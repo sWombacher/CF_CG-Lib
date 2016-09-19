@@ -10,6 +10,7 @@ struct MyWindow : public cf::Window3D {
         static const float minHeight = 0.f;
         static const float maxHeight = 10.f;
         static const float cubeSize  = 0.5f;
+        static const float seaLevel  = 2.0f;
 
         // this loop could be paralllized,
         // however opengl has to syncronize these calls -> no performance gains
@@ -30,6 +31,8 @@ struct MyWindow : public cf::Window3D {
                 cubeHeight /= 255.f;
                 cubeHeight *= maxHeight - minHeight;
                 cubeHeight += minHeight;
+                if (cubeHeight < seaLevel)
+                    cubeHeight = seaLevel;
 
                 // colorize each cube based on its height
                 //glColor3f(cubeHeight / maxHeight, cubeHeight / maxHeight, cubeHeight / maxHeight); // gray scale
@@ -42,7 +45,7 @@ struct MyWindow : public cf::Window3D {
 
                 glScalef(1.f, cubeHeight, 1.f);
                 glTranslatef(0.f, cubeSize, 0.f);
-                glutSolidCube(cubeSize);
+                glutSolidCube(double(cubeSize));
             }
             glPopMatrix(); // load original state
         }
@@ -86,6 +89,7 @@ int main(int argc, char** argv){
     //  Type: STATIC_X_AXIS
     //  Set start height 10
     //  look at distance of 100
-    window.setCamera(MyWindow::CameraType::STATIC_X_AXIS, glm::vec3(0, 10, 0), 100.f);
+    //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS, glm::vec3(0, 10, 0), 100.f);
+    window.setCamera(MyWindow::CameraType::FREE_MOVEMENT);
     return window.startDrawing();
 }

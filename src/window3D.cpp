@@ -98,6 +98,9 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
             left = glm::cross(cameraPos, up);
         }
         break;
+    case Window3D::CameraType::FREE_MOVEMENT:
+        // this will directly be handled on key-switch case
+        break;
     case Window3D::CameraType::STATIC_X_AXIS:
         left = glm::vec3( 0.f, 0.f, 1.f);
         up   = glm::vec3( 0.f, 1.f, 0.f);
@@ -122,20 +125,60 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
     up *= windowPtr->m_CameraAdjustment;
 
     switch (key){
-    case 'a': windowPtr->m_LookAt += left; break;
-    case 'd': windowPtr->m_LookAt -= left; break;
+    case 'a':
+        windowPtr->m_LookAt += left;
+        windowPtr->m_FreeCamera_position += glm::cross(windowPtr->m_FreeCamera_UpVector, windowPtr->m_FreeCamera_LookDirection);
+        break;
+    case 'd':
+        windowPtr->m_LookAt -= left;
+        windowPtr->m_FreeCamera_position -= glm::cross(windowPtr->m_FreeCamera_UpVector, windowPtr->m_FreeCamera_LookDirection);
+        break;
 
-    case 'w': windowPtr->m_LookAt += up; break;
-    case 's': windowPtr->m_LookAt -= up; break;
+    case 'w':
+        windowPtr->m_LookAt += up;
+        windowPtr->m_FreeCamera_position += windowPtr->m_FreeCamera_UpVector;
+        break;
+    case 's':
+        windowPtr->m_LookAt -= up;
+        windowPtr->m_FreeCamera_position -= windowPtr->m_FreeCamera_UpVector;
+        break;
 
-    case 'c': windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment; break;
-    case 'y': windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment; break;
+    case 'c':
+    {
+        windowPtr->m_RotationAngle_Y += windowPtr->m_AngleAdjustment;
 
-    case 'e': windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment; break;
-    case 'q': windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment; break;
+        glm::vec3 rotAxis = glm::cross(windowPtr->m_FreeCamera_UpVector, windowPtr->m_FreeCamera_LookDirection);
+        windowPtr->m_FreeCamera_UpVector = glm::rotate(windowPtr->m_FreeCamera_UpVector, cf::degree2radian(+windowPtr->m_AngleAdjustment), rotAxis);
+        windowPtr->m_FreeCamera_LookDirection = glm::rotate(windowPtr->m_FreeCamera_LookDirection, cf::degree2radian(+windowPtr->m_AngleAdjustment), rotAxis);
+    }
+        break;
+    case 'y':
+    {
+        windowPtr->m_RotationAngle_Y -= windowPtr->m_AngleAdjustment;
 
-    case 'r': windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment; break;
-    case 'f': windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment; break;
+        glm::vec3 rotAxis = glm::cross(windowPtr->m_FreeCamera_UpVector, windowPtr->m_FreeCamera_LookDirection);
+        windowPtr->m_FreeCamera_UpVector = glm::rotate(windowPtr->m_FreeCamera_UpVector, cf::degree2radian(-windowPtr->m_AngleAdjustment), rotAxis);
+        windowPtr->m_FreeCamera_LookDirection = glm::rotate(windowPtr->m_FreeCamera_LookDirection, cf::degree2radian(-windowPtr->m_AngleAdjustment), rotAxis);
+    }
+        break;
+
+    case 'e':
+        windowPtr->m_RotationAngle_Z += windowPtr->m_AngleAdjustment;
+        windowPtr->m_FreeCamera_LookDirection = glm::rotate(windowPtr->m_FreeCamera_LookDirection, cf::degree2radian(-windowPtr->m_AngleAdjustment), windowPtr->m_FreeCamera_UpVector);
+        break;
+    case 'q':
+        windowPtr->m_RotationAngle_Z -= windowPtr->m_AngleAdjustment;
+        windowPtr->m_FreeCamera_LookDirection = glm::rotate(windowPtr->m_FreeCamera_LookDirection, cf::degree2radian(+windowPtr->m_AngleAdjustment), windowPtr->m_FreeCamera_UpVector);
+        break;
+
+    case 'r':
+        windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment;
+        windowPtr->m_FreeCamera_position -= windowPtr->m_FreeCamera_LookDirection;
+        break;
+    case 'f':
+        windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment;
+        windowPtr->m_FreeCamera_position += windowPtr->m_FreeCamera_LookDirection;
+        break;
 
 #ifndef __APPLE__
     case 27 /*esc key*/: glutLeaveMainLoop(); break;
@@ -255,6 +298,15 @@ void Window3D::_AdjustCamera(){
         gluLookAt(cameraPos.x     , cameraPos.y     , cameraPos.z     ,
                   this->m_LookAt.x, this->m_LookAt.y, this->m_LookAt.z,
                   lookUpVector.x  , lookUpVector.y  , lookUpVector.z  );
+        }
+        break;
+    case CameraType::FREE_MOVEMENT: {
+        const glm::vec3& pos = this->m_FreeCamera_position;
+        const glm::vec3& up  = this->m_FreeCamera_UpVector;
+        const glm::vec3& dir = this->m_FreeCamera_LookDirection;
+        gluLookAt(pos.x        , pos.y        , pos.z        ,
+                  pos.x + dir.x, pos.y + dir.y, pos.z + dir.z,
+                  up .x        , up .y        , up .z);
         }
         break;
     case CameraType::STATIC_X_AXIS:
