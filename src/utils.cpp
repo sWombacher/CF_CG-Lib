@@ -146,11 +146,11 @@ std::string Direction::toString(RelativeDirection relDir){
 }
 
 
-float Intervall::translateIntervallPostion(const Intervall& originalIntervall, const Intervall& newIntervall, float originalPosition){
-    float factor = (newIntervall.max - newIntervall.min) / (originalIntervall.max - originalIntervall.min);
-    originalPosition -= originalIntervall.min;
+float Interval::translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval, float originalPosition){
+    float factor = (newInterval.max - newInterval.min) / (originalInterval.max - originalInterval.min);
+    originalPosition -= originalInterval.min;
 
-    return originalPosition * factor + newIntervall.min;
+    return originalPosition * factor + newInterval.min;
 }
 
 
@@ -313,29 +313,45 @@ float degree2radian(float degreeValue){
 std::string Console::readString() {
 	Console::_console2foreground();
 	std::string tmp;
+    std::cin.clear();
 	std::getline(std::cin, tmp);
 	return tmp;
 }
 float Console::readFloat() {
 	float value;
-	std::stringstream sstr(Console::readString());
+    auto getString = []() -> std::string {
+        std::string str = Console::readString();
+        std::replace(str.begin(), str.end(), ',', '.');
+        return str;
+    };
+
+    std::stringstream sstr(getString());
 	sstr >> value;
     while (sstr.fail()) {
 		std::cout << "\nError: provided value is not of type floatingpoint, please enter a valid value" << std::endl;
 		sstr.clear();
-		sstr << Console::readString();
+        sstr << getString();
 		sstr >> value;
 	}
 	return value;
 }
 int Console::readInt() {
 	int value;
-	std::stringstream sstr(Console::readString());
+    auto getString = []() -> std::string {
+        std::string str = Console::readString();
+        if (std::find(str.begin(), str.end(), ',') != str.end())
+            std::cout << "Warning: provided value is a floating point value, required type: int" << std::endl;
+        if (std::find(str.begin(), str.end(), '.') != str.end())
+            std::cout << "Warning: provided value is a floating point value, required type: int" << std::endl;
+        return str;
+    };
+
+    std::stringstream sstr(getString());
 	sstr >> value;
     while (sstr.fail()) {
 		std::cout << "\nError: provided value is not of type integer, please enter a valid value" << std::endl;
 		sstr.clear();
-		sstr << Console::readString();
+        sstr << getString();
 		sstr >> value;
 	}
 	return value;

@@ -56,7 +56,7 @@ int main(int argc, char** argv){
     if (des0 == des1 && des1 == des2){
         // all 3 descriptions have the same value
         if (des0 == PointDescription::LEFTSIDE_OF_LINE)
-            std::cout << "The user input points is within the triangle\n\n";
+            std::cout << "The user input point is within the triangle\n\n";
         else if (des0 == PointDescription::ON_THE_LINE)
             std::cout << "The user input point is on the triangle\n\n";
         else

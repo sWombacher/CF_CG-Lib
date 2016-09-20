@@ -7,7 +7,7 @@ int main(int argc, char** argv){
     std::string imagePath;
     std::string LUT_path;
     if (argc < 3) {
-        std::cout << "Usage for costum images/LUT's:\n1. console parameter: full iamge path\n2. console parameter: fulll *.pal path\n\n\n";
+        std::cout << "Usage for custom images/LUT's:\n1. console parameter: full iamge path\n2. console parameter: full *.pal path\n\n\n";
 
         imagePath = CHAOS_FILE_PATH;
         imagePath += "x1.png";

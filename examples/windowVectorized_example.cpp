@@ -5,22 +5,22 @@
 #include <iostream>
 
 int main() {
-// read intervalls from console
-    cf::Intervall range_x;
+// read intervals from console
+    cf::Interval range_x;
     std::cout << "Part 1: Demonstration of the correspondence between an \n";
     std::cout << "user defined float 2D-interval and an image matrix\n\n";
 
-    std::cout << "Please provide a Intervall for the x-axes:\n";
+    std::cout << "Please provide a Interval for the x-axes:\n";
     std::cout << "(Min and max values between -10 and 10!)\n";
-    std::cout << "Intervall min: "; range_x.min = cf::Console::readFloat();
-    std::cout << "Intervall max: "; range_x.max = cf::Console::readFloat();
+    std::cout << "Interval min: "; range_x.min = cf::Console::readFloat();
+    std::cout << "Interval max: "; range_x.max = cf::Console::readFloat();
     std::cout << std::endl;
 
-    cf::Intervall range_y;
-    std::cout << "Please provide a Intervall for the y-axes:\n";
+    cf::Interval range_y;
+    std::cout << "Please provide a Interval for the y-axes:\n";
     std::cout << "(Min and max values between -10 and 10!)\n";
-    std::cout << "Intervall min: "; range_y.min = cf::Console::readFloat();
-    std::cout << "Intervall max: "; range_y.max = cf::Console::readFloat();
+    std::cout << "Interval min: "; range_y.min = cf::Console::readFloat();
+    std::cout << "Interval max: "; range_y.max = cf::Console::readFloat();
     cf::Console::clearConsole();
 
 
@@ -39,7 +39,7 @@ int main() {
     window.drawCircle(point1, 3, -1 /*fill circle*/, cf::Color::WHITE);
     window.show();
 
-    std::cout << "Read intervall position:\n"
+    std::cout << "Read interval position:\n"
               << "Interval x-position: " << point1.x << std::endl
               << "Interval y-position: " << point1.y << std::endl
                                        << std::endl;
@@ -60,11 +60,11 @@ int main() {
 // first   point: use interval position
 // second  point: use pixel position
     std::cout << "Enter float coordinates within interval for first point! \n";
-    std::cout << "Please provide a float value for x within the intervall: " << range_x << ":\n";
+    std::cout << "Please provide a float value for x within the interval: " << range_x << ":\n";
     point1.x = cf::Console::readFloat();
 
     std::cout << std::endl;
-    std::cout << "Please provide a floatingpoint value within the intervall " << range_y << ":\n";
+    std::cout << "Please provide a floatingpoint value within the interval " << range_y << ":\n";
     point1.y = cf::Console::readFloat();
 
     std::cout << "Circle around first user-point\n";
@@ -74,15 +74,15 @@ int main() {
     cf::Point point2;
     std::cout << std::endl << std::endl;
     std::cout << "Enter integer coordinates within image for second point! \n";
-    std::cout << "Please provide a integer value within the intervall [0-" << window.getWidth() - 1 << "]:\n";
+    std::cout << "Please provide a integer value within the interval [0-" << window.getWidth() - 1 << "]:\n";
     point2.x = cf::Console::readInt();
 
     std::cout << std::endl;
-    std::cout << "Please provide a integer value within the intervall [0-" << window.getHeight() - 1 << "]:\n";
+    std::cout << "Please provide a integer value within the interval [0-" << window.getHeight() - 1 << "]:\n";
     point2.y = cf::Console::readInt();
 
-    // translate position "point2" to intervall position
-    point2 = window.transformPoint_fromImage_toIntervall(point2);
+    // translate position "point2" to interval position
+    point2 = window.transformPoint_fromImage_toInterval(point2);
     window.drawCircle(point2, 3, -1, cf::Color::BLUE);
     window.show();
 
@@ -103,10 +103,10 @@ int main() {
 // draw circle from point with radius to point2
     // calculate radius using pytagora
     cf::Point vec_1_2 = point2 - point1;
-    float intervallLength = std::sqrt(vec_1_2.x * vec_1_2.x + vec_1_2.y * vec_1_2.y);
+    float intervalLength = std::sqrt(vec_1_2.x * vec_1_2.x + vec_1_2.y * vec_1_2.y);
 
-    // convert length from intervall length to pixel length
-    int pixelLength = window.convert_intervallLength_to_pixelLength(intervallLength);
+    // convert length from interval length to pixel length
+    int pixelLength = std::round(window.convert_intervalLength_to_pixelLength(intervalLength));
 
     // draw
     std::cout << "\n\n\nPress enter to draw a circle (point1 as center, point2 on circle line)\n";

@@ -32,8 +32,8 @@ struct LindenmayerSystem{
 
     bool clearWindowEachTime() const;
 
-    const Intervall& getRangeX() const;
-    const Intervall& getRangeY() const;
+    const Interval& getRangeX() const;
+    const Interval& getRangeY() const;
 
     float getScale() const;
     float getStartAngle() const;
@@ -55,8 +55,8 @@ private:
     bool m_ClearWindowEachTime;
 
 
-    Intervall m_RangeX;
-    Intervall m_RangeY;
+    Interval m_RangeX;
+    Interval m_RangeY;
 };
 
 typedef LindenmayerSystem LSystem; // short version for lazy people like myself :)

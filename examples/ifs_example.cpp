@@ -21,10 +21,10 @@ int main(int argc, char** argv) {
     std::string align = " :  ";
     std::cout << "Name"               << align << ifs.getName()               << '\n'
               << "Num transformation" << align << ifs.getNumTransformations() << '\n'
-              << "Intervall X min"    << align << ifs.getRangeX().min         << '\n'
-              << "Intervall X max"    << align << ifs.getRangeX().max         << '\n'
-              << "Intervall Y min"    << align << ifs.getRangeY().min         << '\n'
-              << "Intervall Y max"    << align << ifs.getRangeY().max         << '\n'
+              << "Interval X min"     << align << ifs.getRangeX().min         << '\n'
+              << "Interval X max"     << align << ifs.getRangeX().max         << '\n'
+              << "Interval Y min"     << align << ifs.getRangeY().min         << '\n'
+              << "Interval Y max"     << align << ifs.getRangeY().max         << '\n'
               << "\n\n" << std::endl;
 
     for (std::size_t i = 0; i < ifs.getNumTransformations(); ++i)

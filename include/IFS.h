@@ -21,8 +21,8 @@ struct IteratedFunctionSystem{
 
     const glm::mat3x3& getTransformation(std::size_t pos) const;
 
-    const Intervall& getRangeX() const;
-    const Intervall& getRangeY() const;
+    const Interval& getRangeX() const;
+    const Interval& getRangeY() const;
     const std::string& getName() const;
     const std::vector<glm::mat3x3>& getAllTransformation() const;
 
@@ -30,8 +30,8 @@ private:
     std::string m_Name;
     std::vector<glm::mat3x3> m_Transformations;
 
-    Intervall m_RangeX;
-    Intervall m_RangeY;
+    Interval m_RangeX;
+    Interval m_RangeY;
 };
 
 typedef IteratedFunctionSystem IFS; // short version for lazy people like myself :)

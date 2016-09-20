@@ -59,27 +59,27 @@ public:
 
     /**
      * @brief drawCircle
-     * @param point point within intervall_x and intervall_y
-     * @param radius circle radius in pixel (not effected by intervalls)
-     * @param lineWidth pixelwidth of line (not effected by intervalls)
+     * @param point point within interval_x and interval_y
+     * @param radius circle radius in pixel (not effected by intervals)
+     * @param lineWidth pixelwidth of line (not effected by intervals)
      * @param color
      */
     void drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& color);
 
     /**
      * @brief drawRectangle
-     * @param point1 point within intervall_x and intervall_y, has to be the diagonal point to point2
-     * @param point2 point within intervall_x and intervall_y, has to be the diagonal point to point1
-     * @param lineWidth lineWidth pixelwidth of line (not effected by intervalls)
+     * @param point1 point within interval_x and interval_y, has to be the diagonal point to point2
+     * @param point2 point within interval_x and interval_y, has to be the diagonal point to point1
+     * @param lineWidth lineWidth pixelwidth of line (not effected by intervals)
      * @param color
      */
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
     /**
      * @brief drawLine
-     * @param point1 point within intervall_x and intervall_y
-     * @param point2 point within intervall_x and intervall_y
-     * @param lineWidth lineWidth pixelwidth of line (not effected by intervalls)
+     * @param point1 point within interval_x and interval_y
+     * @param point2 point within interval_x and interval_y
+     * @param lineWidth lineWidth pixelwidth of line (not effected by intervals)
      * @param color Line color
      */
     void drawLine(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
@@ -96,23 +96,23 @@ public:
 
     /**
      * @brief drawSpecializedLine Draws specialized line of width 1 (dotted and/or dashed lines)
-     * @param point1 point within intervall_x and intervall_y
-     * @param point2 point within intervall_x and intervall_y
+     * @param point1 point within interval_x and interval_y
+     * @param point2 point within interval_x and interval_y
      * @param lineType Type of line to be drawn
      * @param color Line color
      */
     void drawSpecializedLine(cf::Point point1, cf::Point point2, LineType lineType, const cf::Color& color);
 
     /**
-     * @brief setNewIntervall Set new intervall
-     * @param intervallX Intervall in x direction
-     * @param intervallY Intervall in y direction
+     * @brief setNewInterval Set new interval
+     * @param intervalX Interval in x direction
+     * @param intervalY Interval in y direction
      */
-    void setNewIntervall(const cf::Intervall& intervallX, const cf::Intervall& intervallY);
+    void setNewInterval(const cf::Interval& intervalX, const cf::Interval& intervalY);
     /**
-     * @brief resetIntervall Set default intervall (intervall x: [0, image widht - 1], intervall y: [0, image height - 1])
+     * @brief resetInterval Set default interval (interval x: [0, image widht - 1], interval y: [0, image height - 1])
      */
-    void  resetIntervall();
+    void  resetInterval();
 
     /**
      * @brief saveImage saves current image to harddrive
@@ -137,15 +137,15 @@ public:
 
 
     /**
-     * @brief getIntervallX Const access to intervall in x direction
+     * @brief getIntervalX Const access to interval in x direction
      * @return
      */
-    const cf::Intervall& getIntervallX() const;
+    const cf::Interval& getIntervalX() const;
     /**
-     * @brief getIntervallY Const access to intervall in y direction
+     * @brief getIntervalY Const access to interval in y direction
      * @return
      */
-    const cf::Intervall& getIntervallY() const;
+    const cf::Interval& getIntervalY() const;
 
     /**
      * @brief getWidth Acess to underlying image width
@@ -165,10 +165,10 @@ public:
     cv::Mat& getImage();
 
     /**
-     * @brief drawAxis This function draws x and y axis based on Intervall
+     * @brief drawAxis This function draws x and y axis based on Interval
      * @param color Axis color, default is white
-     * @param stepSize_x Dynamially set step size (x-axis), negative numbers indicate 10 steps for intervall x
-     * @param stepSize_y Dynamially set step size (y-axis), negative numbers indicate 10 steps for intervall y
+     * @param stepSize_x Dynamially set step size (x-axis), negative numbers indicate 10 steps for interval x
+     * @param stepSize_y Dynamially set step size (y-axis), negative numbers indicate 10 steps for interval y
      */
     void drawAxis(const cf::Color& color = cf::Color::BLACK, float stepSize_x = 1.f, float stepSize_y = 1.f, float interceptLength = 3.f);
 
@@ -191,8 +191,8 @@ public:
 
 protected:
     void _correctYValue(float& y) const;
-    void _convertFromNewIntervall(float& x, float& y) const;
-    void _convertToNewIntervall(float& x, float& y) const;
+    void _convertFromNewInterval(float& x, float& y) const;
+    void _convertToNewInterval(float& x, float& y) const;
 
 	void _window2foreground() const;
 
@@ -202,11 +202,11 @@ protected:
     const char* m_WindowName;
     float m_WindowScale;
 
-    cf::Intervall m_IntervallX;
-    cf::Intervall m_IntervallY;
+    cf::Interval m_IntervalX;
+    cf::Interval m_IntervalY;
 
     float m_MouseCallBackStorage[2];
-    bool m_IntervallChanged = false;
+    bool m_IntervalChanged = false;
 
     mutable bool m_FristShowCall = true;
 };

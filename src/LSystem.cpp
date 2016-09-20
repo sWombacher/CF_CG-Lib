@@ -117,10 +117,10 @@ bool LindenmayerSystem::clearWindowEachTime() const{
     return this->m_ClearWindowEachTime;
 }
 
-const Intervall& LindenmayerSystem::getRangeX() const{
+const Interval& LindenmayerSystem::getRangeX() const{
     return this->m_RangeX;
 }
-const Intervall& LindenmayerSystem::getRangeY() const{
+const Interval& LindenmayerSystem::getRangeY() const{
     return this->m_RangeY;
 }
 
@@ -139,8 +139,8 @@ const std::vector<std::pair<const char, const std::string> > &LindenmayerSystem:
     return this->m_Productions;
 }
 
-std::ostream& operator<<(std::ostream& os, const Intervall& intervall){
-    os << '[' << intervall.min << ", " << intervall.max << ']';
+std::ostream& operator<<(std::ostream& os, const Interval& interval){
+    os << '[' << interval.min << ", " << interval.max << ']';
     return os;
 }
 

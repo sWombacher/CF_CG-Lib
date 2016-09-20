@@ -16,8 +16,8 @@ struct Orbit{
      */
     void read(const std::string& filename);
 
-    const Intervall& getRangeX() const;
-    const Intervall& getRangeY() const;
+    const Interval& getRangeX() const;
+    const Interval& getRangeY() const;
 
     const std::string& getName() const;
 
@@ -29,8 +29,8 @@ struct Orbit{
 
 private:
     std::string m_Name;
-    Intervall m_IntervallX;
-    Intervall m_IntervallY;
+    Interval m_IntervalX;
+    Interval m_IntervalY;
 
     std::vector<glm::vec3> m_StartPoints;
     std::vector<float> m_Factors;

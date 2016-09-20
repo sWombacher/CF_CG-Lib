@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
               << "Start angle"             << align << ls.getStartAngle()                        << '\n'
               << "Adjustment angle"        << align << ls.getAdjustmentAngel()                   << '\n'
               << "Scale"                   << align << ls.getScale()                             << '\n'
-              << "Intervall X"             << align << ls.getRangeX()                            << '\n'
-              << "Intervall Y"             << align << ls.getRangeY()                            << '\n'
+              << "Interval X"              << align << ls.getRangeX()                            << '\n'
+              << "Interval Y"              << align << ls.getRangeY()                            << '\n'
               << std::endl;
 
     // most of the files provide F as a symbol

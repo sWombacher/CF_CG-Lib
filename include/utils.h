@@ -75,15 +75,15 @@ struct Direction{
 
 
 /**
- * @brief The Intervall struct provides functionallity to translate values from one intervall into another
+ * @brief The Interval struct provides functionallity to translate values from one interval into another
  */
-struct Intervall{
-    Intervall(float _min = 0, float _max = 0):min(_min), max(_max){}
+struct Interval{
+    Interval(float _min = 0, float _max = 0):min(_min), max(_max){}
     float min;
     float max;
 
-    static float translateIntervallPostion(const Intervall& originalIntervall, const Intervall& newIntervall, float originalPosition);
-    friend std::ostream& operator<<(std::ostream& os, const Intervall& intervall);
+    static float translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval, float originalPosition);
+    friend std::ostream& operator<<(std::ostream& os, const Interval& interval);
 };
 
 /**

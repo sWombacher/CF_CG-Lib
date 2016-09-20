@@ -21,10 +21,10 @@ int main(int argc, char** argv) {
     std::cout << "Name"               << align << orb.getName()              << '\n'
               << "Num Factors"        << align << orb.getNumFactors()        << '\n'
               << "Num Startingpoints" << align << orb.getNumStartingPoints() << '\n'
-              << "Intervall X min"    << align << orb.getRangeX().min        << '\n'
-              << "Intervall X max"    << align << orb.getRangeX().max        << '\n'
-              << "Intervall Y min"    << align << orb.getRangeY().min        << '\n'
-              << "Intervall Y max"    << align << orb.getRangeY().max        << '\n'
+              << "Interval X min"     << align << orb.getRangeX().min        << '\n'
+              << "Interval X max"     << align << orb.getRangeX().max        << '\n'
+              << "Interval Y min"     << align << orb.getRangeY().min        << '\n'
+              << "Interval Y max"     << align << orb.getRangeY().max        << '\n'
               << "\n\n\n" << std::flush;
 
     std::cout << "Startingpoints:\n";

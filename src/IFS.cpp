@@ -94,10 +94,10 @@ const glm::mat3x3& IteratedFunctionSystem::getTransformation(std::size_t pos) co
     return this->m_Transformations[pos];
 }
 
-const Intervall& IteratedFunctionSystem::getRangeX() const{
+const Interval& IteratedFunctionSystem::getRangeX() const{
     return this->m_RangeX;
 }
-const Intervall& IteratedFunctionSystem::getRangeY() const{
+const Interval& IteratedFunctionSystem::getRangeY() const{
     return this->m_RangeY;
 }
 

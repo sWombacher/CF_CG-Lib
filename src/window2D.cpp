@@ -5,7 +5,7 @@ namespace cf{
 Window2D::Window2D(int width, int height, const char* windowName, const cf::Color& c)
 : m_Image(height, width, CV_8UC3, cv::Scalar(c.b, c.g, c.r)), m_InvertYAxis(false),
   m_WindowName(windowName), m_WindowScale(1.f),
-  m_IntervallX(0, this->m_Image.cols - 1), m_IntervallY(0, this->m_Image.rows -1)
+  m_IntervalX(0, this->m_Image.cols - 1), m_IntervalY(0, this->m_Image.rows -1)
 {
     if(!this->m_WindowName)
         this->m_WindowName = "";
@@ -13,13 +13,13 @@ Window2D::Window2D(int width, int height, const char* windowName, const cf::Colo
     cv::namedWindow(this->m_WindowName);
 }
 
-Window2D::Window2D(const char *filePath):m_InvertYAxis(false), m_WindowName(filePath), m_WindowScale(1.f), m_IntervallX(0, 0), m_IntervallY(0, 0) {
+Window2D::Window2D(const char *filePath):m_InvertYAxis(false), m_WindowName(filePath), m_WindowScale(1.f), m_IntervalX(0, 0), m_IntervalY(0, 0) {
     if (!filePath)
         throw std::runtime_error("Error: filePath musn't be a nullpointer");
 
     this->m_Image = cv::imread(filePath, CV_LOAD_IMAGE_COLOR);
-    this->m_IntervallX.max = this->m_Image.cols - 1;
-    this->m_IntervallY.max = this->m_Image.rows - 1;
+    this->m_IntervalX.max = this->m_Image.cols - 1;
+    this->m_IntervalY.max = this->m_Image.rows - 1;
 }
 Window2D::~Window2D(){ cv::destroyWindow(this->m_WindowName); }
 
@@ -71,14 +71,14 @@ void Window2D::waitMouseInput(float &x, float &y) {
     this->m_MouseCallBackStorage[1] /= this->m_WindowScale;
 
     this->_correctYValue(this->m_MouseCallBackStorage[1]);
-    this->_convertToNewIntervall(this->m_MouseCallBackStorage[0], this->m_MouseCallBackStorage[1]);
+    this->_convertToNewInterval(this->m_MouseCallBackStorage[0], this->m_MouseCallBackStorage[1]);
 
     x = this->m_MouseCallBackStorage[0];
     y = this->m_MouseCallBackStorage[1];
 }
 
 void Window2D::setColor(float x, float y, const Color& c){
-    this->_convertFromNewIntervall(x, y);
+    this->_convertFromNewInterval(x, y);
     this->_correctYValue(y);
 
     //this->m_Image.at<cf::Color>(int(y), int(x)) = c;
@@ -88,7 +88,7 @@ void Window2D::setColor(float x, float y, const Color& c){
 	tmp[2] = c.r;
 }
 Color Window2D::getColor(float x, float y) const{
-    this->_convertFromNewIntervall(x, y);
+    this->_convertFromNewInterval(x, y);
     this->_correctYValue(y);
 
     //return this->m_Image.at<cf::Color>(int(y), int(x));
@@ -115,7 +115,7 @@ bool Window2D::getInvertYAxis() const{
 }
 
 void Window2D::drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color &c){
-    this->_convertFromNewIntervall(center.x, center.y);
+    this->_convertFromNewInterval(center.x, center.y);
     this->_correctYValue(center.y);
     if (this->m_InvertYAxis){
         startAngle *= -1.f;
@@ -126,28 +126,28 @@ void Window2D::drawCriclePart(cf::Point center, int radius, float startAngle, fl
 }
 
 void Window2D::floodFill(Point startingPoint, const Color &c) {
-    this->_convertFromNewIntervall(startingPoint.x, startingPoint.y);
+    this->_convertFromNewInterval(startingPoint.x, startingPoint.y);
     this->_correctYValue(startingPoint.y);
 
     cv::floodFill(this->m_Image, startingPoint, cv::Scalar(c.b, c.g, c.r));
 }
 void Window2D::drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& c){
-    this->_convertFromNewIntervall(center.x, center.y);
+    this->_convertFromNewInterval(center.x, center.y);
     this->_correctYValue(center.y);
 
     cv::circle(this->m_Image, center, radius, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawRectangle(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
-    this->_convertFromNewIntervall(p1.x, p1.y);
-    this->_convertFromNewIntervall(p2.x, p2.y);
+    this->_convertFromNewInterval(p1.x, p1.y);
+    this->_convertFromNewInterval(p2.x, p2.y);
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
     cv::rectangle(this->m_Image, p1, p2, cv::Scalar(c.b, c.g, c.r), lineWidth);
 }
 void Window2D::drawLine(cf::Point p1, cf::Point p2, int lineWidth, const cf::Color& c){
-    this->_convertFromNewIntervall(p1.x, p1.y);
-    this->_convertFromNewIntervall(p2.x, p2.y);
+    this->_convertFromNewInterval(p1.x, p1.y);
+    this->_convertFromNewInterval(p2.x, p2.y);
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
@@ -162,8 +162,8 @@ void Window2D::drawSpecializedLine(cf::Point p1, cf::Point p2, cf::Window2D::Lin
     static const int FREQ_SCALE = 3;
     static const int FREQ_OFFSET = 1;
 
-    this->_convertFromNewIntervall(p1.x, p1.y);
-    this->_convertFromNewIntervall(p2.x, p2.y);
+    this->_convertFromNewInterval(p1.x, p1.y);
+    this->_convertFromNewInterval(p2.x, p2.y);
     this->_correctYValue(p1.y);
     this->_correctYValue(p2.y);
 
@@ -201,27 +201,27 @@ void Window2D::drawSpecializedLine(cf::Point p1, cf::Point p2, cf::Window2D::Lin
     }
 }
 
-void Window2D::setNewIntervall(const Intervall& intervallX, const Intervall& intervallY){
-    this->m_IntervallX = intervallX;
-    this->m_IntervallY = intervallY;
+void Window2D::setNewInterval(const Interval& intervalX, const Interval& intervalY){
+    this->m_IntervalX = intervalX;
+    this->m_IntervalY = intervalY;
 
-    if (intervallX.min != 0.f || intervallX.max != this->m_Image.cols - 1 ||
-        intervallY.min != 0.f || intervallY.max != this->m_Image.rows - 1)
+    if (intervalX.min != 0.f || intervalX.max != this->m_Image.cols - 1 ||
+        intervalY.min != 0.f || intervalY.max != this->m_Image.rows - 1)
     {
-        this->m_IntervallChanged = true;
+        this->m_IntervalChanged = true;
     }
     else
-        this->m_IntervallChanged = false;
+        this->m_IntervalChanged = false;
 }
 
-void Window2D::resetIntervall(){
-    this->m_IntervallX.min = 0;
-    this->m_IntervallX.max = this->m_Image.cols - 1;
+void Window2D::resetInterval(){
+    this->m_IntervalX.min = 0;
+    this->m_IntervalX.max = this->m_Image.cols - 1;
 
-    this->m_IntervallY.min = 0;
-    this->m_IntervallY.max = this->m_Image.rows - 1;
+    this->m_IntervalY.min = 0;
+    this->m_IntervalY.max = this->m_Image.rows - 1;
 
-    this->m_IntervallChanged = false;
+    this->m_IntervalChanged = false;
 }
 
 void Window2D::saveImage(const char *filePath) const{
@@ -258,25 +258,25 @@ void Window2D::drawAxis(const cf::Color& color, float stepSize_x, float stepSize
     //
     // Note:
     //  opencv takes care of pixel positions out of image
-    this->drawLine({this->m_IntervallX.min, 0.f}, {this->m_IntervallX.max, 0.f}, lineWidth, color);
-    this->drawLine({0.f, this->m_IntervallY.min}, {0.f, this->m_IntervallY.max}, lineWidth, color);
+    this->drawLine({this->m_IntervalX.min, 0.f}, {this->m_IntervalX.max, 0.f}, lineWidth, color);
+    this->drawLine({0.f, this->m_IntervalY.min}, {0.f, this->m_IntervalY.max}, lineWidth, color);
 
     if (stepSize_x < 0.f)
-        stepSize_x = (this->m_IntervallX.max - this->m_IntervallX.min) / 10.f;
+        stepSize_x = (this->m_IntervalX.max - this->m_IntervalX.min) / 10.f;
     if (stepSize_y < 0.f)
-        stepSize_y = (this->m_IntervallY.max - this->m_IntervallY.min) / 10.f;
+        stepSize_y = (this->m_IntervalY.max - this->m_IntervalY.min) / 10.f;
 
     auto drawAxisInterceptions = [&](bool horizontalLine){
         float stepSize = horizontalLine ? stepSize_x : stepSize_y;
         int pixelLength = horizontalLine ? this->m_Image.rows : this->m_Image.cols;
-        const cf::Intervall& intervall = horizontalLine ? this->m_IntervallX : this->m_IntervallY;
+        const cf::Interval& interval = horizontalLine ? this->m_IntervalX : this->m_IntervalY;
 
-        int startPos = int(intervall.min / stepSize);
+        int startPos = int(interval.min / stepSize);
         int iterationCounter = helperLines_occurence - std::abs(startPos % helperLines_occurence);
 
-        float verticalLineHeight = (intervall.max - intervall.min) / float(pixelLength) * interceptLength * lineWidth;
+        float verticalLineHeight = (interval.max - interval.min) / float(pixelLength) * interceptLength * lineWidth;
         for (float start = startPos * stepSize;
-             start <= intervall.max;
+             start <= interval.max;
              start += stepSize, ++iterationCounter)
         {
             // draw vertical line
@@ -296,30 +296,30 @@ void Window2D::drawAxis(const cf::Color& color, float stepSize_x, float stepSize
 }
 
 
-const cf::Intervall& Window2D::getIntervallX() const{
-    return this->m_IntervallX;
+const cf::Interval& Window2D::getIntervalX() const{
+    return this->m_IntervalX;
 }
-const cf::Intervall& Window2D::getIntervallY() const{
-    return this->m_IntervallY;
+const cf::Interval& Window2D::getIntervalY() const{
+    return this->m_IntervalY;
 }
 
 void Window2D::_correctYValue(float& y) const{
     if (this->m_InvertYAxis)
         y = (this->m_Image.rows - 1) - y;
 }
-void Window2D::_convertFromNewIntervall(float& x, float& y) const{
-    if (!this->m_IntervallChanged)
+void Window2D::_convertFromNewInterval(float& x, float& y) const{
+    if (!this->m_IntervalChanged)
         return;
 
-    x = Intervall::translateIntervallPostion(this->m_IntervallX, Intervall(0, this->m_Image.cols - 1), x);
-    y = Intervall::translateIntervallPostion(this->m_IntervallY, Intervall(0, this->m_Image.rows - 1), y);
+    x = Interval::translateIntervalPostion(this->m_IntervalX, Interval(0, this->m_Image.cols - 1), x);
+    y = Interval::translateIntervalPostion(this->m_IntervalY, Interval(0, this->m_Image.rows - 1), y);
 }
-void Window2D::_convertToNewIntervall(float &x, float &y) const{
-    if (!this->m_IntervallChanged)
+void Window2D::_convertToNewInterval(float &x, float &y) const{
+    if (!this->m_IntervalChanged)
         return;
 
-    x = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.cols - 1), this->m_IntervallX, x);
-    y = Intervall::translateIntervallPostion(Intervall(0, this->m_Image.rows - 1), this->m_IntervallY, y);
+    x = Interval::translateIntervalPostion(Interval(0, this->m_Image.cols - 1), this->m_IntervalX, x);
+    y = Interval::translateIntervalPostion(Interval(0, this->m_Image.rows - 1), this->m_IntervalY, y);
 }
 
 

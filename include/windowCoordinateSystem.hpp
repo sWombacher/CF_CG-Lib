@@ -11,27 +11,27 @@ namespace cf{
 struct WindowCoordinateSystem : protected Window2D {
     /**
      * @brief WindowCoordinateSystem constructor
-     * @param range_x intervall in x direction
-     * @param range_y intervall in y direction
+     * @param range_x interval in x direction
+     * @param range_y interval in y direction
      * @param width image width in pixel (hight will be determind automatically)
      */
-    WindowCoordinateSystem(int width, const cf::Intervall& range_x, const cf::Intervall& range_y,
+    WindowCoordinateSystem(int width, const cf::Interval& range_x, const cf::Interval& range_y,
                      const char* windowName = "Computer Geometry", const cf::Color& startColor = cf::Color::WHITE)
         : Window2D(1, 1, windowName, startColor)
     {
         this->setInvertYAxis(true);
-        this->setIntervall(range_x, range_y, width);
+        this->setInterval(range_x, range_y, width);
     }
     virtual ~WindowCoordinateSystem() = default;
 
     /**
-     * @brief setIntervall set new intervall
-     * @param range_x intervall in x direction
-     * @param range_y intervall in y direction
+     * @brief setInterval set new interval
+     * @param range_x interval in x direction
+     * @param range_y interval in y direction
      * @param width image width in pixel (hight will be determind automatically)
      */
-    void setIntervall(const cf::Intervall& range_x, const cf::Intervall& range_y, int width){
-        this->setNewIntervall(range_x, range_y);
+    void setInterval(const cf::Interval& range_x, const cf::Interval& range_y, int width){
+        this->setNewInterval(range_x, range_y);
         this->resize(width, WindowCoordinateSystem::_CALCULATE_HEIGHT(range_x, range_y, width));
     }
 
@@ -44,11 +44,11 @@ struct WindowCoordinateSystem : protected Window2D {
         static const float pixelLength = 7.f;
         static const int lineWidth = 1;
 
-        const float half_intervallLength = std::abs(this->convert_pixelLength_to_intervallLength(pixelLength)) / 2.f;
-        cf::Window2D::drawLine({pos.x - half_intervallLength, pos.y - half_intervallLength},
-                               {pos.x + half_intervallLength, pos.y + half_intervallLength}, lineWidth, color);
-        cf::Window2D::drawLine({pos.x - half_intervallLength, pos.y + half_intervallLength},
-                               {pos.x + half_intervallLength, pos.y - half_intervallLength}, lineWidth, color);
+        const float half_intervalLength = std::abs(this->convert_pixelLength_to_intervalLength(pixelLength)) / 2.f;
+        cf::Window2D::drawLine({pos.x - half_intervalLength, pos.y - half_intervalLength},
+                               {pos.x + half_intervalLength, pos.y + half_intervalLength}, lineWidth, color);
+        cf::Window2D::drawLine({pos.x - half_intervalLength, pos.y + half_intervalLength},
+                               {pos.x + half_intervalLength, pos.y - half_intervalLength}, lineWidth, color);
     }
 
     /**
@@ -86,7 +86,7 @@ struct WindowCoordinateSystem : protected Window2D {
         if (std::abs(drawingDirection.x) < cf::WindowCoordinateSystem::ZERO_COMPARE){
             if (std::abs(drawingDirection.y) < cf::WindowCoordinateSystem::ZERO_COMPARE)
                 throw std::runtime_error("Error: At least one direction component (x/y) must be set!");
-            this->drawLine({pointVector.x, this->m_IntervallY.min}, {pointVector.x, this->m_IntervallY.max}, color, type, lineWidth);
+            this->drawLine({pointVector.x, this->m_IntervalY.min}, {pointVector.x, this->m_IntervalY.max}, color, type, lineWidth);
         }
         else{
             float slope = drawingDirection.y / drawingDirection.x;
@@ -121,7 +121,7 @@ struct WindowCoordinateSystem : protected Window2D {
             // 0*y = 0
             // <=>  ax + c = 0
             // <=>  x = -c/a
-            this->drawLine({-c/a, this->m_IntervallY.min}, {-c/a, this->m_IntervallY.max}, color, type, lineWidth);
+            this->drawLine({-c/a, this->m_IntervalY.min}, {-c/a, this->m_IntervalY.max}, color, type, lineWidth);
         }
         else {
             //       0 =  ax + by + c
@@ -160,21 +160,21 @@ struct WindowCoordinateSystem : protected Window2D {
         auto addPoint_horizontal = [&](float xValue){
             cf::Point point(xValue, 0.f);
             point.y = slope * point.x + yIntercept;
-            if (point.y >= this->m_IntervallY.min && point.y <= this->m_IntervallY.max)
+            if (point.y >= this->m_IntervalY.min && point.y <= this->m_IntervalY.max)
                 points.push_back(point);
         };
-        addPoint_horizontal(this->m_IntervallX.min);
-        addPoint_horizontal(this->m_IntervallX.max);
+        addPoint_horizontal(this->m_IntervalX.min);
+        addPoint_horizontal(this->m_IntervalX.max);
 
         // check crossing points with y min/max
         auto addPoint_vertical = [&](float yValue){
             cf::Point point(0.f, yValue);
             point.x = (point.y - yIntercept) / slope;
-            if (point.x >= this->m_IntervallX.min && point.x <= this->m_IntervallX.max)
+            if (point.x >= this->m_IntervalX.min && point.x <= this->m_IntervalX.max)
                 points.push_back(point);
         };
-        addPoint_vertical(this->m_IntervallY.min);
-        addPoint_vertical(this->m_IntervallY.max);
+        addPoint_vertical(this->m_IntervalY.min);
+        addPoint_vertical(this->m_IntervalY.max);
 
         // get actual points
         if (points.size() <= 1){
@@ -214,39 +214,39 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawCircle Draw circle with intervall radius
+     * @brief drawCircle Draw circle with interval radius
      * @param center Circle center
      * @param radius Circle radius
      * @param color  Curcle color
      */
     void drawCircle(const cf::Point& center, float radius, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
-        int pixelRadius = std::round(this->convert_intervallLength_to_pixelLength(radius));
+        int pixelRadius = std::round(this->convert_intervalLength_to_pixelLength(radius));
         if (pixelRadius <= 0)
             pixelRadius = 1;
         cf::Window2D::drawCircle(center, pixelRadius, lineWidth, color);
     }
 
     /**
-     * @brief convert_pixelLength_to_intervallLength Converts length from pixel to intervall
+     * @brief convert_pixelLength_to_intervalLength Converts length from pixel to interval
      * @param pixelLength
      * @return
      */
-    float convert_pixelLength_to_intervallLength(float pixelLength) const {
-        return (this->m_IntervallX.max - this->m_IntervallX.min) / float(this->m_Image.cols) * pixelLength;
+    float convert_pixelLength_to_intervalLength(float pixelLength) const {
+        return (this->m_IntervalX.max - this->m_IntervalX.min) / float(this->m_Image.cols) * pixelLength;
     }
 
     /**
-     * @brief convert_intervallLength_to_pixelLength Converts length from intervall to pixel
-     * @param intervallLength
+     * @brief convert_intervalLength_to_pixelLength Converts length from interval to pixel
+     * @param intervalLength
      * @return
      */
-    float convert_intervallLength_to_pixelLength(float intervallLength) const {
-        return float(this->m_Image.cols) / (this->m_IntervallX.max - this->m_IntervallX.min) * intervallLength;
+    float convert_intervalLength_to_pixelLength(float intervalLength) const {
+        return float(this->m_Image.cols) / (this->m_IntervalX.max - this->m_IntervalX.min) * intervalLength;
     }
 
 
     void drawCriclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
-        float pixelRadius = this->convert_intervallLength_to_pixelLength(radius);
+        float pixelRadius = this->convert_intervalLength_to_pixelLength(radius);
         Window2D::drawCriclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
     }
 
@@ -254,8 +254,8 @@ struct WindowCoordinateSystem : protected Window2D {
     using Window2D::getWindowDisplayScale;
     using Window2D::setWindowDisplayScale;
     using Window2D::waitMouseInput;
-    using Window2D::getIntervallX;
-    using Window2D::getIntervallY;
+    using Window2D::getIntervalX;
+    using Window2D::getIntervalY;
     using Window2D::saveImage;
     using Window2D::getHeight;
     using Window2D::floodFill;
@@ -269,7 +269,7 @@ struct WindowCoordinateSystem : protected Window2D {
     using Window2D::show;
 
 private:
-    static int _CALCULATE_HEIGHT(const cf::Intervall& range_x, const cf::Intervall& range_y, int width){
+    static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width){
         float diff_y = range_y.max - range_y.min;
         float diff_x = range_x.max - range_x.min;
         return int(width * (diff_y / diff_x));

@@ -73,20 +73,20 @@ void Orbit::read(const std::string &filename){
         values.push_back(std::stof(s));
     }
     if (values.size() != 4)
-        throw std::runtime_error("Wrong format in Orb-File (intervall format)");
+        throw std::runtime_error("Wrong format in Orb-File (interval format)");
 
-    this->m_IntervallX.min = values[0];
-    this->m_IntervallX.max = values[1];
+    this->m_IntervalX.min = values[0];
+    this->m_IntervalX.max = values[1];
 
-    this->m_IntervallY.min = values[2];
-    this->m_IntervallY.max = values[3];
+    this->m_IntervalY.min = values[2];
+    this->m_IntervalY.max = values[3];
 }
 
-const Intervall& Orbit::getRangeX() const{
-    return this->m_IntervallX;
+const Interval& Orbit::getRangeX() const{
+    return this->m_IntervalX;
 }
-const Intervall& Orbit::getRangeY() const{
-    return this->m_IntervallY;
+const Interval& Orbit::getRangeY() const{
+    return this->m_IntervalY;
 }
 
 const std::string &Orbit::getName() const{
