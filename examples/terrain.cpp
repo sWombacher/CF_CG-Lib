@@ -3,15 +3,12 @@
 
 struct MyWindow : public cf::Window3D {
     MyWindow(int* argc, char** argv, const cf::WindowRasterized& heightMap, const std::vector<cf::Color>& colorMapping)
-        : cf::Window3D(argc, argv), m_HeightMap(heightMap), m_ColorMapping(colorMapping)
-    {
-        this->m_FreeCamera_position = glm::vec3(0.f, 20.f, -127.f);
-    }
+        : cf::Window3D(argc, argv), m_HeightMap(heightMap), m_ColorMapping(colorMapping) {}
 
     virtual void draw() override{
         this->clear();
         static const float minHeight = 0.f;
-        static const float maxHeight = 10.f;
+        static const float maxHeight = 30.f;
         static const float cubeSize  = 0.5f;
         static const float seaLevel  = 2.0f;
 
@@ -47,13 +44,21 @@ struct MyWindow : public cf::Window3D {
                              (y - this->m_HeightMap.getHeight() / 2) * cubeSize);
 
                 glScalef(1.f, cubeHeight, 1.f);
-                glTranslatef(0.f, cubeSize, 0.f);
+                glTranslatef(0.f, cubeSize / 2.f, 0.f);
                 glutSolidCube(double(cubeSize));
             }
             glPopMatrix(); // load original state
         }
         }
     }
+
+    void setupCameraParameter(){
+        this->m_LookAtDistance = 150.f;
+        this->m_RotationAngle_X = -30.f;
+        this->m_RotationAngle_Y = 0.f;
+        this->_AdjustCamera();
+    }
+
 private:
     const cf::WindowRasterized& m_HeightMap;
     const std::vector<cf::Color>& m_ColorMapping;
@@ -89,10 +94,11 @@ int main(int argc, char** argv){
     MyWindow window(&argc, argv, img, col);
 
     // setup camera
-    //  Type: STATIC_X_AXIS
-    //  Set start height 10
-    //  look at distance of 100
-    //window.setCamera(MyWindow::CameraType::STATIC_X_AXIS, glm::vec3(0, 10, 0), 100.f);
-    window.setCamera(MyWindow::CameraType::FREE_MOVEMENT);
+    window.setCamera(MyWindow::CameraType::ROTATION);
+    window.setupCameraParameter();
+
+    // disable lighting for this example
+    window.disableLighting();
+
     return window.startDrawing();
 }
