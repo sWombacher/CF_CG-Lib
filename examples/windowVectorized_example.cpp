@@ -10,17 +10,17 @@ int main() {
     std::cout << "Part 1: Demonstration of the correspondence between an \n";
     std::cout << "user defined float 2D-interval and an image matrix\n\n";
 
-    std::cout << "Please provide a Interval for the x-axes:\n";
-    std::cout << "(Min and max values between -10 and 10!)\n";
-    std::cout << "Interval min: "; range_x.min = cf::Console::readFloat();
-    std::cout << "Interval max: "; range_x.max = cf::Console::readFloat();
+    std::cout << "Please provide a float interval for the x-axis:\n";
+    std::cout << "(Min and max values between -10.0 and 10.0!)\n";
+    std::cout << "Interval: x-min: "; range_x.min = cf::Console::readFloat();
+    std::cout << "Interval: x-max: "; range_x.max = cf::Console::readFloat();
     std::cout << std::endl;
 
     cf::Interval range_y;
-    std::cout << "Please provide a Interval for the y-axes:\n";
-    std::cout << "(Min and max values between -10 and 10!)\n";
-    std::cout << "Interval min: "; range_y.min = cf::Console::readFloat();
-    std::cout << "Interval max: "; range_y.max = cf::Console::readFloat();
+    std::cout << "Please provide a float interval for the y-axis:\n";
+    std::cout << "(Min and max values between -10.0 and 10.0!)\n";
+    std::cout << "Interval: y-min: "; range_y.min = cf::Console::readFloat();
+    std::cout << "Interval: y-max: "; range_y.max = cf::Console::readFloat();
     cf::Console::clearConsole();
 
 
@@ -39,13 +39,13 @@ int main() {
     window.drawCircle(point1, 3, -1 /*fill circle*/, cf::Color::WHITE);
     window.show();
 
-    std::cout << "Read interval position:\n"
-              << "Interval x-position: " << point1.x << std::endl
-              << "Interval y-position: " << point1.y << std::endl
-                                       << std::endl;
+    std::cout << "Point coordinates in interval:\n"
+              << "Interval: x-position: " << point1.x << std::endl
+              << "Interval: y-position: " << point1.y << std::endl
+              << std::endl;
 
     point1 = window.transformPoint_fromInterval_toImage(point1);
-    std::cout << "Read image position (in pixel):\n"
+    std::cout << "Point coordinates in image (in pixel):\n"
               << "Image: i-position: " << std::round(point1.x) << std::endl
               << "Image: j-position: " << std::round(point1.y) << std::endl
               << std::endl;
@@ -64,7 +64,7 @@ int main() {
     point1.x = cf::Console::readFloat();
 
     std::cout << std::endl;
-    std::cout << "Please provide a floatingpoint value within the interval " << range_y << ":\n";
+    std::cout << "Please provide a float value for y within the interval: " << range_y << ":\n";
     point1.y = cf::Console::readFloat();
 
     std::cout << "Circle around first user-point\n";
@@ -74,11 +74,11 @@ int main() {
     cf::Point point2;
     std::cout << std::endl << std::endl;
     std::cout << "Enter integer coordinates within image for second point! \n";
-    std::cout << "Please provide a integer value within the interval [0-" << window.getWidth() - 1 << "]:\n";
+    std::cout << "Please provide an integer value for column i within the image [0-" << window.getWidth() - 1 << "]:\n";
     point2.x = cf::Console::readInt();
 
     std::cout << std::endl;
-    std::cout << "Please provide a integer value within the interval [0-" << window.getHeight() - 1 << "]:\n";
+    std::cout << "Please provide an integer value for row j within the image [0-" << window.getHeight() - 1 << "]:\n";
     point2.y = cf::Console::readInt();
 
     // translate position "point2" to interval position
@@ -122,7 +122,7 @@ int main() {
 
     // if point2 is on the right side of point1 we have to adjust the angle by 180
     // reason:
-    //  trigonemetric functions like atan are using nearest angle [-90°, 90°] -> in same cases "wrong"
+    //  trigonemetric functions like atan are using nearest angle [-90°, 90°] -> in some cases "wrong"
     if (vec_1_2.x > 0.f)
         angle += 180.f;
 

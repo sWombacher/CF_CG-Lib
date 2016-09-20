@@ -77,7 +77,7 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param color line color
      * @param type Change line type to dot/dash/dot-dash
      */
-    void drawLinearEquation(const cf::Point pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
+    void drawLinearEquation(const cf::Point& pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
     {
         if (std::abs(drawingDirection.z) > cf::WindowCoordinateSystem::ZERO_COMPARE)
@@ -246,7 +246,7 @@ struct WindowCoordinateSystem : protected Window2D {
 
 
     void drawCriclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
-        float pixelRadius = this->convert_intervalLength_to_pixelLength(radius);
+        int pixelRadius = std::round(this->convert_intervalLength_to_pixelLength(radius));
         Window2D::drawCriclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
     }
 

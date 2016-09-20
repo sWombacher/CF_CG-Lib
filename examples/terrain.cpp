@@ -5,12 +5,14 @@ struct MyWindow : public cf::Window3D {
     MyWindow(int* argc, char** argv, const cf::WindowRasterized& heightMap, const std::vector<cf::Color>& colorMapping)
         : cf::Window3D(argc, argv), m_HeightMap(heightMap), m_ColorMapping(colorMapping) {}
 
+    virtual ~MyWindow() = default;
+
     virtual void draw() override{
         this->clear();
         static const float minHeight = 0.f;
         static const float maxHeight = 30.f;
         static const float cubeSize  = 0.5f;
-        static const float seaLevel  = 2.0f;
+        static const float seaLevel  = 5.5f;
 
         // this loop could be paralllized,
         // however opengl has to syncronize these calls -> no performance gains
@@ -53,6 +55,7 @@ struct MyWindow : public cf::Window3D {
     }
 
     void setupCameraParameter(){
+        // you probably don't need to set default values
         this->m_LookAtDistance = 150.f;
         this->m_RotationAngle_X = -30.f;
         this->m_RotationAngle_Y = 0.f;
@@ -88,7 +91,6 @@ int main(int argc, char** argv){
 
     std::vector<cf::Color> col = cf::readPaletteFromFile(filePath_palFile.c_str());
     img.show();
-    img.waitKey(1000);
 
     MyWindow::showWindowUsage();
     MyWindow window(&argc, argv, img, col);
