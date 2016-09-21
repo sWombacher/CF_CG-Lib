@@ -5,15 +5,23 @@ int main(int argc, char** argv){
     // additional operations can be utilized by using opencv directly
     typedef cf::WindowRasterized Image;
 
+	std::string image_path1, image_path2;
     if (argc < 3){
-        std::cout << "Please provide two image files";
-		cf::Console::waitKey();
-        return -1;
+        std::cout << "Please provide two image files, if you want to use custom images.\n";
+		image_path1 = CHAOS_FILE_PATH;
+		image_path1 += "x1.png";
+		
+		image_path2 = CHAOS_FILE_PATH;
+		image_path2 += "x2.png";
     }
+	else {
+		image_path1 = argv[1];
+		image_path2 = argv[2];
+	}
 
     // read images
-    Image img1(argv[1]);
-    Image img2(argv[2]);
+    Image img1(image_path1.c_str());
+    Image img2(image_path2.c_str());
 	img1.show();
 	img2.show();
 
@@ -43,5 +51,9 @@ int main(int argc, char** argv){
         toDisplay.show();
         toDisplay.waitKey();
     }
+	cf::Console::clearConsole();
+	std::cout << "Press any key to finish the process." << std::endl;
+	toDisplay.show();
+	toDisplay.waitKey();
     return 0;
 }
