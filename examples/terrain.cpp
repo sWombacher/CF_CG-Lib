@@ -68,6 +68,12 @@ private:
 };
 
 int main(int argc, char** argv){
+#ifdef __APPLE__
+    // I don't exactly know why macOS requires this init,
+    // my guess has to do with opencv, which is used in WindowRasterized
+    glutInit(&argc, argv);
+#endif
+
     // read command line parameter
     // (image file of any format opencv does support, tested formats: jpeg, png, bmp)
     std::string filePath_heightMap;
