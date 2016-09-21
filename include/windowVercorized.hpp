@@ -42,6 +42,7 @@ struct WindowVectorized : protected Window2D {
      */
     cf::Point transformPoint_fromInterval_toImage(cf::Point point){
         this->_convertFromNewInterval(point.x, point.y);
+        this->_invertY(point);
         return point;
     }
 
@@ -51,6 +52,7 @@ struct WindowVectorized : protected Window2D {
      * @return transformed point
      */
     cf::Point transformPoint_fromImage_toInterval(cf::Point point){
+        this->_invertY(point);
         this->_convertToNewInterval(point.x, point.y);
         return point;
     }
@@ -101,6 +103,7 @@ private:
         float diff_x = range_x.max - range_x.min;
         return int(width * (diff_y / diff_x));
     }
+    inline void _invertY(cf::Point& p){ p.y = this->getHeight() - 1 - p.y; }
 };
 
 }
