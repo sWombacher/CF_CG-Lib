@@ -15,7 +15,7 @@ do
 				sudo yum install glm-devel opencv-devel cmake gcc gcc-c++ freeglut-devel libXi-devel libXmu-devel
 			;;
 			pacman)
-				sudo pacman -S glm opencv cmake gcc g++ libxmu libxi freeglut
+				sudo pacman -S glm opencv cmake gcc libxmu libxi freeglut
 			;;
 			apt-get)
 				sudo apt-get install libglm-dev libopencv-dev cmake freeglut3-dev libxmu-dev libxi-dev gcc g++
