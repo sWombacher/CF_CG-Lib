@@ -11,9 +11,9 @@ namespace cf{
 struct WindowVectorized : protected Window2D {
     /**
      * @brief WindowVectorized constructor
+     * @param width image width in pixel (hight will be determind automatically)
      * @param range_x interval in x direction
      * @param range_y interval in y direction
-     * @param width image width in pixel (hight will be determind automatically)
      */
     WindowVectorized(int width, const cf::Interval& range_x, const cf::Interval& range_y,
                      const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::BLACK)
@@ -22,6 +22,21 @@ struct WindowVectorized : protected Window2D {
         this->setInvertYAxis(true);
         this->setInterval(range_x, range_y, width);
     }
+
+    /**
+     * @brief WindowVectorized Image reading constructoor
+     * @param filePath Path to image file
+     * @param width Image width, Note: height will be calculated based on ranges and width
+     * @param range_x interval in x direction
+     * @param range_y interval in y direction
+     */
+    WindowVectorized(const char* filePath, int width, const cf::Interval& range_x, const cf::Interval& range_y)
+        : Window2D(filePath)
+    {
+        this->setInvertYAxis(true);
+        this->setInterval(range_x, range_y, width);
+    }
+
     virtual ~WindowVectorized() = default;
 
     /**
@@ -73,6 +88,17 @@ struct WindowVectorized : protected Window2D {
      */
     float convert_intervalLength_to_pixelLength(float intervalLength) const {
         return float(this->m_Image.cols) / (this->m_IntervalX.max - this->m_IntervalX.min) * intervalLength;
+    }
+
+
+    cf::Color getColor_imageSpace(int i, int j) const {
+        const cv::Vec3b& c = this->m_Image.at<cv::Vec3b>(i, j);
+        return {c[2], c[1], c[0]};
+    }
+    void setColor_imageSpace(int i, int j, const cf::Color& color) {
+        this->m_Image.at<cv::Vec3b>(i, j)[0] = color.b;
+        this->m_Image.at<cv::Vec3b>(i, j)[1] = color.g;
+        this->m_Image.at<cv::Vec3b>(i, j)[2] = color.r;
     }
 
     // publicly available functions from class Window2D
