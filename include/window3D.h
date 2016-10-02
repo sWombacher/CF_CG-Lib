@@ -47,7 +47,7 @@ struct Window3D{
      * @param x x position the key is pressed
      * @param y y position the key is pressed
      */
-	virtual void handleKeyboardInput(unsigned char key, int x, int y);
+    virtual void handleKeyboardInput(unsigned char key, int x, int y);
 
     /**
      * @brief startDrawing start drawing, this function only returns afer 'ESC'-key press
