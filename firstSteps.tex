@@ -1,0 +1,176 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{textcomp}
+\usepackage{hyperref}
+
+\usepackage{listings}
+\lstset{
+	language=C++,
+	tabsize=4,
+	keepspaces,
+	extendedchars=true,
+	rulecolor=\color{black},
+	basicstyle=\footnotesize,
+	aboveskip=5pt,
+	upquote=true,
+	columns=fixed,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	frame=single,
+	showtabs=true,
+	showspaces=false,
+	showstringspaces=false,
+	basicstyle=\tiny,
+	keywordstyle=\color{blue}
+}
+
+%opening
+\title{First steps}
+\author{Wombacher Sascha}
+
+\begin{document}
+\maketitle
+
+
+\section{Introduction}
+
+This small guide will help you install and run all provided examples and provide some info about how to add you own projects.\\
+
+Getting started:
+\begin{enumerate}
+	\item Introduction for Windows users (section \ref{Windows})
+	\item Introduction for \space macOS \space \space users (section \ref{Mac})
+	\item Introduction for \space \space Linux \space \space \space users (section \ref{Linux})
+\end{enumerate}
+
+
+\section{General}
+This library uses some third Party libraries:
+\begin{itemize}
+	\item GLM (GL mathematics for vector and matrix operations)
+	\item OpenCV (ComputerVision library for 2D graphics)
+	\item Glut/Freeglut (3D, currently only OpenGL 1.x is used)
+	\item InfInt (Lib for very long int values, C\# equivalent BigInt)
+\end{itemize}
+
+\newpage
+\section{Windows}\label{Windows}
+
+\textit{\textbf{Installation:}}
+\begin{enumerate}
+	\item Install Visual Studio 2015, link: \url{https://www.visualstudio.com/downloads/}
+	\item Run 'createVisualStudioSolution.bat'
+	\item Open Visual Studio solution $<$ProjectDirectory$>$/VisualStudio/BUILD\_ALL
+	\item Build all (Debug/Release libraries should both be linked)
+	\item Set a example Project: Right click on example $\rightarrow$ set as start Project
+	\item Run example \\
+\end{enumerate}
+
+\textit{\textbf{Create a new project:}}
+\begin{enumerate}
+\item Add a new *.cpp file in directory 'Solutions'
+\item Run 'createVisualStudioSolution.bat' \\
+\end{enumerate}
+
+\textit{\textbf{Remove a project:}}
+\begin{enumerate}
+\item Remove the corresponding *.cpp file from the 'Solutions' directory
+\item Run 'createVisualStudioSolution.bat' \\
+\end{enumerate}
+
+\subsection{Some helpful Visual Studio functionalities \\}
+
+\underline{\textbf{Set a command line parameter}} \\
+
+Some Examples require a command line argument(s). If you want to use those parameter you have three options:
+\begin{itemize}
+	\item Set parameter in Visual studio:
+	\begin{itemize}
+		\item Right click on project $\rightarrow$ preferences
+		\item Go to Debugging $\rightarrow$ command arguments
+	\end{itemize}
+	\item Open program with command line and add a parameter
+	\item If you only have 1 input parameter you can drag and drop a file onto the executable
+\end{itemize}
+
+
+\newpage
+\section{Mac}\label{Mac}
+
+\textit{\textbf{Installation:}}
+\begin{enumerate}
+	\item Install XCode, link: \url{https://developer.apple.com/download/}
+	\item Install dependencies by running 'mac\_installDependencies.sh'
+	\item Run 'createXCodeProject.sh'
+	\item Open XCodeProject: $<$ProjectDirectory$>$/XCodeProject/*.xcodeproj
+	\item Build all examples
+	\item Choose a example and run it \\
+\end{enumerate}
+
+\textit{\textbf{Create a new project:}}
+\begin{enumerate}
+\item Add a new *.cpp file in directory 'Solutions'
+\item Run 'createXCodeProject.sh' \\
+\end{enumerate}
+
+\textit{\textbf{Remove a project:}}
+\begin{enumerate}
+\item Remove the corresponding *.cpp file from the 'Solutions' directory
+\item Run 'createXCodeProject.sh' \\
+\end{enumerate}
+
+\newpage
+\section{Linux}\label{Linux}
+Currently three dependency commands are available:
+\begin{itemize}
+	\item Apt-Get based (Ubuntu/Debian/...) 
+	\item Pacman based (Arch/Manjaro/...)
+	\item Yum based (Fedora/RedHat/...) \\
+\end{itemize}
+
+If you own another distribution you should know how to install dependencies, required packages:
+\begin{itemize}
+	\item GL
+	\item GLU
+	\item Freeglut
+	\item GLM
+	\item OpenCV (2.x is tested, should also work on 3.x)
+	\item libxmu 
+	\item libxi
+	\item cmake \\
+\end{itemize}
+
+\subsection{Linux installation}
+
+\textit{\textbf{Installation:}}
+\begin{enumerate}
+	\item Install dependencies by running 'linux\_installDependencies.sh'
+	\item Run 'createMakeFileProject.sh'
+	\item Run 'cd $<$ProjectDirectory$>$/MakeFileProject' $\rightarrow$ 'make -j 4'
+	\item All compiled executables are located in: $<$ProjectDirectory$>$/bin
+	\item Choose a example and run it \\
+\end{enumerate}
+
+\textit{\textbf{Create a new project:}}
+\begin{enumerate}
+\item Add a new *.cpp file in directory 'Solutions'
+\item Run 'createMakeFileProject.sh' \\
+\end{enumerate}
+
+\textit{\textbf{Remove a project:}}
+\begin{enumerate}
+\item Remove the corresponding *.cpp file from the 'Solutions' directory
+\item Run 'createMakeFileProject.sh' \\
+\end{enumerate}
+
+\subsection{Linux IDEs}
+
+There are a couple of IDE's available for Linux. Possible IDE's with integrated cmake support are: 
+\begin{itemize}
+\item QtCreator
+\item CLion (free for students)
+\end{itemize}
+
+\end{document}
