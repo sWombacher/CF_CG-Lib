@@ -13,7 +13,7 @@ namespace cf{
 struct IteratedFunctionSystem{
     /**
      * @brief read a *.ifs file from path
-     * @param fiilename
+     * @param fiilePath Path to a *.ifs file
      */
     void read(const std::string& fiilePath);
 

@@ -9,6 +9,13 @@ namespace cf{
  * @brief The WindowRasterized struct Default struct for verctorized operations within a custom interval
  */
 struct WindowRasterized : protected Window2D {
+    /**
+     * @brief WindowRasterized Constructor
+     * @param width Pixel width of the image
+     * @param height Pixel height of the image
+     * @param windowName Name of the window
+     * @param startColor Background color
+     */
     WindowRasterized(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0})
         : Window2D(width, height, windowName, startColor)
     {
@@ -16,8 +23,8 @@ struct WindowRasterized : protected Window2D {
     }
 
     /**
-     * @brief WindowRasterized load image from file path
-     * @param filePath path to file
+     * @brief WindowRasterized Load image from file path
+     * @param filePath Path to file
      */
     WindowRasterized(const char* filePath) : Window2D(filePath) {}
     virtual ~WindowRasterized() = default;

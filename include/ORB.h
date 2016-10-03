@@ -12,9 +12,9 @@ namespace cf{
 struct Orbit{
     /**
      * @brief read a *.orb file from path
-     * @param fiilename
+     * @param filePath Path to a *.orb file
      */
-    void read(const std::string& filename);
+    void read(const std::string& filePath);
 
     const Interval& getRangeX() const;
     const Interval& getRangeY() const;

@@ -10,10 +10,10 @@ namespace cf{
  */
 struct WindowVectorized : protected Window2D {
     /**
-     * @brief WindowVectorized constructor
-     * @param width image width in pixel (hight will be determind automatically)
-     * @param range_x interval in x direction
-     * @param range_y interval in y direction
+     * @brief WindowVectorized Constructor
+     * @param width Image width in pixel (hight will be determind automatically)
+     * @param range_x Interval in x direction
+     * @param range_y Interval in y direction
      */
     WindowVectorized(int width, const cf::Interval& range_x, const cf::Interval& range_y,
                      const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::BLACK)
@@ -27,8 +27,8 @@ struct WindowVectorized : protected Window2D {
      * @brief WindowVectorized Image reading constructoor
      * @param filePath Path to image file
      * @param width Image width, Note: height will be calculated based on ranges and width
-     * @param range_x interval in x direction
-     * @param range_y interval in y direction
+     * @param range_x Interval in x direction
+     * @param range_y Interval in y direction
      */
     WindowVectorized(const char* filePath, int width, const cf::Interval& range_x, const cf::Interval& range_y)
         : Window2D(filePath)
@@ -40,10 +40,10 @@ struct WindowVectorized : protected Window2D {
     virtual ~WindowVectorized() = default;
 
     /**
-     * @brief setInterval set new interval
-     * @param range_x interval in x direction
-     * @param range_y interval in y direction
-     * @param width image width in pixel (hight will be determind automatically)
+     * @brief setInterval Set new interval
+     * @param range_x Interval in x direction
+     * @param range_y Interval in y direction
+     * @param width Image width in pixel (hight will be determind automatically)
      */
     void setInterval(const cf::Interval& range_x, const cf::Interval& range_y, int width){
         this->setNewInterval(range_x, range_y);
@@ -51,9 +51,9 @@ struct WindowVectorized : protected Window2D {
     }
 
     /**
-     * @brief transformPoint_fromInterval_toImage transform point from interval position to pixel position
-     * @param p point to be transformed
-     * @return transformed point
+     * @brief transformPoint_fromInterval_toImage Transform point from interval position to pixel position
+     * @param point Point to be transformed
+     * @return Transformed point
      */
     cf::Point transformPoint_fromInterval_toImage(cf::Point point){
         this->_convertFromNewInterval(point.x, point.y);
@@ -62,9 +62,9 @@ struct WindowVectorized : protected Window2D {
     }
 
     /**
-     * @brief transformPoint_fromImage_toInterval transform point from pixel position to interval position
-     * @param p point to be transformed
-     * @return transformed point
+     * @brief transformPoint_fromImage_toInterval Transform point from pixel position to interval position
+     * @param point Point to be transformed
+     * @return Transformed point
      */
     cf::Point transformPoint_fromImage_toInterval(cf::Point point){
         this->_invertY(point);
@@ -74,7 +74,7 @@ struct WindowVectorized : protected Window2D {
 
     /**
      * @brief convert_pixelLength_to_intervalLength Converts length from pixel to interval
-     * @param pixelLength
+     * @param pixelLength Length to be converted to the intervall length
      * @return
      */
     float convert_pixelLength_to_intervalLength(float pixelLength) const {
@@ -83,7 +83,7 @@ struct WindowVectorized : protected Window2D {
 
     /**
      * @brief convert_intervalLength_to_pixelLength Converts length from interval to pixel
-     * @param intervalLength
+     * @param intervalLength Length to be converted to pixel length
      * @return
      */
     float convert_intervalLength_to_pixelLength(float intervalLength) const {
@@ -91,10 +91,22 @@ struct WindowVectorized : protected Window2D {
     }
 
 
+    /**
+     * @brief getColor_imageSpace Get color from image i/j position
+     * @param i I position
+     * @param j J position
+     * @return
+     */
     cf::Color getColor_imageSpace(int i, int j) const {
         const cv::Vec3b& c = this->m_Image.at<cv::Vec3b>(i, j);
         return {c[2], c[1], c[0]};
     }
+    /**
+     * @brief setColor_imageSpace Set color from image i/j position
+     * @param i I position
+     * @param j J position
+     * @param color Color to be set
+     */
     void setColor_imageSpace(int i, int j, const cf::Color& color) {
         this->m_Image.at<cv::Vec3b>(i, j)[0] = color.b;
         this->m_Image.at<cv::Vec3b>(i, j)[1] = color.g;

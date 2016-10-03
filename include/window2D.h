@@ -21,28 +21,28 @@ public:
     virtual ~Window2D();
 
     /**
-     * @brief show show image, on first call it may require additional time to display content correctly (in those cases use waitKey(1000) )
+     * @brief show Show image, on first call it may require additional time to display content correctly (in those cases use waitKey(1000) )
      */
     void show() const;
     void clear(const cf::Color& color = cf::Color::WHITE);
 
     /**
-     * @brief waitKey block access until key input on window
-     * @param delay value > 0 -> wait till key input on window or 'delay'ms else wait till user input
+     * @brief waitKey Block access until key input on window
+     * @param delay Value > 0 -> wait till key input on window or 'delay'ms else wait till user input
      * @return
      */
     unsigned char waitKey(int delay = 0) const;
 
     /**
-     * @brief waitMouseInput blocks until mouse input has been given
-     * @param x window position
-     * @param y window position
+     * @brief waitMouseInput Blocks until mouse input has been given
+     * @param x X-Window position
+     * @param y Y-Window position
      */
     void waitMouseInput(float& x, float& y);
 
     /**
-     * @brief setWindowDisplayScale scales image before displaying
-     * @param scale
+     * @brief setWindowDisplayScale Scales the image before displaying
+     * @param scale Window scale size
      */
     void  setWindowDisplayScale(float scale);
     float getWindowDisplayScale() const;
@@ -58,35 +58,34 @@ public:
     Color getColor(float x, float y) const;
 
     /**
-     * @brief drawCircle
-     * @param point point within interval_x and interval_y
-     * @param radius circle radius in pixel (not effected by intervals)
-     * @param lineWidth pixelwidth of line (not effected by intervals)
-     * @param color
+     * @brief drawCircle Draws a circle around the center
+     * @param point Point within interval_x and interval_y
+     * @param radius Circle radius in pixel (not effected by intervals)
+     * @param lineWidth Pixelwidth of line (not effected by intervals)
+     * @param color Circle color
      */
     void drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& color);
 
     /**
-     * @brief drawRectangle
-     * @param point1 point within interval_x and interval_y, has to be the diagonal point to point2
-     * @param point2 point within interval_x and interval_y, has to be the diagonal point to point1
-     * @param lineWidth lineWidth pixelwidth of line (not effected by intervals)
-     * @param color
+     * @brief drawRectangle Draws a rectangle from two diagonal points
+     * @param point1 Point within interval_x and interval_y, has to be the diagonal point to point2
+     * @param point2 Point within interval_x and interval_y, has to be the diagonal point to point1
+     * @param lineWidth LineWidth pixelwidth of line (not effected by intervals)
+     * @param color Rectangle color
      */
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
     /**
-     * @brief drawLine
-     * @param point1 point within interval_x and interval_y
-     * @param point2 point within interval_x and interval_y
-     * @param lineWidth lineWidth pixelwidth of line (not effected by intervals)
+     * @brief drawLine Draws a line from point1 to point2
+     * @param point1 Point within interval_x and interval_y
+     * @param point2 Point within interval_x and interval_y
+     * @param lineWidth Line width in pixel size
      * @param color Line color
      */
     void drawLine(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
 
     /**
      * @brief The LineType enum Special line type used by one function of 'drawLine'
-     *
      */
     enum class LineType{    DEFAULT = 0 /* normal line */ ,
                               DOT_0 = Window2D::DOT_VALUE                          | 1,      DOT_1,      DOT_2,
@@ -96,8 +95,8 @@ public:
 
     /**
      * @brief drawSpecializedLine Draws specialized line of width 1 (dotted and/or dashed lines)
-     * @param point1 point within interval_x and interval_y
-     * @param point2 point within interval_x and interval_y
+     * @param point1 Point within interval_x and interval_y
+     * @param point2 Point within interval_x and interval_y
      * @param lineType Type of line to be drawn
      * @param color Line color
      */
@@ -115,23 +114,23 @@ public:
     void  resetInterval();
 
     /**
-     * @brief saveImage saves current image to harddrive
-     * @param filePath file path and name, format will be determind from file ending (*.png, *.jpeg, ...)
+     * @brief saveImage Saves current image to harddrive
+     * @param filePath File path and name, format will be determind based on file ending (*.png, *.jpeg, ...)
      */
     void saveImage(const char* filePath) const;
     /**
-     * @brief resize resize underlying image
+     * @brief resize Resize underlying image
      * @param pixelWidth New width
      * @param pixelHeight New height
      */
     void resize(int pixelWidth, int pixelHeight);
 
     /**
-     * @brief flippHorizontal flipp image horizontally
+     * @brief flippHorizontal Flipp image horizontally
      */
     void flippHorizontal();
     /**
-     * @brief flippHorizontal flipp image vertically
+     * @brief flippHorizontal Flipp image vertically
      */
     void flippVertical();
 
@@ -159,7 +158,7 @@ public:
     int getHeight()const;
 
     /**
-     * @brief getImage direct access to the underlying image
+     * @brief getImage Direct access to the underlying image
      * @return Image handle
      */
     cv::Mat& getImage();
@@ -173,12 +172,12 @@ public:
     void drawAxis(const cf::Color& color = cf::Color::BLACK, float stepSize_x = 1.f, float stepSize_y = 1.f, float interceptLength = 3.f);
 
     /**
-     * @brief drawCriclePart
-     * @param center
-     * @param radius
-     * @param startAngle
-     * @param endAngle
-     * @param color
+     * @brief drawCriclePart Draws a part of a circle
+     * @param center Center point of the circle
+     * @param radius Radius of the circle
+     * @param startAngle Start position (in degrees)
+     * @param endAngle End position (in degrees)
+     * @param color Color of the drawn line
      */
     void drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color = cf::Color::BLACK);
 

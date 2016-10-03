@@ -30,27 +30,27 @@ struct Window3D{
     };
 
     /**
-     * @brief showWindowUsage print camera usage to console
+     * @brief printWindowUsage Print camera usage to console
      */
-    static void showWindowUsage();
+    static void printWindowUsage();
 
     void clear(const Color& color = Color::BLACK);
 
     /**
-     * @brief draw draw function, has to be implemented
+     * @brief draw Draw function, this has to be implemented
      */
     virtual void draw() = 0;
 
     /**
-     * @brief handleKeyboardInput access key input by simple override this function
-     * @param key key pressed
-     * @param x x position the key is pressed
-     * @param y y position the key is pressed
+     * @brief handleKeyboardInput Access key input by simple override this function
+     * @param key Key pressed
+     * @param x Mouse-x-position of the key press event
+     * @param y Mouse-y-position of the key press event
      */
     virtual void handleKeyboardInput(unsigned char key, int x, int y);
 
     /**
-     * @brief startDrawing start drawing, this function only returns afer 'ESC'-key press
+     * @brief startDrawing Start drawing, this function only returns afer 'ESC'-key press
      * @return
      */
     int startDrawing();
@@ -59,55 +59,61 @@ struct Window3D{
     int getWindowHeight() const;
 
     /**
-     * @brief setCamera set or change current camera type
-     * @param type cerma type
+     * @brief setCamera Set or change current camera type
+     * @param type Camera type
      * @param lookAt
      * @param distance
      */
     void setCamera(CameraType type, glm::vec3 lookAt = glm::vec3(0, 0, 0), float distance = 10.f);
 
     /**
-     * @brief drawAxis draw x-,y- and z-axis
-     * @param length axis length
+     * @brief drawAxis Draw x-,y- and z-axis
+     * @param length Axis length
      */
     void drawAxis(float length = 10.f) const;
 
     /**
-     * @brief forceDisplay displays all content, it may be used for displaying the current process of the draw function
+     * @brief forceDisplay Displays all content, it may be used for displaying the current process of the draw function
      */
     void forceDisplay() const;
 
     /**
-     * @brief drawCylinder draws a solid clynder
-     * @param drawingDirection cylinder direction
-     * @param position start position
-     * @param diameter cylinder diamenter
-     * @param color cylinder color
+     * @brief drawCylinder Draws a solid clynder
+     * @param drawingDirection Cylinder direction
+     * @param position Start position
+     * @param diameter Cylinder diamenter
+     * @param color Cylinder color
      */
     void drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color& color = Color::WHITE) const;
 
     /**
-     * @brief type different version of Window3D::drawCylinder
+     * @brief Type adjusted version of Window3D::drawCylinder
      */
     void drawCylinder(const glm::vec4& drawingDirection, const glm::vec3& position, float diameter = 1.f, const Color& color = Color::WHITE) const;
 
     /**
-     * @brief type different version of Window3D::drawCylinder
+     * @brief Type adjusted version of Window3D::drawCylinder
      */
     void drawCylinder(const glm::vec3& drawingDirection, const glm::vec4& position, float diameter = 1.f, const Color& color = Color::WHITE) const;
 
     /**
-     * @brief type different version of Window3D::drawCylinder
+     * @brief Type adjusted version of Window3D::drawCylinder
      */
     void drawCylinder(const glm::vec4& drawingDirection, const glm::vec4& position, float diameter = 1.f, const Color& color = Color::WHITE) const;
 
     /**
-     * @brief setMaxFPS set maximum frames per second
-     * @param maxFPS values > 0 indicates capped fps, value of 0 indicates "only draw after key-input"
+     * @brief setMaxFPS Set maximum frames per second
+     * @param maxFPS values > 0 indicates capped fps, value of 0 indicates "only draw after key-input", 0 is default
      */
     void setMaxFPS(float maxFPS = 0.f);
 
+    /**
+     * @brief enableLighting Enable lightning (Default: lightning is enabled)
+     */
     void  enableLighting(){  glEnable(GL_LIGHTING); }
+    /**
+     * @brief disableLighting Disable lightning (Default: lightning is enabled)
+     */
     void disableLighting(){ glDisable(GL_LIGHTING); }
 
 protected:

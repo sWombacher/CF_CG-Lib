@@ -298,8 +298,8 @@ void _removeWindowsSpecificCarriageReturn(std::string& str){
     }
 }
 
-float radian2degree(float radiantValue){
-    return radiantValue / glm::pi<float>() * 180.f;
+float radian2degree(float radianValue){
+    return radianValue / glm::pi<float>() * 180.f;
 }
 
 float degree2radian(float degreeValue){

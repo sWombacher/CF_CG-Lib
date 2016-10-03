@@ -19,9 +19,9 @@ struct LindenmayerSystem{
 
     /**
      * @brief read a *.lin file from path
-     * @param fiilename
+     * @param filePath Path to a *.lin file
      */
-    void read(const std::string& filename);
+    void read(const std::string& filePath);
 
     const std::string& getName () const;
     char getAxiom() const;

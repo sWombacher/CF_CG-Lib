@@ -27,7 +27,7 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 namespace cf{
 
 /**
- * @brief _removeWindowsSpecificCarriageReturn removes 'carriage return' characters in strings ('carriage return' may be read from unix system with windows files)
+ * @brief _removeWindowsSpecificCarriageReturn Removes 'carriage return' characters in strings ('carriage return' may be read from unix system by providing windows files)
  * @param str string containing 'carriage return', which will be removed
  */
 void _removeWindowsSpecificCarriageReturn(std::string& str);
@@ -37,21 +37,21 @@ struct Color;
 
 /**
  * @brief readPaletteFromFile
- * @param filePath read *.pal file from path
+ * @param filePath Read *.pal file from path
  * @return
  */
 std::vector<Color> readPaletteFromFile(const std::string& filePath);
 
 /**
  * @brief readAntString
- * @param filePath read *.ant file from path
+ * @param filePath Read *.ant file from path
  * @return
  */
 std::string readAntString(const std::string& filePath);
 
 /**
  * @brief readDATFile Reads a *.dat file
- * @param filePath
+ * @param filePath Read *.dat file from path
  * @return
  */
 template<typename _VectorType = glm::vec3>
@@ -98,16 +98,16 @@ std::vector<_VectorType> readDATFile(const std::string& filePath){
     return points;
 }
 /**
- * @brief radiant2degree converts from radiant value to degree values
- * @param radiantValue
- * @return degree value
+ * @brief radian2degree Converts a radian value to a degree value
+ * @param radianValue Radian value to be converted
+ * @return Converted degree value
  */
-float radian2degree(float radiantValue);
+float radian2degree(float radianValue);
 
 /**
- * @brief degree2radiant converts from degree value to radiant values
- * @param degreeValue
- * @return radiant value
+ * @brief degree2radian Converts a degree value to a radian value
+ * @param degreeValue Degree value to be converted
+ * @return Converted radian value
  */
 float degree2radian(float degreeValue);
 

@@ -38,7 +38,7 @@ Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
 }
 
-void Window3D::showWindowUsage(){
+void Window3D::printWindowUsage(){
     std::cout << "Close window:\n"
               << "esc-key\n\n"
               << "Camera usage:\n"

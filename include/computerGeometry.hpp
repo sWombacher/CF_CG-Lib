@@ -23,9 +23,9 @@ namespace cf {
 }
 
 /**
- * @brief operator<<
- * @param os
- * @param rhs
+ * @brief operator<< Simple shift operator for output
+ * @param os Outputstream, e.g. std::cout
+ * @param rhs cf::PointVector or cf::DirectionVector
  * @return
  */
 template<bool b>
@@ -181,6 +181,11 @@ struct Vec3{
         this->m_Data.z = value;
     }
 
+    /**
+     * @brief operator[]  Access to each component of the Vector, Note: read access is granted to all components (including index 2)
+     * @param idx Acess index
+     * @return
+     */
     float  operator[](int idx) const { return this->m_Data[idx]; }
 
     /**

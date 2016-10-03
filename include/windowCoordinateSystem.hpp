@@ -10,10 +10,10 @@ namespace cf{
  */
 struct WindowCoordinateSystem : protected Window2D {
     /**
-     * @brief WindowCoordinateSystem constructor
-     * @param range_x interval in x direction
-     * @param range_y interval in y direction
-     * @param width image width in pixel (hight will be determind automatically)
+     * @brief WindowCoordinateSystem Constructor
+     * @param range_x Interval in x direction
+     * @param range_y Interval in y direction
+     * @param width Image width in pixel (hight will be determind automatically)
      */
     WindowCoordinateSystem(int width, const cf::Interval& range_x, const cf::Interval& range_y,
                      const char* windowName = "Computer Geometry", const cf::Color& startColor = cf::Color::WHITE)
@@ -25,10 +25,10 @@ struct WindowCoordinateSystem : protected Window2D {
     virtual ~WindowCoordinateSystem() = default;
 
     /**
-     * @brief setInterval set new interval
-     * @param range_x interval in x direction
-     * @param range_y interval in y direction
-     * @param width image width in pixel (hight will be determind automatically)
+     * @brief setInterval Set new interval
+     * @param range_x Interval in x direction
+     * @param range_y Interval in y direction
+     * @param width Image width in pixel (hight will be determind automatically)
      */
     void setInterval(const cf::Interval& range_x, const cf::Interval& range_y, int width){
         this->setNewInterval(range_x, range_y);
@@ -36,9 +36,9 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawPoint draws a cross-shaed point
-     * @param pos cross position
-     * @param color cross color
+     * @brief drawPoint Draws a cross-shaped point
+     * @param pos Cross position
+     * @param color Cross color
      */
     void drawPoint(const cf::Point& pos, const cf::Color& color = cf::Color::BLACK){
         static const float pixelLength = 7.f;
@@ -57,6 +57,7 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param p2 Second point
      * @param color Line color
      * @param type Line type
+     * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawLine(const cf::Point& p1, const cf::Point& p2, const cf::Color& color = cf::Color::BLACK,
                   cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
@@ -71,11 +72,12 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawLinearEquation Draws line from a point on line and direction vector
+     * @brief drawLinearEquation Draws a line from a point on line and direction vector
      * @param pointVector Point on the line
      * @param drawingDirection Line direction
-     * @param color line color
+     * @param color Line color
      * @param type Change line type to dot/dash/dot-dash
+     * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawLinearEquation(const cf::Point& pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
@@ -96,12 +98,13 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawLinearEquation draw line from linear equation: ax + by + c = 0
-     * @param a coefficent of x
-     * @param b coefficent of y
-     * @param c constant
-     * @param color line color
+     * @brief drawLinearEquation Draw a line from a linear equation: ax + by + c = 0
+     * @param a Coefficent of x
+     * @param b Coefficent of y
+     * @param c Constant
+     * @param color Line color
      * @param type Change line type to dot/dash/dot-dash
+     * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawLinearEquation(float a, float b, float c, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
@@ -132,10 +135,11 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawLinearEquation draw line from linear equation: ax + by + c = 0, where a b and c are part of the vector v(a, b, c)
+     * @brief drawLinearEquation Draw line from linear equation: ax + by + c = 0, where a b and c are part of coefficent vector
      * @param vec Vector of cooefficents a b and see
-     * @param color line color
+     * @param color Line color
      * @param type Change line type to dot/dash/dot-dash
+     * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawLinearEquation(const glm::vec3& vec, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
@@ -144,11 +148,12 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawLinearEquation draw line from standard format y = m*x + t
-     * @param slope m of equation y = m*x + t
-     * @param yIntercept t of equation y = m*x + t
-     * @param color line color
+     * @brief drawLinearEquation Draw line from standard format y = m*x + t
+     * @param slope Slope m of equation y = m*x + t
+     * @param yIntercept y-Intercept t of equation y = m*x + t
+     * @param color Line color
      * @param type Change line type to dot/dash/dot-dash
+     * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawLinearEquation(float slope, float yIntercept, const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1)
@@ -214,10 +219,11 @@ struct WindowCoordinateSystem : protected Window2D {
     }
 
     /**
-     * @brief drawCircle Draw circle with interval radius
+     * @brief drawCircle Draws a circle with interval radius
      * @param center Circle center
      * @param radius Circle radius
-     * @param color  Curcle color
+     * @param color Circle color
+     * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawCircle(const cf::Point& center, float radius, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
         int pixelRadius = std::round(this->convert_intervalLength_to_pixelLength(radius));

@@ -5,8 +5,8 @@
 
 namespace cf{
 
-void Orbit::read(const std::string &filename){
-    std::fstream input(filename, std::fstream::in);
+void Orbit::read(const std::string &filePath){
+    std::fstream input(filePath, std::fstream::in);
     if (!input)
         throw std::runtime_error("File not found in function: \"Orbit::read\"");
 

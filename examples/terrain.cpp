@@ -98,7 +98,7 @@ int main(int argc, char** argv){
     std::vector<cf::Color> col = cf::readPaletteFromFile(filePath_palFile.c_str());
     img.show();
 
-    MyWindow::showWindowUsage();
+    MyWindow::printWindowUsage();
     MyWindow window(&argc, argv, img, col);
 
     // setup camera

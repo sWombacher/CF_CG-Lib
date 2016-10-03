@@ -17,21 +17,21 @@ public:
 // create a cylinder
 // direction and length of this vector will be drawn as a cylinder later on
         glm::vec4 dir(this->m_Length, 0, 0, 1);
-        float radiantValue = cf::degree2radian(this->m_Angle); // glm library uses radiant format
+        float radianValue = cf::degree2radian(this->m_Angle); // glm library uses radian format
 
         // rotation around x-axis,
         // since 'dir' lies on the x-axis the rotation doesn't do anything :)
         // change 'dir' to see a difference
-        // glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(1, 0, 0));
+        // glm::mat4x4 rotMat = glm::rotate(radianValue, glm::vec3(1, 0, 0));
 
-        //glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 1, 0)); // rotation around y-axis
-        glm::mat4x4 rotMat = glm::rotate(radiantValue, glm::vec3(0, 0, 1)); // rotation around z-axis
+        //glm::mat4x4 rotMat = glm::rotate(radianValue, glm::vec3(0, 1, 0)); // rotation around y-axis
+        glm::mat4x4 rotMat = glm::rotate(radianValue, glm::vec3(0, 0, 1)); // rotation around z-axis
         dir = rotMat * dir;
 
 // create a 2nd cylinder
 // and rotate it 90° around z-axis and half its size
         glm::mat4x4 rotMat2 = glm::rotate(cf::degree2radian(90), glm::vec3(0, 0, 1)); // degree
-        //glm::mat4x4 rotMat2 = glm::rotate(glm::pi<float>() / 2.f, glm::vec3(0, 0, 1)); // radiant
+        //glm::mat4x4 rotMat2 = glm::rotate(glm::pi<float>() / 2.f, glm::vec3(0, 0, 1)); // radian
 
         glm::vec4 dir2 = rotMat2 * dir;
         dir2 *= 0.5; // half the length of cylinder2
@@ -79,7 +79,7 @@ private:
 
 int main(int argc, char** argv){
 // print camera usage
-    MyWindow::showWindowUsage();
+    MyWindow::printWindowUsage();
 
 // print object movement options
 	std::cout << std::endl << std::endl
