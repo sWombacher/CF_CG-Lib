@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include <iostream>
 
 #include <inttypes.h>
@@ -23,6 +25,14 @@ std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 
 
 namespace cf{
+
+/**
+ * @brief _removeWindowsSpecificCarriageReturn removes 'carriage return' characters in strings ('carriage return' may be read from unix system with windows files)
+ * @param str string containing 'carriage return', which will be removed
+ */
+void _removeWindowsSpecificCarriageReturn(std::string& str);
+
+
 struct Color;
 
 /**
@@ -39,7 +49,54 @@ std::vector<Color> readPaletteFromFile(const std::string& filePath);
  */
 std::string readAntString(const std::string& filePath);
 
+/**
+ * @brief readDATFile Reads a *.dat file
+ * @param filePath
+ * @return
+ */
+template<typename _VectorType = glm::vec3>
+std::vector<_VectorType> readDATFile(const std::string& filePath){
+    std::fstream file(filePath, std::fstream::in);
+    if (!file)
+        throw std::runtime_error("File not found in function: \"readPaletteFromFile\"");
 
+    std::string str;
+    if (!file.good())
+        throw std::runtime_error(filePath + ", file not found");
+
+    std::vector<_VectorType> points;
+    while (file.good()){
+        std::getline(file, str);
+        cf::_removeWindowsSpecificCarriageReturn(str);
+
+        // remove non numbers, and non . ' '
+        for (size_t i = 0; i < str.size(); ++i){
+            char c = str[i];
+            if (c != ' ' && c != '.' && (c < '0' || c > '9')){
+                std::cout << "Warning: Unknown symbol detected, ASCII code: '" << (int)str[i] << "'" << std::endl;
+                str.erase(i, 1);
+                --i;
+            }
+        }
+
+        _VectorType tmp;
+        std::stringstream sstr(str);
+        int valueCounter = 0;
+        while (sstr.good()){
+            std::getline(sstr, str, ' ');
+            if (str.size()){
+                float value = std::stof(str);
+                tmp[valueCounter] = value;
+                ++valueCounter;
+                if (valueCounter >= 3)
+                    break;
+            }
+        }
+        if (valueCounter == 3)
+            points.push_back(tmp);
+    }
+    return points;
+}
 /**
  * @brief radiant2degree converts from radiant value to degree values
  * @param radiantValue
@@ -129,13 +186,6 @@ struct Color{
     static const Color PINK;
     static const Color RED;
 };
-
-/**
- * @brief _removeWindowsSpecificCarriageReturn removes 'carriage return' characters in strings ('carriage return' may be read from unix system with windows files)
- * @param str string containing 'carriage return', which will be removed
- */
-void _removeWindowsSpecificCarriageReturn(std::string& str);
-
 
 /**
  * @brief The Console struct offers utility functions for 'console'

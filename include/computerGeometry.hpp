@@ -2,6 +2,7 @@
 #define COMPUTER_GEOMETRY_H_H
 
 #include "windowCoordinateSystem.hpp"
+#include "utils.h"
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -33,13 +34,6 @@ std::ostream& operator<<(std::ostream& os, const cf::Vec3<b>& rhs);
 
 
 namespace cf{
-
-/**
- * @brief readDATFile Reads a *.dat file
- * @param filePath
- * @return
- */
-std::vector<PointVector> readDATFile(const std::string& filePath);
 
 /**
  * @brief The Vec3 struct General class for vector operations
@@ -240,55 +234,6 @@ private:
 
     glm::vec3 m_Data;
 };
-
-std::vector<cf::PointVector> readDATFile(const std::string& filePath){
-    std::fstream file(filePath, std::fstream::in);
-    if (!file)
-        throw std::runtime_error("File not found in function: \"readPaletteFromFile\"");
-
-    std::string str;
-    if (!file.good()){
-        str = filePath;
-        str += ", file not found";
-        throw std::runtime_error(str);
-    }
-
-    std::vector<PointVector> points;
-    while (file.good()){
-        std::getline(file, str);
-        cf::_removeWindowsSpecificCarriageReturn(str);
-
-        // remove non numbers, and non . ' '
-        for (size_t i = 0; i < str.size(); ++i){
-            char c = str[i];
-            if (c != ' ' && c != '.' && (c < '0' || c > '9')){
-                std::cout << "Warning: Unknown symbol detected, ASCII code: '" << (int)str[i] << "'" << std::endl;
-                str.erase(i, 1);
-                --i;
-            }
-        }
-
-        glm::vec3 tmp;
-        std::stringstream sstr(str);
-        int valueCounter = 0;
-        while (sstr.good()){
-            std::getline(sstr, str, ' ');
-            if (str.size()){
-                float value = std::stof(str);
-                tmp[valueCounter] = value;
-                ++valueCounter;
-                if (valueCounter >= 3)
-                    break;
-            }
-        }
-        if (valueCounter == 3){
-            PointVector point;
-            point = tmp;
-            points.push_back(point);
-        }
-    }
-    return points;
-}
 
 }
 

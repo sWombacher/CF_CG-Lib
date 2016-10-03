@@ -1,8 +1,6 @@
 
 
 #include "utils.h"
-#include <fstream>
-#include <sstream>
 #include <iomanip>
 #include <opencv2/opencv.hpp>
 
@@ -98,7 +96,6 @@ std::string readAntString(const std::string& filePath){
     _removeWindowsSpecificCarriageReturn(str);
     return str;
 }
-
 
 Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection currentDirection, RelativeDirection relativeMovement){
     switch(relativeMovement){

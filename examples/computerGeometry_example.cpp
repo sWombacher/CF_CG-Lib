@@ -11,7 +11,9 @@ int main(int argc, char** argv){
     }
     else
         filePath = argv[1];
-    std::vector<cf::PointVector> points = cf::readDATFile(filePath);
+
+    // read dat file as cf::PointVector type
+    std::vector<cf::PointVector> points = cf::readDATFile<cf::PointVector>(filePath);
 
 /// part 1
 // create coordinate system and draw all points and lines
