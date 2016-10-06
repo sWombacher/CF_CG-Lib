@@ -39,7 +39,7 @@ int main(int argc, char** argv){
     //image.waitKey(1000);
 
     std::cout << "Press enter to continue";
-	cf::Console::waitKey();
+    image.waitKey();
 
 // transform image into pseudo color image
     for (int y = 0; y < image.getHeight(); ++y){
@@ -54,7 +54,7 @@ int main(int argc, char** argv){
     image.show();
 
     std::cout << "Press enter to continue";
-	cf::Console::waitKey();
+    image.waitKey();
 
 // generate a LUT of random numbers
     // initialize random generator with seed
@@ -82,7 +82,7 @@ int main(int argc, char** argv){
     image.show();
 
     std::cout << "Press enter to continue";
-    cf::Console::waitKey();
+    image.waitKey();
 
     // invert diagonal pixels
     for (int x = 0, y = 0;
@@ -96,7 +96,7 @@ int main(int argc, char** argv){
     image.show();
 
     std::cout << "Press enter to continue";
-    cf::Console::waitKey();
+    image.waitKey();
 
     // color diagonal pixels black/white based on brightness
     for (int y = image.getHeight() - 1, x = 0;
@@ -118,6 +118,6 @@ int main(int argc, char** argv){
     image.show();
 
     std::cout << "Press enter to finish\n";
-	cf::Console::waitKey();
+    image.waitKey();
     return 0;
 }

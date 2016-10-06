@@ -81,8 +81,7 @@ void Window2D::setColor(float x, float y, const Color& c){
     this->_convertFromNewInterval(x, y);
     this->_correctYValue(y);
 
-    //this->m_Image.at<cf::Color>(int(y), int(x)) = c;
-	auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
+    auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
 	tmp[0] = c.b;
 	tmp[1] = c.g;
 	tmp[2] = c.r;
@@ -91,7 +90,6 @@ Color Window2D::getColor(float x, float y) const{
     this->_convertFromNewInterval(x, y);
     this->_correctYValue(y);
 
-    //return this->m_Image.at<cf::Color>(int(y), int(x));
     const auto& tmp = this->m_Image.at<cv::Vec3b>(int(y), int(x));
     cf::Color c;
     c.r = tmp[2];
@@ -311,8 +309,8 @@ void Window2D::_convertFromNewInterval(float& x, float& y) const{
     if (!this->m_IntervalChanged)
         return;
 
-    x = Interval::translateIntervalPostion(this->m_IntervalX, Interval(0, this->m_Image.cols - 1), x);
-    y = Interval::translateIntervalPostion(this->m_IntervalY, Interval(0, this->m_Image.rows - 1), y);
+    x = std::round(Interval::translateIntervalPostion(this->m_IntervalX, Interval(0, this->m_Image.cols - 1), x));
+    y = std::round(Interval::translateIntervalPostion(this->m_IntervalY, Interval(0, this->m_Image.rows - 1), y));
 }
 void Window2D::_convertToNewInterval(float &x, float &y) const{
     if (!this->m_IntervalChanged)

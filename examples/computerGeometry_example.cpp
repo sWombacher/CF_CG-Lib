@@ -71,7 +71,7 @@ int main(int argc, char** argv){
 /// part 2
     // reset coordianteSystem
     std::cout << "Press enter to continue with part 2 of example\n\n";
-	cf::Console::waitKey();
+    coordinateSystem.waitKey();
     coordinateSystem.clear();
     coordinateSystem.drawAxis(cf::Color::BLACK, 10.f, 10.f);
     coordinateSystem.show();
@@ -79,7 +79,7 @@ int main(int argc, char** argv){
 // draw line from point2 to point0 (from input file)
 //  using line normal
     std::cout << "Press enter to draw a line between point0 and point2" << std::flush;
-	cf::Console::waitKey();
+    coordinateSystem.waitKey();
     cf::PointVector normal = points[2] % points[0];
     coordinateSystem.drawLinearEquation(normal, cf::Color::BLACK, cf::Window2D::LineType::DEFAULT, 2);
     //coordinateSystem.drawLinearEquation(normal[0], normal[1], normal[2]); // alternatively
@@ -88,7 +88,7 @@ int main(int argc, char** argv){
 // draw line from point1 to point0 (from input file)
 //  using PointVector and a direction
     std::cout << "Press enter to draw a line between point1 and point0";
-	cf::Console::waitKey();
+    coordinateSystem.waitKey();
     cf::DirectionVector dir = points[1] - points[0];
     coordinateSystem.drawLinearEquation(points[1], dir, cf::Color::RED, cf::Window2D::LineType::DOT_1 /* cf::WindowCoordinateSystem::LineType::DOT_1 is also available */);
     coordinateSystem.show();
@@ -96,19 +96,19 @@ int main(int argc, char** argv){
 // draw line from point1 to point2 (from input file)
 //  using points directly
     std::cout << "Press enter to draw a line between point1 and point2" << std::flush;
-	cf::Console::waitKey();
+    coordinateSystem.waitKey();
     coordinateSystem.drawLine(points[1], points[2], cf::Color::BLUE, cf::Window2D::LineType::DOT_DASH_0);
     coordinateSystem.show();
 
 // draw circle around userPoint and fill it with a color
     std::cout << "Press enter to draw a circle (around user point)" << std::flush;
-	cf::Console::waitKey();
+    coordinateSystem.waitKey();
     coordinateSystem.drawCircle(userPoint, 20.f, cf::Color::CYAN, -1 /* negative line width will fill the circle */);
     coordinateSystem.drawCircle(userPoint, 20.f, cf::Color::MAGENTA);
     coordinateSystem.drawPoint(userPoint);
     coordinateSystem.show();
 
     std::cout << "Press enter to finish the process\n";
-	cf::Console::waitKey();
+    coordinateSystem.waitKey();
     return 0;
 }

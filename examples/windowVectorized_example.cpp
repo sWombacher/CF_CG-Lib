@@ -50,8 +50,8 @@ int main() {
               << "Image: j-position: " << std::round(point1.y) << std::endl
               << std::endl;
 
-    std::cout << "\n\nActivate console window and press enter to continue with part 2: drawing \n";
-	cf::Console::waitKey();
+    std::cout << "\n\nActivate image window and press enter to continue with part 2: drawing \n";
+    window.waitKey();
     cf::Console::clearConsole();
 
 
@@ -90,12 +90,12 @@ int main() {
 // draw line and rectangle
 	cf::Console::clearConsole();
     std::cout << "Press enter to draw a line\n";
-	cf::Console::waitKey();
+    window.waitKey();
     window.drawLine(point1, point2, 2, cf::Color::BLACK);
     window.show();
 
     std::cout << "\n\n\nPress enter to draw a rectangle\n";
-	cf::Console::waitKey();
+    window.waitKey();
     window.drawRectangle(point1, point2, 2, cf::Color::GREEN);
     window.show();
 
@@ -110,7 +110,7 @@ int main() {
 
     // draw
     std::cout << "\n\n\nPress enter to draw a circle (point1 as center, point2 on circle line)\n";
-	cf::Console::waitKey();
+    window.waitKey();
     window.drawCircle(point1, pixelLength, 2, cf::Color(127, 27, 127));
     window.show();
 
@@ -132,10 +132,10 @@ int main() {
     window.drawCriclePart(point2, pixelLength, angle - 60.f, angle + 60.f, 2, cf::Color::GREY);
 
     std::cout << "\n\n\nPress enter to draw a circle part (point2 center, point1 on circle line)\n";
-	cf::Console::waitKey();
+    window.waitKey();
     window.show();
 
     std::cout << "\n\n\nPress enter to finish the process\n";
-	cf::Console::waitKey();
+    window.waitKey();
     return 0;
 }
