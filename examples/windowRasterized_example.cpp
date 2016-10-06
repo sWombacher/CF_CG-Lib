@@ -38,7 +38,7 @@ int main(int argc, char** argv){
     //  this issue can be solved by calling "waitKey"
     //image.waitKey(1000);
 
-    std::cout << "Press enter to continue";
+    std::cout << "Press enter to continue\n";
     image.waitKey();
 
 // transform image into pseudo color image
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
     }
     image.show();
 
-    std::cout << "Press enter to continue";
+    std::cout << "Press enter to continue\n";
     image.waitKey();
 
 // generate a LUT of random numbers
@@ -81,7 +81,7 @@ int main(int argc, char** argv){
     }
     image.show();
 
-    std::cout << "Press enter to continue";
+    std::cout << "Press enter to continue\n";
     image.waitKey();
 
     // invert diagonal pixels
@@ -95,7 +95,7 @@ int main(int argc, char** argv){
     }
     image.show();
 
-    std::cout << "Press enter to continue";
+    std::cout << "Press enter to continue\n";
     image.waitKey();
 
     // color diagonal pixels black/white based on brightness
