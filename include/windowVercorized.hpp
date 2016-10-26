@@ -117,7 +117,7 @@ struct WindowVectorized : protected Window2D {
     using Window2D::getWindowDisplayScale;
     using Window2D::setWindowDisplayScale;
     using Window2D::drawSpecializedLine;
-    using Window2D::drawCriclePart;
+    using Window2D::drawCirclePart;
     using Window2D::waitMouseInput;
     using Window2D::getIntervalX;
     using Window2D::getIntervalY;

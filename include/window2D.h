@@ -7,6 +7,10 @@
 
 namespace cf{
 struct Point;
+struct Line;
+struct Rect;
+struct Circle;
+struct CirclePartition;
 
 /**
  * @brief The Window2D struct offers advanced features used by WindowRasterized/WindowVertorized
@@ -179,7 +183,7 @@ public:
      * @param endAngle End position (in degrees)
      * @param color Color of the drawn line
      */
-    void drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color = cf::Color::BLACK);
+    void drawCirclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color = cf::Color::BLACK);
 
     /**
      * @brief floodFill Fills an area
@@ -187,6 +191,12 @@ public:
      * @param color Fill color
      */
     void floodFill(cf::Point startingPoint, const cf::Color& color);
+
+
+    void drawLine(const cf::Line& line);
+    void drawRectangle(const cf::Rect& rect);
+    void drawCircle(const cf::Circle& circle);
+    void drawCirclePart(const cf::CirclePartition& circlePartition);
 
 protected:
     void _correctYValue(float& y) const;
@@ -211,7 +221,7 @@ protected:
 };
 
 
-// Note: cv::Point only alows int positions NOT floatingpoint
+// Note: cv::Point only allows int positions NOT floatingpoint
 /**
  * @brief The Point struct is a simple class for positon access on 2D images (imilar to cv::Point, but uses floats instead of integer)
  */
@@ -240,6 +250,36 @@ struct Point{
     friend Point operator*(float lhs, const Point& p);
     friend Point operator/(float lhs, const Point& p);
 };
+
+
+struct Line{
+    int lineWidth = 1;
+    cf::Point point1 = cf::Point(0, 0);
+    cf::Point point2 = cf::Point(0, 0);
+    cf::Color color = cf::Color::BLACK;
+    cf::Window2D::LineType lineType = cf::Window2D::LineType::DEFAULT;
+};
+struct Rect{
+    int lineWidth = 1;
+    cf::Point point1 = cf::Point(0, 0);
+    cf::Point point2 = cf::Point(0, 0);
+    cf::Color color = cf::Color::BLACK;
+};
+struct Circle{
+    int lineWidth = 1;
+    int radius = 1;
+    cf::Point center = cf::Point(0, 0);
+    cf::Color color = cf::Color::BLACK;
+};
+struct CirclePartition{
+    int lineWidth = 1;
+    int radius = 1;
+    float startAngle = 0.f;
+    float endAngle = 0.f;
+    cf::Point center = cf::Point(0, 0);
+    cf::Color color = cf::Color::BLACK;
+};
+
 
 }
 

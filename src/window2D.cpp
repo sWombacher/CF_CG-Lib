@@ -112,7 +112,7 @@ bool Window2D::getInvertYAxis() const{
     return this->m_InvertYAxis;
 }
 
-void Window2D::drawCriclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color &c){
+void Window2D::drawCirclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color &c){
     this->_convertFromNewInterval(center.x, center.y);
     this->_correctYValue(center.y);
     if (this->m_InvertYAxis){
@@ -129,6 +129,12 @@ void Window2D::floodFill(Point startingPoint, const Color &c) {
 
     cv::floodFill(this->m_Image, startingPoint, cv::Scalar(c.b, c.g, c.r));
 }
+
+void Window2D::drawLine(const Line &line) { this->drawLine(line.point1, line.point2, line.lineWidth, line.color); }
+void Window2D::drawRectangle(const Rect &rect){ this->drawRectangle(rect.point1, rect.point2, rect.lineWidth, rect.color); }
+void Window2D::drawCircle(const Circle &circle){ this->drawCircle(circle.center, circle.radius, circle.lineWidth, circle.color); }
+void Window2D::drawCirclePart(const CirclePartition &cp){ this->drawCirclePart(cp.center, cp.radius, cp.startAngle, cp.endAngle, cp.lineWidth, cp.color); }
+
 void Window2D::drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& c){
     this->_convertFromNewInterval(center.x, center.y);
     this->_correctYValue(center.y);

@@ -129,7 +129,7 @@ int main() {
     // draw part of the circle
     //  you can think of the angle as the drawn line
     //  from that line we need +/- 60 degrees to reach the other circle sides
-    window.drawCriclePart(point2, pixelLength, angle - 60.f, angle + 60.f, 2, cf::Color::GREY);
+    window.drawCirclePart(point2, pixelLength, angle - 60.f, angle + 60.f, 2, cf::Color::GREY);
 
     std::cout << "\n\n\nPress enter to draw a circle part (point2 center, point1 on circle line)\n";
     window.waitKey();

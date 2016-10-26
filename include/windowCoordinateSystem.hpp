@@ -260,9 +260,9 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param color Circle color
      * @param lineWidth Line width of the circle
      */
-    void drawCriclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
+    void drawCirclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
         int pixelRadius = std::round(this->convert_intervalLength_to_pixelLength(radius));
-        Window2D::drawCriclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
+        Window2D::drawCirclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
     }
 
     // publicly available functions from class Window2D
