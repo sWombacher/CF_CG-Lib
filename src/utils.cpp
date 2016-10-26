@@ -2,6 +2,7 @@
 
 #include "utils.h"
 #include <iomanip>
+#include <random>
 #include <opencv2/opencv.hpp>
 
 typedef unsigned int uint; // may not be defined (for example on windows)
@@ -151,13 +152,13 @@ float Interval::translateIntervalPostion(const Interval& originalInterval, const
 }
 
 
-bool Color::operator==(const Color& c){
+bool Color::operator==(const Color& c) const{
     if (this->r == c.r && this->g == c.g && this->b == c.b)
         return true;
     return false;
 }
 
-bool Color::operator!=(const Color& c){
+bool Color::operator!=(const Color& c) const{
     return !(*this == c);
 }
 
@@ -167,29 +168,35 @@ Color Color::invert() const{
     return toReturn;
 }
 
+Color Color::RandomColor() {
+    static std::mt19937 gen = std::mt19937((std::random_device()).operator ()());
+    static std::uniform_int_distribution<int> dis = std::uniform_int_distribution<int>(0, 255);
+    return { uint8_t(dis(gen)), uint8_t(dis(gen)), uint8_t(dis(gen)) };
+}
 
-std::ostream& operator<<(std::ostream &os, const Color& c){
+
+std::ostream& operator<<(std::ostream &os, const Color& c) {
     os << "Red: " << int(c.r) << "   Green: " << int(c.g) << "   Blue: " << int(c.b);
     return os;
 }
 
-Color  Color::operator* (float value){
+Color  Color::operator* (float value) const{
     Color tmp = *this;
     tmp *= value;
     return tmp;
 }
-Color  Color::operator/ (float value){
+Color  Color::operator/ (float value) const{
     Color tmp = *this;
     tmp /= value;
     return tmp;
 }
 
-Color  Color::operator+ (const Color& c){
+Color  Color::operator+ (const Color& c) const{
     Color toReturn = *this;
     toReturn += c;
     return toReturn;
 }
-Color  Color::operator- (const Color& c){
+Color  Color::operator- (const Color& c) const{
     Color toReturn = *this;
     toReturn -= c;
     return toReturn;

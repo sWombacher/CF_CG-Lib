@@ -153,14 +153,14 @@ struct Color{
     uint8_t g;
     uint8_t r;
 
-    Color  operator* (float value);
-    Color  operator/ (float value);
+    Color  operator* (float value) const;
+    Color  operator/ (float value) const;
 
     Color& operator*=(float value);
     Color& operator/=(float value);
 
-    Color  operator+ (const Color& c);
-    Color  operator- (const Color& c);
+    Color  operator+ (const Color& c) const;
+    Color  operator- (const Color& c) const;
 
     Color& operator+=(const Color& c);
     Color& operator-=(const Color& c);
@@ -168,11 +168,13 @@ struct Color{
     friend cf::Color operator*(float value, const cf::Color& c);
     friend cf::Color operator/(float value, const cf::Color& c);
 
-    bool operator==(const Color& c);
-    bool operator!=(const Color& c);
+    bool operator==(const Color& c) const;
+    bool operator!=(const Color& c) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Color& c);
     Color invert() const;
+
+    static cf::Color RandomColor();
 
     static const Color MAGENTA;
     static const Color YELLOW;
