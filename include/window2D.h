@@ -183,7 +183,7 @@ public:
      * @param endAngle End position (in degrees)
      * @param color Color of the drawn line
      */
-    void drawCirclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color = cf::Color::BLACK);
+    void drawCirclePart(cf::Point center, int radius, float startAngle, float endAngle, int lineWidth, const cf::Color& color);
 
     /**
      * @brief floodFill Fills an area
@@ -193,9 +193,28 @@ public:
     void floodFill(cf::Point startingPoint, const cf::Color& color);
 
 
+    /**
+     * @brief drawLine Draws a line from line class
+     * @param line
+     */
     void drawLine(const cf::Line& line);
+
+    /**
+     * @brief drawRectangle Draws a rect from rect class
+     * @param rect
+     */
     void drawRectangle(const cf::Rect& rect);
+
+    /**
+     * @brief drawCircle Draws a circle from circle class
+     * @param circle
+     */
     void drawCircle(const cf::Circle& circle);
+
+    /**
+     * @brief drawCirclePart  Draws a circlePartition from circlePartition class
+     * @param circlePartition
+     */
     void drawCirclePart(const cf::CirclePartition& circlePartition);
 
 protected:
@@ -252,32 +271,56 @@ struct Point{
 };
 
 
+/**
+ * @brief The Line struct Simple parameter wrapper struct
+ */
 struct Line{
-    int lineWidth = 1;
-    cf::Point point1 = cf::Point(0, 0);
-    cf::Point point2 = cf::Point(0, 0);
-    cf::Color color = cf::Color::BLACK;
-    cf::Window2D::LineType lineType = cf::Window2D::LineType::DEFAULT;
+    Line(cf::Point Point1, cf::Point Point2, int LineWidth, const cf::Color& Color, cf::Window2D::LineType LineType = cf::Window2D::LineType::DEFAULT)
+        : point1(Point1), point2(Point2), lineWidth(LineWidth), color(Color), lineType(LineType){}
+
+    cf::Point point1;
+    cf::Point point2;
+    int lineWidth;
+    cf::Color color;
+    cf::Window2D::LineType lineType;
 };
+/**
+ * @brief The Rect struct Simple parameter wrapper struct
+ */
 struct Rect{
-    int lineWidth = 1;
-    cf::Point point1 = cf::Point(0, 0);
-    cf::Point point2 = cf::Point(0, 0);
-    cf::Color color = cf::Color::BLACK;
+    Rect(cf::Point Point1, cf::Point Point2, int LineWidth, const cf::Color& Color)
+        : point1(Point1), point2(Point2), lineWidth(LineWidth), color(Color){}
+
+    cf::Point point1;
+    cf::Point point2;
+    int lineWidth;
+    cf::Color color;
 };
+/**
+ * @brief The Circle struct Simple parameter wrapper struct
+ */
 struct Circle{
-    int lineWidth = 1;
-    int radius = 1;
-    cf::Point center = cf::Point(0, 0);
-    cf::Color color = cf::Color::BLACK;
+    Circle(const cf::Point& Center, int Radius, int LineWidth, const cf::Color& Color)
+        : center(Center), radius(Radius), lineWidth(LineWidth), color(Color) {}
+
+    cf::Point center;
+    int radius;
+    int lineWidth;
+    cf::Color color;
 };
+/**
+ * @brief The CirclePartition struct Simple parameter wrapper struct
+ */
 struct CirclePartition{
-    int lineWidth = 1;
-    int radius = 1;
-    float startAngle = 0.f;
-    float endAngle = 0.f;
-    cf::Point center = cf::Point(0, 0);
-    cf::Color color = cf::Color::BLACK;
+    CirclePartition(cf::Point Center, int Radius, float StartAngle, float EndAngle, int LineWidth, const cf::Color& Color)
+        : center(Center), radius(Radius), startAngle(StartAngle), endAngle(EndAngle), lineWidth(LineWidth), color(Color){}
+
+    cf::Point center;
+    int radius;
+    float startAngle;
+    float endAngle;
+    int lineWidth;
+    cf::Color color;
 };
 
 
