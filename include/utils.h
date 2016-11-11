@@ -139,6 +139,7 @@ struct Interval{
     float min;
     float max;
 
+    float translateIntervalPostion(const Interval& newInterval, float originalPosition) const;
     static float translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval, float originalPosition);
     friend std::ostream& operator<<(std::ostream& os, const Interval& interval);
 };

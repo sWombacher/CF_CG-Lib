@@ -92,25 +92,25 @@ struct WindowVectorized : protected Window2D {
 
 
     /**
-     * @brief getColor_imageSpace Get color from image i/j position
-     * @param i I position
-     * @param j J position
+     * @brief getColor_imageSpace Get color from image x/y position
+     * @param x X position
+     * @param y Y position
      * @return
      */
-    cf::Color getColor_imageSpace(int i, int j) const {
-        const cv::Vec3b& c = this->m_Image.at<cv::Vec3b>(i, j);
+    cf::Color getColor_imageSpace(int x, int y) const {
+        const cv::Vec3b& c = this->m_Image.at<cv::Vec3b>(y, x);
         return {c[2], c[1], c[0]};
     }
     /**
-     * @brief setColor_imageSpace Set color from image i/j position
-     * @param i I position
-     * @param j J position
+     * @brief setColor_imageSpace Set color from image x/y position
+     * @param x X position
+     * @param y Y position
      * @param color Color to be set
      */
-    void setColor_imageSpace(int i, int j, const cf::Color& color) {
-        this->m_Image.at<cv::Vec3b>(i, j)[0] = color.b;
-        this->m_Image.at<cv::Vec3b>(i, j)[1] = color.g;
-        this->m_Image.at<cv::Vec3b>(i, j)[2] = color.r;
+    void setColor_imageSpace(int x, int y, const cf::Color& color) {
+        this->m_Image.at<cv::Vec3b>(y, x)[0] = color.b;
+        this->m_Image.at<cv::Vec3b>(y, x)[1] = color.g;
+        this->m_Image.at<cv::Vec3b>(y, x)[2] = color.r;
     }
 
     // publicly available functions from class Window2D
@@ -119,9 +119,9 @@ struct WindowVectorized : protected Window2D {
     using Window2D::drawSpecializedLine;
     using Window2D::drawCirclePart;
     using Window2D::waitMouseInput;
+    using Window2D::drawRectangle;
     using Window2D::getIntervalX;
     using Window2D::getIntervalY;
-    using Window2D::drawRectangle;
     using Window2D::drawCircle;
     using Window2D::saveImage;
     using Window2D::getHeight;
@@ -131,6 +131,7 @@ struct WindowVectorized : protected Window2D {
     using Window2D::setColor;
     using Window2D::drawAxis;
     using Window2D::LineType;
+    using Window2D::getImage;
     using Window2D::waitKey;
     using Window2D::clear;
     using Window2D::show;
@@ -139,7 +140,7 @@ private:
     static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width){
         float diff_y = range_y.max - range_y.min;
         float diff_x = range_x.max - range_x.min;
-        return int(width * (diff_y / diff_x));
+        return int(std::round(width * (diff_y / diff_x)));
     }
     inline void _invertY(cf::Point& p){ p.y = this->getHeight() - 1 - p.y; }
 };

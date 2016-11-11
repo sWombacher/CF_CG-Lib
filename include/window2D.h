@@ -217,6 +217,13 @@ public:
      */
     void drawCirclePart(const cf::CirclePartition& circlePartition);
 
+    /**
+     * @brief operator= Copy assigment operator
+     * @param rhs Element to be copied
+     * @return
+     */
+    Window2D& operator=(const Window2D& rhs);
+
 protected:
     void _correctYValue(float& y) const;
     void _convertFromNewInterval(float& x, float& y) const;

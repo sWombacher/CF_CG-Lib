@@ -144,6 +144,10 @@ std::string Direction::toString(RelativeDirection relDir){
 }
 
 
+float Interval::translateIntervalPostion(const Interval &newInterval, float originalPosition) const {
+    return Interval::translateIntervalPostion(*this, newInterval, originalPosition);
+}
+
 float Interval::translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval, float originalPosition){
     float factor = (newInterval.max - newInterval.min) / (originalInterval.max - originalInterval.min);
     originalPosition -= originalInterval.min;

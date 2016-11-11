@@ -1,4 +1,4 @@
-#include "windowVercorized.hpp"
+#include "windowVectorized.hpp"
 
 #include <string>
 #include <sstream>

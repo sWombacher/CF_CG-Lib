@@ -135,6 +135,17 @@ void Window2D::drawRectangle(const Rect &rect){ this->drawRectangle(rect.point1,
 void Window2D::drawCircle(const Circle &circle){ this->drawCircle(circle.center, circle.radius, circle.lineWidth, circle.color); }
 void Window2D::drawCirclePart(const CirclePartition &cp){ this->drawCirclePart(cp.center, cp.radius, cp.startAngle, cp.endAngle, cp.lineWidth, cp.color); }
 
+Window2D& Window2D::operator=(const Window2D &rhs){
+    this->m_IntervalChanged = rhs.m_IntervalChanged;
+    this->m_FristShowCall = rhs.m_FristShowCall;
+    this->m_InvertYAxis = rhs.m_InvertYAxis;
+    this->m_WindowScale = rhs.m_WindowScale;
+    this->m_IntervalX = rhs.m_IntervalX;
+    this->m_IntervalY = rhs.m_IntervalY;
+    this->m_Image = rhs.m_Image.clone();
+    return *this;
+}
+
 void Window2D::drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& c){
     this->_convertFromNewInterval(center.x, center.y);
     this->_correctYValue(center.y);
