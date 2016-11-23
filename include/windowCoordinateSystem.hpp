@@ -252,7 +252,7 @@ struct WindowCoordinateSystem : protected Window2D {
 
 
     /**
-     * @brief drawCriclePart Draw a partition of a circle
+     * @brief drawCirclePart Draw a partition of a circle
      * @param center Circle center
      * @param radius Circle radius (in intervall length)
      * @param startAngle Starting angle for circle (0° -> positive x direction, 90° -> positive y direction)

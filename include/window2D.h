@@ -176,7 +176,7 @@ public:
     void drawAxis(const cf::Color& color = cf::Color::BLACK, float stepSize_x = 1.f, float stepSize_y = 1.f, float interceptLength = 3.f);
 
     /**
-     * @brief drawCriclePart Draws a part of a circle
+     * @brief drawCirclePart Draws a part of a circle
      * @param center Center point of the circle
      * @param radius Radius of the circle
      * @param startAngle Start position (in degrees)

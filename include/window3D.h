@@ -51,6 +51,7 @@ struct Window3D{
 
     /**
      * @brief startDrawing Start drawing, this function only returns afer 'ESC'-key press
+     * @brief fistClearColor Fist clear color (clear in 'draw' function might be ignored the first time)
      * @return
      */
     int startDrawing();
@@ -101,7 +102,28 @@ struct Window3D{
      */
     void drawCylinder(const glm::vec4& drawingDirection, const glm::vec4& position, float diameter = 1.f, const Color& color = Color::WHITE) const;
 
-    /**
+
+
+	// Groch
+	/**
+	* @brief drawSphere Draws a solid Sphere
+	* @param position Midpoint position
+	* @param diameter Sphere diamenter
+	* @param color Sphere color
+	*/
+	void drawSphere(const glm::vec3& position, float diameter = 1.f, const Color& color = Color::WHITE) const;
+
+	// Groch
+	/**
+	* @brief drawCube Draws a solid Cube
+	* @param position Midpoint position
+	* @param size Cube size
+	* @param color Cube color
+	*/
+	void drawCube(const glm::vec3& position, float size = 1.f, const Color& color = Color::WHITE) const;
+
+
+	/**
      * @brief setMaxFPS Set maximum frames per second
      * @param maxFPS values > 0 indicates capped fps, value of 0 indicates "only draw after key-input", 0 is default
      */
