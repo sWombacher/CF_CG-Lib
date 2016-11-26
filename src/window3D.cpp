@@ -282,16 +282,7 @@ void Window3D::drawSphere(const glm::vec3& position, float diameter, const Color
 		glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
 		glTranslatef(position.x, position.y, position.z);
 		glScalef(diameter, diameter, diameter);
-
-#ifndef __APPLE__
 		glutSolidSphere(1.f, 10, 10);
-#else
-		glScalef(1.f, 1.f, glm::length(drawingDirection) / diameter);
-		glTranslatef(0.f, 0.f, 0.5f);
-		glutSolidCube(1.f);
-		glRotatef(45.f, 0.f, 0.f, 1.f);
-		glutSolidCube(1.f);
-#endif
 	}
 	glPopMatrix();
 }
@@ -305,16 +296,7 @@ void Window3D::drawCube(const glm::vec3& position, float size, const Color& colo
 		glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
 		glTranslatef(position.x, position.y, position.z);
 		glScalef(size, size, size);
-
-#ifndef __APPLE__
 		glutSolidCube(1.f);
-#else
-		glScalef(1.f, 1.f, glm::length(drawingDirection) / diameter);
-		glTranslatef(0.f, 0.f, 0.5f);
-		glutSolidCube(1.f);
-		glRotatef(45.f, 0.f, 0.f, 1.f);
-		glutSolidCube(1.f);
-#endif
 	}
 	glPopMatrix();
 }

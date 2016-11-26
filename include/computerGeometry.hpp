@@ -38,7 +38,7 @@ namespace cf{
 /**
  * @brief The Vec3 struct General class for vector operations
  *
- * it porvieds:
+ * it porvides:
  *  - conversions from/to cf::Point and glm::vec3
  *  - Cross product ('operator%') and dot product ('operator*') with other vectors
  *  - Support for DirectionVectors and PointVectors (see typedef 'PointVector' and 'DirectionVector')
@@ -105,7 +105,7 @@ struct Vec3{
      * @return
      */
     template<bool RHS>
-    Vec3<RHS | POINTVECTOR>  operator% (const Vec3<RHS>& rhs) const{
+    Vec3<RHS | POINTVECTOR> operator% (const Vec3<RHS>& rhs) const{
         Vec3<RHS | POINTVECTOR> tmp;
         tmp.m_Data = glm::cross(this->m_Data, rhs.m_Data);
         return tmp;
