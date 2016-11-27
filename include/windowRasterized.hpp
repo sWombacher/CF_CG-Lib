@@ -40,6 +40,7 @@ struct WindowRasterized : protected Window2D {
     using Window2D::drawCircle;
     using Window2D::saveImage;
     using Window2D::getHeight;
+    using Window2D::floodFill;
     using Window2D::getWidth;
     using Window2D::drawLine;
     using Window2D::getImage;
