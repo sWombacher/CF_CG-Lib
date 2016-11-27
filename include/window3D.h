@@ -34,7 +34,7 @@ struct Window3D{
      */
     static void printWindowUsage();
 
-    void clear(const Color& color = Color::BLACK);
+    void clear(const Color& color = Color::WHITE);
 
     /**
      * @brief draw Draw function, this has to be implemented
