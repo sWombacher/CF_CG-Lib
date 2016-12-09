@@ -156,20 +156,28 @@ float Interval::translateIntervalPostion(const Interval& originalInterval, const
 }
 
 
+bool Color::operator< (const Color& c) const{
+    static_assert(sizeof(c.r) + sizeof(c.g) + sizeof(c.b) <= sizeof(int),
+                  "Error: color2integer function generates undefined behavior!");
+
+    auto color2integer = [](const Color& color) -> int {
+        return (int(color.r) << (sizeof(color.r) * 8 * 2)) +
+               (int(color.g) << (sizeof(color.g) * 8 * 1)) +
+               (int(color.b) << (sizeof(color.b) * 8 * 0));
+    };
+    return color2integer(*this) < color2integer(c);
+}
 bool Color::operator==(const Color& c) const{
-    if (this->r == c.r && this->g == c.g && this->b == c.b)
-        return true;
-    return false;
+    return this->r == c.r && this->g == c.g && this->b == c.b;
 }
 
-bool Color::operator!=(const Color& c) const{
-    return !(*this == c);
-}
+bool Color::operator> (const Color& c) const{ return c < *this; }
+bool Color::operator!=(const Color& c) const{ return !(*this == c); }
+bool Color::operator<=(const Color& c) const{ return !(*this >  c); }
+bool Color::operator>=(const Color& c) const{ return !(*this <  c); }
 
 Color Color::invert() const{
-    Color toReturn = cf::Color::WHITE;
-    toReturn -= *this;
-    return toReturn;
+    return cf::Color::WHITE - (*this);
 }
 
 Color Color::RandomColor() {

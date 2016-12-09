@@ -172,9 +172,23 @@ struct Color{
     bool operator==(const Color& c) const;
     bool operator!=(const Color& c) const;
 
+    bool operator< (const Color& c) const;
+    bool operator> (const Color& c) const;
+    bool operator<=(const Color& c) const;
+    bool operator>=(const Color& c) const;
+
     friend std::ostream& operator<<(std::ostream& os, const Color& c);
+
+    /**
+     * @brief invert Invert a color, for example cf::Color::BLACK will be changed to cf::Color::WHITE
+     * @return Inverted cf::Color
+     */
     Color invert() const;
 
+    /**
+     * @brief RandomColor Produces a color with random red, green and blue channel
+     * @return Random cf::Color
+     */
     static cf::Color RandomColor();
 
     bool operator<(const cf::Color& rhs) const;

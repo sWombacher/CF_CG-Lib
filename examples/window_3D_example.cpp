@@ -103,6 +103,10 @@ int main(int argc, char** argv){
     // default: 0 - draw after each key-input
     //window.setMaxFPS(60.f);
 
+// set first clear color
+    // I don't know why the first 'clear' within function MyWindow::draw does nothing....
+    window.clear();
+
 // start drawing
     // function returns when the "esc-key" is pressed
     return window.startDrawing();

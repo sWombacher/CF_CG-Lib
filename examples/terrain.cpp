@@ -101,6 +101,10 @@ int main(int argc, char** argv){
     MyWindow::printWindowUsage();
     MyWindow window(&argc, argv, img, col);
 
+    // first clear in function MyWindow::draw will be ignored
+    // I don't know why....
+    window.clear();
+
     // setup camera
     window.setCamera(MyWindow::CameraType::ROTATION);
     window.setupCameraParameter();

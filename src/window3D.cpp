@@ -39,16 +39,19 @@ Window3D::~Window3D(){
 }
 
 void Window3D::printWindowUsage(){
-    std::cout << "Close window:\n"
-              << "esc-key\n\n"
-              << "Camera usage:\n"
-              << "a/d: camera movement left/right\n"
-              << "w/s: camera movement up/down\n"
-              << "f/r: move camera closer/further away\n\n"
-              << "Rotation-Type specific movements:\n"
-              << "q/e: rotation y-axis\n"
-              << "y/c: rotation x-axis\n"
-              << std::endl;
+    std::cout
+#ifndef __APPLE__
+        << "Close window:\n"
+        << "esc-key\n\n"
+#endif
+        << "Camera usage:\n"
+        << "a/d: camera movement left/right\n"
+        << "w/s: camera movement up/down\n"
+        << "f/r: move camera closer/further away\n\n"
+        << "Rotation-Type specific movements:\n"
+        << "q/e: rotation y-axis\n"
+        << "y/c: rotation x-axis\n"
+        << std::endl;
 }
 
 
