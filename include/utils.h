@@ -177,6 +177,8 @@ struct Color{
 
     static cf::Color RandomColor();
 
+    bool operator<(const cf::Color& rhs) const;
+
     static const Color MAGENTA;
     static const Color YELLOW;
     static const Color ORANGE;

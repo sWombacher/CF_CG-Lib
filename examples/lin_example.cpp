@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
     if (argc < 2){
         std::cout << "Please provide a .lin file, if you want a different file\n\n\n";
         filePath = CHAOS_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/chaos_files
-        filePath += "Busch_1.lin";
+        filePath += "Baum_3d_1.lin";
     }
     else
         filePath = argv[1];
@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
               << "Number of productions"   << align << ls.getNumProductions()                    << '\n'
               << "Clear window each time?" << align << (ls.clearWindowEachTime() ? "yes" : "no") << '\n'
               << "Start angle"             << align << ls.getStartAngle()                        << '\n'
-              << "Adjustment angle"        << align << ls.getAdjustmentAngel()                   << '\n'
+              << "Adjustment angle"        << align << ls.getAdjustmentAngle()                   << '\n'
               << "Scale"                   << align << ls.getScale()                             << '\n'
               << "Interval X"              << align << ls.getRangeX()                            << '\n'
               << "Interval Y"              << align << ls.getRangeY()                            << '\n'
@@ -48,7 +48,12 @@ int main(int argc, char** argv) {
         std::cout << "Symbol: " << e.first << "\nProduction: " << e.second << std::endl << std::endl;
     }
 
-    std::cout << "Press enter to finish the process";
-	cf::Console::waitKey();
+    //std::cout << "Press enter to finish the process";
+    //cf::Console::waitKey();
+
+    cf::LSystem_Controller con(2, ls);
+    for (const auto& e : con)
+        std::cout << e << std::flush;
+    std::cout << std::endl;
     return 0;
 }

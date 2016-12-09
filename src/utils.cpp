@@ -178,6 +178,15 @@ Color Color::RandomColor() {
     return { uint8_t(dis(gen)), uint8_t(dis(gen)), uint8_t(dis(gen)) };
 }
 
+bool Color::operator<(const Color &rhs) const{
+    auto color2int = [](const Color c){
+        return (int(c.r) << sizeof(c.r) * 8 * 0) ||
+               (int(c.g) << sizeof(c.g) * 8 * 1) ||
+               (int(c.b) << sizeof(c.b) * 8 * 2);
+    };
+    return color2int(*this) < color2int(rhs);
+}
+
 
 std::ostream& operator<<(std::ostream &os, const Color& c) {
     os << "Red: " << int(c.r) << "   Green: " << int(c.g) << "   Blue: " << int(c.b);

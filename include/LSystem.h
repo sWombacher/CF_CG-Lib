@@ -2,8 +2,8 @@
 #define LSYSTEM_H_H
 
 #include <string>
-#include <vector>
 #include <memory>
+#include <map>
 
 #include <glm/glm.hpp>
 
@@ -37,15 +37,15 @@ struct LindenmayerSystem{
 
     float getScale() const;
     float getStartAngle() const;
-    float getAdjustmentAngel() const;
+    float getAdjustmentAngle() const;
 
-    const std::vector<std::pair<const char, const std::string> >& getAllProductions() const;
+    const std::map<char, const std::string>& getAllProductions() const;
 
 private:
     std::string m_Name;
 
     char m_Axiom;
-    std::vector<std::pair<const char, const std::string> > m_Productions;
+    std::map<char, const std::string> m_Productions;
 
 
     float m_Scale;
@@ -60,6 +60,38 @@ private:
 };
 
 typedef LindenmayerSystem LSystem; // short version for lazy people like myself :)
+
+
+
+
+struct LSystem_Controller{
+    LSystem_Controller(const size_t depth, const LSystem& LSystem);
+
+    struct iterator {
+        const char& operator*();
+        iterator& operator++();
+        bool operator!=(const iterator& rhs);
+
+    private:
+        friend struct LSystem_Controller;
+        iterator(const LSystem& lsystem, size_t depth, bool endIterator);
+
+        std::vector<std::pair<int, char>> m_Positions;
+        char m_CurrentProduction = '\0';
+        size_t m_CurrentDepth = 0;
+        const LSystem& m_LSystem;
+        bool m_EndReached;
+    };
+
+    iterator begin();
+    iterator end  ();
+
+private:
+    const size_t m_Depth;
+    const LSystem& m_LSystem;
+};
+
+
 }
 
 

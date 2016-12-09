@@ -38,9 +38,7 @@ void LindenmayerSystem::read(const std::string& filePath){
         _removeWindowsSpecificCarriageReturn(str);
         char symbol = str[0];
         str = str.substr(str.find('>') + 1);
-        //str = str.substr(0, str.size() -1);
-
-        this->m_Productions.push_back(std::make_pair(symbol, str));
+        this->m_Productions.emplace(symbol, str);
     }
 
     std::getline(input, str);
@@ -102,10 +100,9 @@ char LindenmayerSystem::getAxiom() const{
 }
 
 const std::string* LindenmayerSystem::getProduction(char symbol) const{
-    for (std::size_t i = 0; i < this->m_Productions.size(); ++i){
-        if (this->m_Productions[i].first == symbol)
-            return &this->m_Productions[i].second;
-    }
+    auto found = this->m_Productions.find(symbol);
+    if (found != this->m_Productions.end())
+        return &found->second;
     return nullptr;
 }
 
@@ -131,17 +128,76 @@ float LindenmayerSystem::getScale() const{
 float LindenmayerSystem::getStartAngle() const{
     return this->m_StartAngle;
 }
-float LindenmayerSystem::getAdjustmentAngel() const{
+float LindenmayerSystem::getAdjustmentAngle() const{
     return this->m_AdjustmentAngle;
 }
 
-const std::vector<std::pair<const char, const std::string> > &LindenmayerSystem::getAllProductions() const{
+const std::map<char, const std::string>& LindenmayerSystem::getAllProductions() const{
     return this->m_Productions;
 }
 
 std::ostream& operator<<(std::ostream& os, const Interval& interval){
     os << '[' << interval.min << ", " << interval.max << ']';
     return os;
+}
+
+LSystem_Controller::LSystem_Controller(const size_t depth, const LSystem &LSystem) : m_Depth(depth), m_LSystem(LSystem){}
+
+LSystem_Controller::iterator LSystem_Controller::begin() { return iterator(this->m_LSystem, this->m_Depth, false); }
+
+LSystem_Controller::iterator LSystem_Controller::end() { return iterator(this->m_LSystem, this->m_Depth, true ); }
+
+const char &LSystem_Controller::iterator::operator*(){
+    return this->m_LSystem.getProduction(this->m_CurrentProduction)->at(this->m_Positions.at(this->m_CurrentDepth).first);
+}
+
+LSystem_Controller::iterator &LSystem_Controller::iterator::operator++(){
+    if (this->m_EndReached)
+        throw std::runtime_error("Bound exception");
+
+    while(true){
+        const std::string& cur_production = *this->m_LSystem.getProduction(this->m_CurrentProduction);
+        auto& cur_pos = this->m_Positions[this->m_CurrentDepth];
+        ++cur_pos.first;
+
+        if (size_t(cur_pos.first) >= cur_production.size()){
+            if (this->m_CurrentDepth == 0){
+                this->m_EndReached = true;
+                return *this;
+            }
+
+            // go up
+            --this->m_CurrentDepth;
+            this->m_CurrentProduction = this->m_Positions[this->m_CurrentDepth].second;
+        }
+        else{
+            // check for terminal symbol
+            char curSymbol = cur_production[cur_pos.first];
+            if (this->m_LSystem.getProduction(curSymbol) == nullptr)
+                return *this;
+
+            // go down
+            if (this->m_CurrentDepth >= this->m_Positions.size() - 1)
+                return *this;
+
+            cur_pos.second = this->m_CurrentProduction;
+            ++this->m_CurrentDepth;
+            this->m_Positions[this->m_CurrentDepth].first = -1;
+            this->m_CurrentProduction = curSymbol;
+        }
+    }
+}
+
+bool LSystem_Controller::iterator::operator!=(const LSystem_Controller::iterator &rhs){
+    if (this->m_EndReached && rhs.m_EndReached)
+        return false;
+    return this->m_Positions != rhs.m_Positions;
+}
+
+LSystem_Controller::iterator::iterator(const LSystem &lsystem, size_t depth, bool endIterator): m_Positions(depth, {endIterator ? (1 << 31) : -1, '\0'}), m_LSystem(lsystem), m_EndReached(endIterator) {
+    this->m_CurrentProduction = lsystem.getAxiom();
+    if (!endIterator)
+        this->operator ++();
 }
 
 }

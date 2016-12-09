@@ -1,0 +1,10 @@
+BasedOnStyle: LLVM
+TabWidth: 4
+AlignTrailingComments: true
+AllowShortFunctionsOnASingleLine: true
+IndentFunctionDeclarationAfterType: true
+PointerBindsToType: true
+BreakBeforeBraces: Attach
+BreakConstructorInitializersBeforeComma: false
+NamespaceIndentation: All
+IndentWidth: 4
