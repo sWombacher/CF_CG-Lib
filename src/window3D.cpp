@@ -125,10 +125,10 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
 
     // adjust left/up vectors to correct length
     left = glm::normalize(left);
-    left *= windowPtr->m_CameraAdjustment;
+    left *= windowPtr->m_CameraAdjustment * windowPtr->m_LookAtDistance / 10.f;
 
     up = glm::normalize(up);
-    up *= windowPtr->m_CameraAdjustment;
+    up *= windowPtr->m_CameraAdjustment * windowPtr->m_LookAtDistance / 10.f;
 
     switch (key){
     case 'a':
