@@ -63,9 +63,19 @@ typedef LindenmayerSystem LSystem; // short version for lazy people like myself 
 
 
 
-
+/**
+ * @brief The LSystem_Controller struct\n
+ * This class enables easy iterating above a given iteration depth\n
+ *
+ * usage: \n
+ \verbatim
+ LSystem_Controller myController(<depth>, <lsystem>);
+ for (char c : myController)
+      std::cout << c;
+ \endverbatim
+ */
 struct LSystem_Controller{
-    LSystem_Controller(const size_t depth, const LSystem& LSystem);
+    LSystem_Controller(size_t depth, const LSystem& LSystem);
 
     struct iterator {
         const char& operator*();

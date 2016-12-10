@@ -26,7 +26,12 @@ void LindenmayerSystem::read(const std::string& filePath){
     // read axiom
     std::getline(input, str);
     _removeWindowsSpecificCarriageReturn(str);
-    this->m_Axiom = str[0];
+    if (str.size() > 1){
+        this->m_Axiom = 'A';
+        this->m_Productions.emplace('A', str);
+    }
+    else
+        this->m_Axiom = str[0];
 
     // read num productions
     std::getline(input, str);
@@ -141,7 +146,7 @@ std::ostream& operator<<(std::ostream& os, const Interval& interval){
     return os;
 }
 
-LSystem_Controller::LSystem_Controller(const size_t depth, const LSystem &LSystem) : m_Depth(depth), m_LSystem(LSystem){}
+LSystem_Controller::LSystem_Controller(size_t depth, const LSystem &LSystem) : m_Depth(depth), m_LSystem(LSystem){}
 
 LSystem_Controller::iterator LSystem_Controller::begin() { return iterator(this->m_LSystem, this->m_Depth, false); }
 
