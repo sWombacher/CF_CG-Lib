@@ -225,7 +225,7 @@ void _MouseCtlClickCallbackFunction(int button, int press, int y, int x){
         _MouseCtlLastZoomMode = button == 2; // 0 = left, 1 = middle, 2 = right
 
     if (windowPtr->m_AdditionalMouseClickCallback)
-        windowPtr->m_AdditionalMouseClickCallback((Window3D::MouseButton)button,
+        windowPtr->m_AdditionalMouseClickCallback(static_cast<Window3D::MouseButton>(button),
                                                   (press == GLUT_DOWN)?Window3D::MouseButtonEvent::PRESSED:Window3D::MouseButtonEvent::RELEASED,
                                                   x,
                                                   y);
@@ -234,14 +234,14 @@ void _MouseCtlClickCallbackFunction(int button, int press, int y, int x){
 void _MouseCtlMotionCallbackFunction(int y, int x){
     bool preventDefault = false;
     if (windowPtr->m_AdditionalMouseMotionCallback)
-        preventDefault = windowPtr->m_AdditionalMouseMotionCallback((Window3D::MouseButton)_MouseCtlBtn,x,y);
+        preventDefault = windowPtr->m_AdditionalMouseMotionCallback(static_cast<Window3D::MouseButton>(_MouseCtlBtn),x,y);
 
     if(!preventDefault){
         if(_MouseCtlLastZoomMode){
-            windowPtr->m_LookAtDistance +=  (_MouseCtlLastX > -1.f ? (_MouseCtlLastX-x)/M_PI : 0.f);
+            windowPtr->m_LookAtDistance +=  (_MouseCtlLastX > -1 ? (_MouseCtlLastX-x)/glm::pi<float>() : 0.f);
         }else{
-            windowPtr->m_RotationAngle_X += (_MouseCtlLastX > -1.f ? _MouseCtlLastX-x : 0.f);
-            windowPtr->m_RotationAngle_Y += (_MouseCtlLastY > -1.f ? _MouseCtlLastY-y : 0.f);
+            windowPtr->m_RotationAngle_X += (_MouseCtlLastX > -1 ? _MouseCtlLastX-x : 0.f);
+            windowPtr->m_RotationAngle_Y += (_MouseCtlLastY > -1 ? _MouseCtlLastY-y : 0.f);
         }
         _MouseCtlLastY = y;
         _MouseCtlLastX = x;
@@ -303,7 +303,7 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
         glScalef(diameter, diameter, diameter);
 
 #ifndef __APPLE__
-        glutSolidCylinder(1.f, glm::length(drawingDirection) / diameter, 10, 10);
+        glutSolidCylinder(1.0, double(glm::length(drawingDirection) / diameter), 10, 10);
 #else
 		glScalef(1.f, 1.f, glm::length(drawingDirection) / diameter);
 		glTranslatef(0.f, 0.f, 0.5f);
