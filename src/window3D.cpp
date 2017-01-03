@@ -212,7 +212,18 @@ static bool _MouseCtlLastZoomMode = false;
 void _MouseCtlClickCallbackFunction(int button, int press, int y, int x){
     _MouseCtlLastX = _MouseCtlLastY = -1;
     _MouseCtlBtn = button;
-    _MouseCtlLastZoomMode = button == 2; // 0 = left, 1 = middle, 2 = right
+
+    if (button == 3){
+        windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment;
+        windowPtr->_AdjustCamera();
+    }
+    else if (button == 4){
+        windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment;
+        windowPtr->_AdjustCamera();
+    }
+    else
+        _MouseCtlLastZoomMode = button == 2; // 0 = left, 1 = middle, 2 = right
+
     if (windowPtr->m_AdditionalMouseClickCallback)
         windowPtr->m_AdditionalMouseClickCallback((Window3D::MouseButton)button,
                                                   (press == GLUT_DOWN)?Window3D::MouseButtonEvent::PRESSED:Window3D::MouseButtonEvent::RELEASED,
