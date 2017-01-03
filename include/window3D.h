@@ -23,11 +23,44 @@ struct Window3D{
     virtual ~Window3D();
 
     /**
+     * @brief Friendly mousebutton mnmes
+     */
+    enum class MouseButton{
+        LEFT, CENTER, RIGHT,WHEEL_UP, WHEEL_DOWN
+    };
+
+    /**
+     * @brief Friendly mousebutton events
+     */
+    enum class MouseButtonEvent{
+        RELEASED, PRESSED
+    };
+
+    /**
      * @brief The CameraType enum providing access to camera types, default: 'CameraType::ROTATION'
      */
     enum class CameraType{
         NONE, ROTATION, FREE_MOVEMENT, STATIC_X_AXIS, STATIC_Y_AXIS, STATIC_Z_AXIS
     };
+
+    /**
+     * @brief handleMousePressedMovement Access mouse movement position while one mousebutton is pressed. Should return true if the default behavior (rotate Camera around object) should be dismissed.
+     * @param button The pressed Mousebutton
+     * @param x Mouse-x-position
+     * @param y Mouse-y-position
+     * @return Should return true if the default behavior (rotate Camera around object) should be dismissed.
+     */
+    virtual bool handleMousePressedMovement(MouseButton button, int x, int y);
+
+    /**
+     * @brief handleMousePress Access mousebutton presses or releases on position
+     * @param button The pressed Mousebutton
+     * @param event The button event
+     * @param x Mouse-x-position of the event
+     * @param y Mouse-y-position of the event
+     */
+    virtual void handleMousePressEvent(MouseButton button, MouseButtonEvent event, int x, int y);
+
 
     /**
      * @brief printWindowUsage Print camera usage to console
@@ -65,7 +98,7 @@ struct Window3D{
      * @param lookAt
      * @param distance
      */
-    void setCamera(CameraType type, glm::vec3 lookAt = glm::vec3(0, 0, 0), float distance = 10.f);
+    void setCamera(CameraType type, glm::vec3 lookAt = glm::vec3(0, 0, 0), float distance = 10.f, glm::vec3 positionCorrection = glm::vec3(0,0,0));
 
     /**
      * @brief drawAxis Draw x-,y- and z-axis
@@ -148,6 +181,7 @@ protected:
     glm::vec3 m_LookAt = glm::vec3(0.f, 0.f, 0.f);
     float m_LookAtDistance = 10.f;
 
+    glm::vec3 m_CameraPositionCorrection = glm::vec3(0.f,0.f,0.f);
 
     float m_RotationAngle_Y = 0.f;
     float m_RotationAngle_X = 0.f;
@@ -162,10 +196,14 @@ protected:
 private:
     friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
     friend void _DrawingFunction();
+    friend void _MouseCtlClickCallbackFunction(int button, int press, int y, int x);
+    friend void _MouseCtlMotionCallbackFunction(int y, int x);
 
     float m_MaxFPS = 0.f;
 
     std::function<void(unsigned char key, int x, int y)> m_AdditionalKeyboardCallback;
+    std::function<bool(MouseButton btn, int x, int y)> m_AdditionalMouseMotionCallback;
+    std::function<void(MouseButton button, MouseButtonEvent event, int x, int y)> m_AdditionalMouseClickCallback;
     int m_Width;
     int m_Height;
 

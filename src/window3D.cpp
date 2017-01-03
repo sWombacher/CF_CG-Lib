@@ -30,6 +30,12 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
 	this->m_AdditionalKeyboardCallback = [this](unsigned char key, int x, int y) {
 		this->handleKeyboardInput(key, x, y);
 	};
+    this->m_AdditionalMouseMotionCallback = [this](MouseButton button, int x, int y){
+        return this->handleMousePressedMovement(button, x, y);
+    };
+    this->m_AdditionalMouseClickCallback = [this](MouseButton button, MouseButtonEvent event, int x, int y){
+        this->handleMousePressEvent(button, event, x, y);
+    };
 
     // enable lighting by default
     glEnable(GL_LIGHTING);
@@ -198,11 +204,47 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
 }
 
 void Window3D::handleKeyboardInput(unsigned char, int, int){}
+bool Window3D::handleMousePressedMovement(MouseButton, int, int){return false;}
+void Window3D::handleMousePressEvent(MouseButton, MouseButtonEvent, int, int){}
+
+static int _MouseCtlLastX = -1, _MouseCtlLastY = -1, _MouseCtlBtn = -1;
+static bool _MouseCtlLastZoomMode = false;
+void _MouseCtlClickCallbackFunction(int button, int press, int y, int x){
+    _MouseCtlLastX = _MouseCtlLastY = -1;
+    _MouseCtlBtn = button;
+    _MouseCtlLastZoomMode = button == 2; // 0 = left, 1 = middle, 2 = right
+    if (windowPtr->m_AdditionalMouseClickCallback)
+        windowPtr->m_AdditionalMouseClickCallback((Window3D::MouseButton)button,
+                                                  (press == GLUT_DOWN)?Window3D::MouseButtonEvent::PRESSED:Window3D::MouseButtonEvent::RELEASED,
+                                                  x,
+                                                  y);
+}
+
+void _MouseCtlMotionCallbackFunction(int y, int x){
+    bool preventDefault = false;
+    if (windowPtr->m_AdditionalMouseMotionCallback)
+        preventDefault = windowPtr->m_AdditionalMouseMotionCallback((Window3D::MouseButton)_MouseCtlBtn,x,y);
+
+    if(!preventDefault){
+        if(_MouseCtlLastZoomMode){
+            windowPtr->m_LookAtDistance +=  (_MouseCtlLastX > -1.f ? (_MouseCtlLastX-x)/M_PI : 0.f);
+        }else{
+            windowPtr->m_RotationAngle_X += (_MouseCtlLastX > -1.f ? _MouseCtlLastX-x : 0.f);
+            windowPtr->m_RotationAngle_Y += (_MouseCtlLastY > -1.f ? _MouseCtlLastY-y : 0.f);
+        }
+        _MouseCtlLastY = y;
+        _MouseCtlLastX = x;
+    }
+    windowPtr->_AdjustCamera();
+}
+
 
 int Window3D::startDrawing(){
     windowPtr = this;
     glutKeyboardFunc(_KeyboardCallbackFunction);
     glutDisplayFunc(_DrawingFunction);
+    glutMotionFunc(_MouseCtlMotionCallbackFunction);
+    glutMouseFunc(_MouseCtlClickCallbackFunction);
 
     // enable light 0
     // this only works if 'GL_LIGHTING' is enabled (default)
@@ -383,10 +425,11 @@ int Window3D::getWindowHeight() const{
     return this->m_Height;
 }
 
-void Window3D::setCamera(Window3D::CameraType type, glm::vec3 lookAt, float distance){
+void Window3D::setCamera(Window3D::CameraType type, glm::vec3 lookAt, float distance, glm::vec3 positionCorrection){
     this->m_CameraType     = type;
     this->m_LookAt         = lookAt;
     this->m_LookAtDistance = distance;
+    this->m_CameraPositionCorrection = positionCorrection;
     this->_AdjustCamera();
 }
 

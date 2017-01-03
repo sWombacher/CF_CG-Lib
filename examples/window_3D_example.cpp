@@ -69,6 +69,61 @@ public:
             this->m_Length = key - '0';
     }
 
+    bool handleMousePressedMovement(MouseButton btn, int x, int y) override {
+        std::string button = "N/A";
+        switch (btn) {
+        case MouseButton::CENTER:
+            button = "middle";
+            break;
+        case MouseButton::LEFT:
+            button = "left";
+            break;
+        case MouseButton::RIGHT:
+            button = "right";
+            break;
+        default:
+            break;
+        }
+        std::cout << "Mouse moved to (" << x << "," << y << ") while the "
+                  << button << " button was pressed." << std::endl;
+
+        // Set returnvalue to true to prevent camera movement
+        return false;
+    }
+
+    void handleMousePressEvent(MouseButton btn, MouseButtonEvent ev, int x, int y) override {
+        std::string button = "N/A";
+        std::string event = "N/A";
+        switch (btn) {
+        case MouseButton::CENTER:
+            button = "middle";
+            break;
+        case MouseButton::LEFT:
+            button = "left";
+            break;
+        case MouseButton::RIGHT:
+            button = "right";
+            break;
+        case MouseButton::WHEEL_UP:
+            button = "wheel up";
+            break;
+        case MouseButton::WHEEL_DOWN:
+            button = "wheel down";
+            break;
+        default:
+            break;
+        }
+        switch (ev) {
+        case MouseButtonEvent::PRESSED:
+            event = "pressed";
+            break;
+        case MouseButtonEvent::RELEASED:
+            event = "released";
+        }
+        std::cout << "Mouse at (" << x << "," << y << ") while the " << button
+                  << " button was " << event << "." << std::endl;
+    }
+
 private:
     float m_Diameter = 0.1f;
     float m_Length = 1.f;
