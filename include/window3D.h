@@ -198,6 +198,7 @@ private:
     friend void _DrawingFunction();
     friend void _MouseCtlClickCallbackFunction(int button, int press, int y, int x);
     friend void _MouseCtlMotionCallbackFunction(int y, int x);
+    friend void _WindowResizeEvent(int w, int h);
 
     float m_MaxFPS = 0.f;
 

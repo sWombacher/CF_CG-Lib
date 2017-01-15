@@ -62,6 +62,12 @@ void Window3D::printWindowUsage(){
 
 
 static Window3D* windowPtr = nullptr;
+void _WindowResizeEvent(int w, int h){
+    windowPtr->m_Width = w;
+    windowPtr->m_Height = h;
+    windowPtr->_AdjustCamera();
+}
+
 void _DrawingFunction(){
     if (!windowPtr)
         throw std::runtime_error("Error: window ptr not set!");
@@ -256,6 +262,7 @@ int Window3D::startDrawing(){
     glutDisplayFunc(_DrawingFunction);
     glutMotionFunc(_MouseCtlMotionCallbackFunction);
     glutMouseFunc(_MouseCtlClickCallbackFunction);
+    glutReshapeFunc(_WindowResizeEvent);
 
     // enable light 0
     // this only works if 'GL_LIGHTING' is enabled (default)
