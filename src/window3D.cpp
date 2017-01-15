@@ -190,11 +190,13 @@ void _KeyboardCallbackFunction(unsigned char key, int x, int y){
         break;
 
     case 'r':
-        windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment;
+        //windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment;
+        windowPtr->_ZoomCamera(true);
         windowPtr->m_FreeCamera_position -= windowPtr->m_FreeCamera_LookDirection;
         break;
     case 'f':
-        windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment;
+        //windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment;
+        windowPtr->_ZoomCamera(false);
         windowPtr->m_FreeCamera_position += windowPtr->m_FreeCamera_LookDirection;
         break;
 
@@ -220,11 +222,13 @@ void _MouseCtlClickCallbackFunction(int button, int press, int y, int x){
     _MouseCtlBtn = button;
 
     if (button == 3){
-        windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment;
+        //windowPtr->m_LookAtDistance -= windowPtr->m_DistAdjustment;
+        windowPtr->_ZoomCamera(false);
         windowPtr->_AdjustCamera();
     }
     else if (button == 4){
-        windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment;
+        //windowPtr->m_LookAtDistance += windowPtr->m_DistAdjustment;
+        windowPtr->_ZoomCamera(true);
         windowPtr->_AdjustCamera();
     }
     else
@@ -424,6 +428,11 @@ void Window3D::_AdjustCamera(){
         throw std::runtime_error("Error: Unknown CameraType");
     }
     glutPostRedisplay();
+}
+
+void Window3D::_ZoomCamera(bool positveZoom){
+    this->m_LookAtDistance += positveZoom ? this->m_DistAdjustment : -this->m_DistAdjustment;;
+    this->m_DistAdjustment = std::abs(this->m_LookAtDistance) / 10.f + 0.1f;
 }
 
 void Window3D::setMaxFPS(float maxFPS){
