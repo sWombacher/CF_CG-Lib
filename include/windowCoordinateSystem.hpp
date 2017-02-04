@@ -260,8 +260,47 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param lineWidth Line width of the circle
      */
     void drawCirclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
-        int pixelRadius = std::round(this->convert_intervalLength_to_pixelLength(radius));
+        const int pixelRadius = static_cast<int>(std::round(this->convert_intervalLength_to_pixelLength(radius)));
         Window2D::drawCirclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
+    }
+
+    void drawCirclePart(const cf::Point& center, const cf::Point& p0, const cf::Point& p1, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1, bool smallerAngle = true){
+        const cf::Point dir0 = p0 - center;
+        const cf::Point dir1 = p1 - center;
+        const float tmp_rad0 = std::sqrt(dir0.x * dir0.x + dir0.y * dir0.y);
+        const float tmp_rad1 = std::sqrt(dir1.x * dir1.x + dir1.y * dir1.y);
+        if (std::abs(tmp_rad0 - tmp_rad1) > 0.0001f)
+            throw std::runtime_error("Error: provided points have different distances towards the center");
+
+        auto calculateAngle = [&center](const cf::Point& p) -> float{
+            const cf::Point tmp = p - center;
+            if (std::abs(tmp.x) < cf::WindowCoordinateSystem::ZERO_COMPARE){
+                if (tmp.y > 0.f)
+                    return 90.f;
+                else if (tmp.y < 0.f)
+                    return 270.f;
+                else
+                    throw std::runtime_error("Error: Center and a point are equal");
+            }
+            const float radiant = std::atan(tmp.y / tmp.x);
+            float degree = cf::radian2degree(radiant);
+            if (tmp.x < 0.f)
+                degree -= 180.f;
+            while (degree < 0.f)
+                degree += 360.f;
+            return degree;
+        };
+        const float radius = tmp_rad0;
+        float startAngle = calculateAngle(p0);
+        float endAngle = calculateAngle(p1);
+
+        startAngle = std::fmod(startAngle, 360.f);
+        endAngle = std::fmod(endAngle, 360.f);
+        if ((std::abs(endAngle - startAngle) > 180.f) == smallerAngle){
+            auto& angle = startAngle < endAngle ? endAngle : startAngle;
+            angle -= 360.f;
+        }
+        this->drawCirclePart(center, radius, startAngle, endAngle, color, lineWidth);
     }
 
     // publicly available functions from class Window2D
