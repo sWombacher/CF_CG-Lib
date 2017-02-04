@@ -40,9 +40,8 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param pos Cross position
      * @param color Cross color
      */
-    void drawPoint(const cf::Point& pos, const cf::Color& color = cf::Color::BLACK){
+    void drawPoint(const cf::Point& pos, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
         static const float pixelLength = 7.f;
-        static const int lineWidth = 1;
 
         const float half_intervalLength = std::abs(this->convert_pixelLength_to_intervalLength(pixelLength)) / 2.f;
         cf::Window2D::drawLine({pos.x - half_intervalLength, pos.y - half_intervalLength},
