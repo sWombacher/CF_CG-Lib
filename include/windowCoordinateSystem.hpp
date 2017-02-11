@@ -264,6 +264,15 @@ struct WindowCoordinateSystem : protected Window2D {
         Window2D::drawCirclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
     }
 
+    /**
+     * @brief drawCirclePart Draw a partition of a circle
+     * @param center Circle center
+     * @param p0 1st point on the Circle line
+     * @param p1 2nd point on the Circle line
+     * @param color Circle color
+     * @param lineWidth Line width
+     * @param smallerAngle Choose wich part of the Circle should be drawn (default: smaller part of the circle)
+     */
     void drawCirclePart(const cf::Point& center, const cf::Point& p0, const cf::Point& p1, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1, bool smallerAngle = true){
         const cf::Point dir0 = p0 - center;
         const cf::Point dir1 = p1 - center;
