@@ -90,8 +90,8 @@ struct WindowCoordinateSystem : protected Window2D {
             this->drawLine({pointVector.x, this->m_IntervalY.min}, {pointVector.x, this->m_IntervalY.max}, color, type, lineWidth);
         }
         else{
-            float slope = drawingDirection.y / drawingDirection.x;
-            float yIntercept = pointVector.y - pointVector.x * slope;
+            const float slope = drawingDirection.y / drawingDirection.x;
+            const float yIntercept = pointVector.y - pointVector.x * slope;
             this->drawLinearEquation(slope, yIntercept, color, type, lineWidth);
         }
     }
