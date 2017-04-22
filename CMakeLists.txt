@@ -1,7 +1,7 @@
 # in case you want to change your compiler on unix systems
-#set(CMAKE_C_COMPILER   "clang"  )
-#set(CMAKE_CXX_COMPILER "clang++")
-#set(CMAKE_C_COMPILER_ID "Clang")
+set(CMAKE_C_COMPILER   "clang"  )
+set(CMAKE_CXX_COMPILER "clang++")
+set(CMAKE_C_COMPILER_ID "Clang")
 
 project(cf_cg)
 cmake_minimum_required(VERSION 3.1)
@@ -11,9 +11,9 @@ cmake_minimum_required(VERSION 3.1)
 set(CMAKE_BUILD_TYPE "Debug")
 
 if (WIN32 OR CYGWIN)
-	set(USE_SYSTEM_LIBS FALSE)
+    set(USE_SYSTEM_LIBS FALSE)
 else()
-	set(USE_SYSTEM_LIBS TRUE )
+    set(USE_SYSTEM_LIBS TRUE )
 endif()
 
 # enable compiler warnings for gcc/clang
@@ -30,11 +30,11 @@ if (USE_SYSTEM_LIBS)
     message("Using system libs")
 	
     find_package(OpenCV REQUIRED)
-	find_package(GLUT REQUIRED)
-	find_package(OpenGL REQUIRED)
-	set(GL_LIB ${OPENGL_LIBRARIES})
-	set(GLU_LIB)
-	set(GLUT_LIB ${GLUT_LIBRARY})
+    find_package(GLUT REQUIRED)
+    find_package(OpenGL REQUIRED)
+    set(GL_LIB ${OPENGL_LIBRARIES})
+    set(GLU_LIB)
+    set(GLUT_LIB ${GLUT_LIBRARY})
 
 else()
     message("Using provided 3rd party libs")
@@ -44,56 +44,55 @@ else()
         message(SEND_ERROR "Error:\nProvided libraries are 64bit versions,\nif you have a 64bit system try changing your compiler to a x86_x64 compiler\nNote: you may have to delete the cmake cache to do so")
     endif()	
 	
-	set(LIB_DIR 3rdparty/lib/${CMAKE_SYSTEM_NAME})
-	if (WIN32 OR CYGWIN)
-		file(GLOB GLUT_LIB_DEBUG ${LIB_DIR}/Debug/freeglut*.lib)
-		file(GLOB GLUT_LIB_RELEASE ${LIB_DIR}/Release/freeglut*.lib)
-		
-		file(GLOB OpenCV_LIBS_DEBUG ${LIB_DIR}/Debug/*opencv*.lib)
-		file(GLOB OpenCV_LIBS_RELEASE ${LIB_DIR}/Release/*opencv*.lib)
+    set(LIB_DIR 3rdparty/lib/${CMAKE_SYSTEM_NAME})
+    if (WIN32 OR CYGWIN)
+        file(GLOB GLUT_LIB_DEBUG ${LIB_DIR}/Debug/freeglut*.lib)
+        file(GLOB GLUT_LIB_RELEASE ${LIB_DIR}/Release/freeglut*.lib)
 
-	elseif (APPLE)
-		find_package(GLUT REQUIRED)
-		find_package(OpenGL REQUIRED)
-		set(GL_LIB ${OPENGL_LIBRARIES})
-		set(GLU_LIB)
-		set(GLUT_LIB ${GLUT_LIBRARY})
+        file(GLOB OpenCV_LIBS_DEBUG ${LIB_DIR}/Debug/*opencv*.lib)
+        file(GLOB OpenCV_LIBS_RELEASE ${LIB_DIR}/Release/*opencv*.lib)
+    elseif (APPLE)
+        find_package(GLUT REQUIRED)
+        find_package(OpenGL REQUIRED)
+        set(GL_LIB ${OPENGL_LIBRARIES})
+        set(GLU_LIB)
+        set(GLUT_LIB ${GLUT_LIBRARY})
 
-		file(GLOB OpenCV_LIBS ${LIB_DIR}/*)
-	else()
-		find_library(GL_LIB NAMES GL)
-		find_library(GLU_LIB NAMES GLU)
-		find_library(GLUT_LIB NAMES glut PATHS ${LIB_DIR} NO_DEFAULT_PATH)
+        file(GLOB OpenCV_LIBS ${LIB_DIR}/*)
+    else()
+        find_library(GL_LIB NAMES GL)
+        find_library(GLU_LIB NAMES GLU)
+        find_library(GLUT_LIB NAMES glut PATHS ${LIB_DIR} NO_DEFAULT_PATH)
 
-		file(GLOB tmp ${LIB_DIR}/*opencv*${CMAKE_SHARED_MODULE_SUFFIX})
-		foreach(file ${tmp})
-			get_filename_component(name ${file} NAME_WE)
+        file(GLOB tmp ${LIB_DIR}/*opencv*${CMAKE_SHARED_MODULE_SUFFIX})
+        foreach(file ${tmp})
+            get_filename_component(name ${file} NAME_WE)
 
-			# remove prefix
-			# NOTE: the  ^  at the beginning is itentional, do not change
-			string(REGEX REPLACE "^${CMAKE_SHARED_MODULE_PREFIX}" "" name ${name})
-			find_library(file NAMES ${name} PATHS ${LIB_DIR} NO_DEFAULT_PATH)
-			set(OpenCV_LIBS ${OpenCV_LIBS} ${file})
-		endforeach()
-	endif()
+            # remove prefix
+            # NOTE: the  ^  at the beginning is itentional, do not change
+            string(REGEX REPLACE "^${CMAKE_SHARED_MODULE_PREFIX}" "" name ${name})
+            find_library(file NAMES ${name} PATHS ${LIB_DIR} NO_DEFAULT_PATH)
+            set(OpenCV_LIBS ${OpenCV_LIBS} ${file})
+        endforeach()
+    endif()
 
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
     SET(CMAKE_INSTALL_RPATH "${CMAKE_CURRENT_LIST_DIR}/3rdparty/lib/${CMAKE_SYSTEM_NAME}")
 endif()
 
 # enable c++11 features
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set output paths
 if (WIN32 OR CYGWIN)
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) # executeable
-	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
-	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) # executeable
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
 else()
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE}) # executeable
-	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
-	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE}) # executeable
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
 endif()
 
 # endable openmp support
@@ -114,35 +113,35 @@ file(GLOB SRC_FILES src/*.cpp src/*.c)
 # create chaos lib
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES})
 if (WIN32 OR CYGWIN)
-	# copy dlls
-	file(GLOB tmp ${LIB_DIR}/dlls/Debug/*)
-	file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
-	
-	file(GLOB tmp ${LIB_DIR}/dlls/Release/*)
-	file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
-	
-	target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} optimized ${GLUT_LIB_RELEASE})
-	
-	# link debug and release libraries
-	list(LENGTH OpenCV_LIBS_DEBUG     Debug_SIZE)
-	list(LENGTH OpenCV_LIBS_RELEASE Release_SIZE)
-	if (NOT ${Debug_SIZE} EQUAL ${Release_SIZE})
-		message(SEND_ERROR "Error: Unequal number of opencv libs between debug and release")
-	endif()
-	
-	math(EXPR SIZE "${Debug_SIZE} - 1")
-	foreach(val RANGE ${SIZE})
-		list(GET OpenCV_LIBS_DEBUG   ${val} deb)
-		list(GET OpenCV_LIBS_RELEASE ${val} rel)
-        target_link_libraries(${PROJECT_NAME} debug ${deb} optimized ${rel})
-	endforeach()
+    # copy dlls
+    file(GLOB tmp ${LIB_DIR}/dlls/Debug/*)
+    file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
+
+    file(GLOB tmp ${LIB_DIR}/dlls/Release/*)
+    file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
+
+    target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} optimized ${GLUT_LIB_RELEASE})
+
+    # link debug and release libraries
+    list(LENGTH OpenCV_LIBS_DEBUG     Debug_SIZE)
+    list(LENGTH OpenCV_LIBS_RELEASE Release_SIZE)
+    if (NOT ${Debug_SIZE} EQUAL ${Release_SIZE})
+        message(SEND_ERROR "Error: Unequal number of opencv libs between debug and release")
+    endif()
+
+    math(EXPR SIZE "${Debug_SIZE} - 1")
+    foreach(val RANGE ${SIZE})
+        list(GET OpenCV_LIBS_DEBUG   ${val} deb)
+        list(GET OpenCV_LIBS_RELEASE ${val} rel)
+    target_link_libraries(${PROJECT_NAME} debug ${deb} optimized ${rel})
+    endforeach()
 else()
-	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
-		message("${CMAKE_BUILD_TYPE} version")
-	else()
-		message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
-	endif()
-	target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
+        message("${CMAKE_BUILD_TYPE} version")
+    else()
+        message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
+    endif()
+    target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
 endif()
 
 # add define
@@ -165,7 +164,7 @@ set(DIRECTORIES_TO_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/include)
 set(LIBRARIES_TO_LINK ${PROJECT_NAME})
 
 if (EXISTS ${CMAKE_CURRENT_LIST_DIR}/Solutions)
-        add_subdirectory(Solutions)
+    add_subdirectory(Solutions)
 else()
-	message("Warning: Solutions directory not found")
+    message("Warning: Solutions directory not found")
 endif()
