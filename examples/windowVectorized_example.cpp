@@ -1,10 +1,17 @@
+#ifdef _WIN32
+// enable exception handling for windows
+// this requires 'int main(int, char**)' function definition
+// therefore 'int main()' is dissabled
+#define CFCG_EXCEPTION_HANDLING
+#endif
+
 #include "windowVectorized.hpp"
 
 #include <string>
 #include <sstream>
 #include <iostream>
 
-int main() {
+int main(int, char**) {
 // read intervals from console
     cf::Interval range_x;
     std::cout << "Part 1: Demonstration of the correspondence between an \n";
