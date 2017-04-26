@@ -24,6 +24,28 @@ std::ostream& operator<<(std::ostream& of, const glm::mat3x3& mat);
 std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 
 
+#ifdef CFCG_EXCEPTION_HANDLING
+#if !defined(_WIN32)
+#warning Warning! CFCG_EXCEPTION_HANDLING is windows specific (unlinke Windows, Unix can handle themselves)
+#else
+#include <windows.h>
+int CF_CG_MAIN(int argc, char** argv);
+int main(int argc, char** argv){
+    const char* error = nullptr;
+    try{ return CF_CG_MAIN(argc, argv); }
+    catch(const std::exception& e){ error = e.what(); }
+    catch(const char* str){ error = str; }
+    catch(...){ error = "Unknown error"; }
+
+    std::cerr << "Exception captured:\n" << error << std::endl;
+    MessageBoxA(0, "Exception captured!", error, MB_OK);
+    return -1;
+}
+#define main CF_CG_MAIN
+#endif // _WIN32
+#endif // CFCG_EXCEPTION_HANDLING
+
+
 namespace cf{
 
 /**
