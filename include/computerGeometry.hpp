@@ -118,18 +118,19 @@ struct Vec3{
     }
 
     /**
-     * @brief normalize Normalizes the PointVector (division by the 'w' component),
-     * compile error on DirectionVecotrs
+     * @brief normalize Normalizes the PointVector (division by the 'w' component), compile error on DirectionVecotrs
+     * @return Return the normalized vector
      */
-    void normalize(){
+    Vec3<POINTVECTOR>& normalize(){
         static_assert(POINTVECTOR, "Error: DirectionVector cannot be normalized!");
-        if (this->m_Data.z == 0.f){
+        if (this->m_Data.z == 0.00000f){
             std::cout << "WARNING: PointVector cannot be normalized (w is 0)" << std::endl;
-            return;
+            return *this;
         }
         this->m_Data.x /= this->m_Data.z;
         this->m_Data.y /= this->m_Data.z;
         this->m_Data.z = 1.f; // this->m_Data.z /= this->m_Data.z;
+        return *this;
     }
 
     /**
@@ -229,6 +230,16 @@ struct Vec3{
         if (this->m_Data.z)
             throw std::runtime_error("Error: Convertion from PointVector not possible (weight != 0)");
         return cf::Vec3<false>(this->m_Data.x, this->m_Data.y);
+    }
+
+    /**
+     * @brief length Calculates the vector length for Direction type vectors
+     * @return Length of the underlying vector
+     */
+    float length() const {
+        if (this->m_Data[2] == 0.00000f)
+            throw std::runtime_error("Error! Length calculation only possible for direction vectors");
+        return std::sqrt(this->m_Data[0] * this->m_Data[0] + this->m_Data[1] * this->m_Data[1]);
     }
 
 private:
