@@ -43,39 +43,39 @@ namespace cf{
  *  - Cross product ('operator%') and dot product ('operator*') with other vectors
  *  - Support for DirectionVectors and PointVectors (see typedef 'PointVector' and 'DirectionVector')
  */
-template<bool POINTVECTOR>
+template<bool IS_POINTVECTOR>
 struct Vec3{
-    Vec3(float x = 0.f, float y = 0.f) : m_Data(x, y, POINTVECTOR ? 1.f : 0.f) {}
+    Vec3(float x = 0.f, float y = 0.f) : m_Data(x, y, IS_POINTVECTOR ? 1.f : 0.f) {}
     Vec3(float x, float y, float w) : m_Data(x, y, w) {
-        if (!POINTVECTOR && !Vec3<POINTVECTOR>::_CmpZero(w))
+        if (!IS_POINTVECTOR && !Vec3<IS_POINTVECTOR>::_CmpZero(w))
             throw std::runtime_error("Error: direction vectors 'w' component may not be set");
     }
     Vec3(const cf::Point& p) : m_Data(p.x, p.y, 1.f){
-        static_assert(!POINTVECTOR, "Error: direction vector cannot be initialized from a cf::Point");
+        static_assert(!IS_POINTVECTOR, "Error: direction vector cannot be initialized from a cf::Point");
     }
 
     template<bool RHS>
-    Vec3<RHS | POINTVECTOR> operator+ (const Vec3<RHS>& rhs) const{
-        Vec3<RHS | POINTVECTOR> tmp;
+    Vec3<RHS | IS_POINTVECTOR> operator+ (const Vec3<RHS>& rhs) const{
+        Vec3<RHS | IS_POINTVECTOR> tmp;
         tmp.m_Data = this->m_Data + rhs.m_Data;
         return tmp;
     }
     template<bool RHS>
-    Vec3<POINTVECTOR>& operator+=(const Vec3<RHS>& rhs){
-        static_assert(POINTVECTOR || !RHS, "Error: Inplace addition of drection and point vector is a point vector, (Direction += Point  is not allowed)");
+    Vec3<IS_POINTVECTOR>& operator+=(const Vec3<RHS>& rhs){
+        static_assert(IS_POINTVECTOR || !RHS, "Error: Inplace addition of drection and point vector is a point vector, (Direction += Point  is not allowed)");
         this->m_Data += rhs.m_Data;
         return *this;
     }
 
     template<bool RHS>
-    Vec3<RHS | POINTVECTOR> operator- (const Vec3<RHS>& rhs) const{
-        Vec3<RHS | POINTVECTOR> tmp;
+    Vec3<RHS | IS_POINTVECTOR> operator- (const Vec3<RHS>& rhs) const{
+        Vec3<RHS | IS_POINTVECTOR> tmp;
         tmp.m_Data = this->m_Data - rhs.m_Data;
         return tmp;
     }
     template<bool RHS>
-    Vec3<POINTVECTOR>& operator-=(const Vec3<RHS>& rhs){
-        static_assert(POINTVECTOR || !RHS, "Error: Inplace substruction of drection and point vector is a point vector, (Direction -= Point  is not allowed)");
+    Vec3<IS_POINTVECTOR>& operator-=(const Vec3<RHS>& rhs){
+        static_assert(IS_POINTVECTOR || !RHS, "Error: Inplace substruction of drection and point vector is a point vector, (Direction -= Point  is not allowed)");
         this->m_Data -= rhs.m_Data;
         return *this;
     }
@@ -85,18 +85,18 @@ struct Vec3{
      * @param rhs Factor for the multiplication
      * @return Multiplied vector
      */
-    cf::Vec3<POINTVECTOR> operator* (float rhs) const{
-        cf::Vec3<POINTVECTOR> tmp = *this;
+    cf::Vec3<IS_POINTVECTOR> operator* (float rhs) const{
+        cf::Vec3<IS_POINTVECTOR> tmp = *this;
         tmp.m_Data *= rhs;
         return tmp;
     }
-    cf::Vec3<POINTVECTOR>& operator*=(float rhs){
+    cf::Vec3<IS_POINTVECTOR>& operator*=(float rhs){
         this->m_Data *= rhs;
         return *this;
     }
 
-    friend cf::Vec3<POINTVECTOR> operator*(float lhs, const cf::Vec3<POINTVECTOR>& vec){
-        cf::Vec3<POINTVECTOR> tmp;
+    friend cf::Vec3<IS_POINTVECTOR> operator*(float lhs, const cf::Vec3<IS_POINTVECTOR>& vec){
+        cf::Vec3<IS_POINTVECTOR> tmp;
         tmp.m_Data = vec.m_Data * lhs;
         return tmp;
     }
@@ -107,14 +107,14 @@ struct Vec3{
      * @return
      */
     template<bool RHS>
-    Vec3<RHS | POINTVECTOR> operator% (const Vec3<RHS>& rhs) const{
-        Vec3<RHS | POINTVECTOR> tmp;
+    Vec3<RHS | IS_POINTVECTOR> operator% (const Vec3<RHS>& rhs) const{
+        Vec3<RHS | IS_POINTVECTOR> tmp;
         tmp.m_Data = glm::cross(this->m_Data, rhs.m_Data);
         return tmp;
     }
     template<bool RHS>
-    Vec3<POINTVECTOR>& operator%=(const Vec3<RHS>& rhs){
-        static_assert(POINTVECTOR || !RHS, "Error: Inplace crossproduct of drection and point vector is a point vector, (Direction %= Point  is not allowed)");
+    Vec3<IS_POINTVECTOR>& operator%=(const Vec3<RHS>& rhs){
+        static_assert(IS_POINTVECTOR || !RHS, "Error: Inplace crossproduct of drection and point vector is a point vector, (Direction %= Point  is not allowed)");
         this->m_Data = glm::cross(this->m_Data, rhs.m_Data);
         return *this;
     }
@@ -123,9 +123,9 @@ struct Vec3{
      * @brief normalize Normalizes the PointVector (division by the 'w' component), compile error on DirectionVecotrs
      * @return Return the normalized vector
      */
-    Vec3<POINTVECTOR>& normalize(){
-        static_assert(POINTVECTOR, "Error: direction vector cannot be normalized!");
-        if (Vec3<POINTVECTOR>::_CmpZero(this->m_Data.z))
+    Vec3<IS_POINTVECTOR>& normalize(){
+        static_assert(IS_POINTVECTOR, "Error: direction vector cannot be normalized!");
+        if (Vec3<IS_POINTVECTOR>::_CmpZero(this->m_Data.z))
             throw std::runtime_error("Error: point vector cannot be normalized (w is 0)");
 
         this->m_Data.x /= this->m_Data.z;
@@ -138,7 +138,7 @@ struct Vec3{
      * @brief isPointVector Checks wether a Vector is a PointVector or DirectionVector
      * @return
      */
-    bool isPointVector() const{ return POINTVECTOR; }
+    bool isPointVector() const{ return IS_POINTVECTOR; }
 
     /**
      * @brief operator* Performs the dot product between two vectors
@@ -179,7 +179,7 @@ struct Vec3{
      * @param value
      */
     void setW(float value){
-        static_assert(POINTVECTOR, "Error: Write acces to direction vector's w component is not allowed");
+        static_assert(IS_POINTVECTOR, "Error: Write acces to direction vector's w component is not allowed");
         this->m_Data.z = value;
     }
 
@@ -196,7 +196,7 @@ struct Vec3{
      * @return
      */
     float& operator[](int idx) {
-        if (idx == 2 && !POINTVECTOR)
+        if (idx == 2 && !IS_POINTVECTOR)
             throw std::runtime_error("Error: Write acces to direction vector's w component is not allowed");
         return this->m_Data[idx];
     }
@@ -208,22 +208,22 @@ struct Vec3{
      * @brief operator cf::Point Conversion operator to cf::Point, compile error on DirectionVectors
      */
     operator cf::Point () const {
-        static_assert(POINTVECTOR, "Error: No convertion right from direction vector to cf::Point, try changing type to point vector");
-        if (cf::Vec3<POINTVECTOR>::_CmpZero(this->m_Data.z))
+        static_assert(IS_POINTVECTOR, "Error: No convertion right from direction vector to cf::Point, try changing type to point vector");
+        if (cf::Vec3<IS_POINTVECTOR>::_CmpZero(this->m_Data.z))
             throw std::runtime_error("Error: Unable to normalize point vector (w component is 0)");
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }
 
     cf::PointVector& operator=(const cf::Point& p){
-        static_assert(!POINTVECTOR, "Error: No convertion from cf::Point to direction vector possible (w component has to be 0)");
+        static_assert(!IS_POINTVECTOR, "Error: No convertion from cf::Point to direction vector possible (w component has to be 0)");
         this->m_Data[0] = p.x;
         this->m_Data[1] = p.y;
         this->m_Data[2] = 1.f;
         return *this;
     }
 
-    cf::Vec3<POINTVECTOR>& operator=(const glm::vec3& rhs) {
-        if (!POINTVECTOR && !cf::Vec3<POINTVECTOR>::_CmpZero(rhs.z))
+    cf::Vec3<IS_POINTVECTOR>& operator=(const glm::vec3& rhs) {
+        if (!IS_POINTVECTOR && !cf::Vec3<IS_POINTVECTOR>::_CmpZero(rhs.z))
             throw std::runtime_error("Error: Cannot convert glm::vec3 to direction vector (w component has to be 0)");
 
 		this->m_Data = rhs;
@@ -233,10 +233,10 @@ struct Vec3{
     /**
      * @brief Conversion operator from point vector to direction vector and vise versa, may throw an exception if 'w' is not 0 (point to direction vector)
      */
-    operator cf::Vec3<!POINTVECTOR> () const {
-        if (POINTVECTOR && !Vec3<POINTVECTOR>::_CmpZero(this->m_Data.z))
+    operator cf::Vec3<!IS_POINTVECTOR> () const {
+        if (IS_POINTVECTOR && !Vec3<IS_POINTVECTOR>::_CmpZero(this->m_Data.z))
             throw std::runtime_error("Error: Convertion from point vector not possible (weight != 0)");
-        return cf::Vec3<!POINTVECTOR>(this->m_Data.x, this->m_Data.y, this->m_Data.z);
+        return cf::Vec3<!IS_POINTVECTOR>(this->m_Data.x, this->m_Data.y, this->m_Data.z);
     }
 
     /**
@@ -244,12 +244,12 @@ struct Vec3{
      * @return Length of the underlying vector
      */
     float length() const {
-        static_assert(POINTVECTOR, "Error! Length calculation only possible for direction vectors");
+        static_assert(IS_POINTVECTOR, "Error! Length calculation only possible for direction vectors");
         return std::sqrt(this->m_Data[0] * this->m_Data[0] + this->m_Data[1] * this->m_Data[1]);
     }
 
 private:
-    friend struct Vec3<!POINTVECTOR>;
+    friend struct Vec3<!IS_POINTVECTOR>;
 
     template<bool b>
     friend std::ostream& (::operator<<)(std::ostream&, const Vec3<b>&);
