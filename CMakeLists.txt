@@ -1,7 +1,7 @@
 # in case you want to change your compiler on unix systems
-set(CMAKE_C_COMPILER   "clang"  )
-set(CMAKE_CXX_COMPILER "clang++")
-set(CMAKE_C_COMPILER_ID "Clang")
+#set(CMAKE_C_COMPILER   "clang"  )
+#set(CMAKE_CXX_COMPILER "clang++")
+#set(CMAKE_C_COMPILER_ID "Clang")
 
 project(cf_cg)
 cmake_minimum_required(VERSION 3.1)

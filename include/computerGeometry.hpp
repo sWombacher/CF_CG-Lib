@@ -55,6 +55,12 @@ namespace cf{
 template<bool IS_POINTVECTOR, typename _ValueType>
 class Vec3{
     typedef Vec3<IS_POINTVECTOR, _ValueType> MY_TYPE;
+
+    // technically glm isn't required
+    // union{ struct{ _ValueType x, y, w; }; _ValueType[3]; }
+    // is enough
+    // however, in this case you have to deal with compiler warnings =)
+    // therefore using glm is easier
     typedef glm::tvec3<_ValueType, glm::precision::highp> glmVec3;
 public:
     typedef _ValueType value_type;
@@ -84,7 +90,7 @@ public:
 
     template<bool PV_RHS, typename _VType>
     auto operator- (const Vec3<PV_RHS, _VType>& rhs) const{
-        Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) + _VType(0))> tmp;
+        Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) - _VType(0))> tmp;
         for (size_t i = 0; i < 3; ++i)
             tmp[i] = this->m_Data[i] - rhs.m_Data[i];
         return tmp;
@@ -123,7 +129,7 @@ public:
      */
     template<bool PV_RHS, typename _VType>
     auto operator% (const Vec3<PV_RHS, _VType>& rhs) const{
-        Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) * _ValueType(0))> tmp = *this;
+        Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) * _ValueType(0) - _ValueType(0))> tmp = *this;
         tmp %= rhs;
         return tmp;
     }
@@ -164,7 +170,7 @@ public:
      * @return
      */
     template<bool PV_RHS, typename _VType>
-    decltype(_ValueType(0) * _VType(0)) operator*(const Vec3<PV_RHS, _VType>& rhs) const{
+    auto operator*(const Vec3<PV_RHS, _VType>& rhs) const{
         const auto& md = this->m_Data;
         const auto& rd = rhs.m_Data;
         return md[0] * rd[0] + md[1] * rd[1] + md[2] * rd[2];
