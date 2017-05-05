@@ -8,7 +8,7 @@ The best way to find ALL functions is by going to 'namespaces @ref cf' (Note: re
   The MIT License (MIT)
 =======================
 
-Copyright © `2016` `Sascha Wombacher`
+Copyright © `2017` `Sascha Wombacher`
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -39,6 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 - OpenCV: 3-clause BSD License
 - InfInt: LGPL
 - FreeGlut: X-Consortium
+- Termcolor: BSD License
 
 Note:
 OpenCV utilizes 3rd party libraries like libpng, these licenes are NOT covered in this segment
