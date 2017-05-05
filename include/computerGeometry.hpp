@@ -23,12 +23,12 @@ namespace cf {
     /**
      * @brief PointVector Specialiaztion of general Vec3
      */
-    typedef PointVector_f PointVector;
+    typedef PointVector_d PointVector;
 
     /**
      * @brief DirectionVector Specialiaztion of general Vec3, where component 'w' may not be written to
      */
-    typedef DirectionVector_f DirectionVector;
+    typedef DirectionVector_d DirectionVector;
 }
 
 /**
@@ -241,6 +241,8 @@ public:
             std::cerr << "Warning: Normalizing point vector with w = 0  -> point at infinity" << std::endl;
             return { std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity() };
         }
+        if (MY_TYPE::_EqualZero(std::abs(this->m_Data.z - _ValueType(1.0))))
+            std::cerr << "Warning: Applying temporary normalization to point vector (you may want to do this yourself)!" << std::endl;
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }
 
@@ -278,6 +280,15 @@ public:
     _ValueType length() const {
         static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
         return std::sqrt(this->m_Data[0] * this->m_Data[0] + this->m_Data[1] * this->m_Data[1]);
+    }
+
+    /**
+     * @brief getVector90Degree A vector that that has an angle of + or - 90 degree from the original vector (only available for direction type vectors)
+     * @return
+     */
+    MY_TYPE getVector90Degree(){
+        static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
+        return { this->m_Data[1], -this->m_Data[0], _ValueType(0.0) };
     }
 
 private:
