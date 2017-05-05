@@ -150,10 +150,9 @@ public:
     MY_TYPE& normalize(){
         static_assert(IS_POINTVECTOR, "Error: direction vector cannot be normalized!");
         if (MY_TYPE::_EqualZero(this->m_Data.z)){
-            std::cerr << "Warning: Point vector cannot be normalized (point at infinity, w = 0)" << std::endl;
+            cf::Console::printWarning("Point vector cannot be normalized (point at infinity, w = 0)");
             return *this;
         }
-
         this->m_Data.x /= this->m_Data.z;
         this->m_Data.y /= this->m_Data.z;
         this->m_Data.z = _ValueType(1.0); // this->m_Data.z /= this->m_Data.z;
@@ -240,11 +239,11 @@ public:
     operator cf::Point () const {
         static_assert(IS_POINTVECTOR, "Error: No convertion from direction vector to cf::Point, try changing type to point vector");
         if (MY_TYPE::_EqualZero(this->m_Data.z)){
-            std::cerr << "Warning: Normalizing point vector with w = 0  -> point at infinity" << std::endl;
+            cf::Console::printWarning("Normalizing point vector with w = 0  -> point at infinity");
             return { std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity() };
         }
         if (!MY_TYPE::_EqualZero(std::abs(this->m_Data.z - _ValueType(1.0))))
-            std::cerr << "Warning: Applying temporary normalization to point vector (you may want to do this yourself)!" << std::endl;
+            cf::Console::printWarning("Applying temporary normalization to point vector (you may want to do this yourself)!\n");
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }
 
@@ -288,7 +287,7 @@ public:
      * @brief getVector90Degree A vector that that has an angle of + or - 90 degree from the original vector (only available for direction type vectors)
      * @return
      */
-    MY_TYPE getVector90Degree(){
+    MY_TYPE getVector90Degree() const{
         static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
         return { this->m_Data[1], -this->m_Data[0], _ValueType(0.0) };
     }

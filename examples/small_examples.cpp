@@ -2,10 +2,11 @@
 #include "InfInt.h"
 #include <iomanip> // set precision
 
+
 int main(){
     // read ant string and print it
     std::string antStr = cf::readAntString(CHAOS_FILE_PATH "Ant_10.ant");
-    std::cout << "Ant string:\t" << antStr << std::endl << std::endl;
+    std::cout << "Ant string:\t" << antStr << '\n' << std::endl;
 
 
     // read pal file and print a color
@@ -52,6 +53,14 @@ int main(){
     std::cout << "If your current direction is 'WEST'\nand you take a right turn your new direction will be:\t'"
               << cf::Direction::toString(cf::Direction::getNextiDirection(west, cf::Direction::RelativeDirection::RIGHT)) << "'\n"
               << std::endl;
+
+
+    // change console color
+    std::cout << termcolor::blue << "blue "
+              << termcolor::bold << "bold "
+              << termcolor::on_cyan << "onGrey "
+              << termcolor::reverse << "reverse "
+              << termcolor::reset << std::endl;
 
 
     // program end

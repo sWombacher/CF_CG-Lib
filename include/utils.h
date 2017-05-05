@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <inttypes.h>
+#include "termcolor.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -48,54 +49,6 @@ std::vector<Color> readPaletteFromFile(const std::string& filePath);
  */
 std::string readAntString(const std::string& filePath);
 
-/**
- * @brief readDATFile Reads a *.dat file
- * @param filePath Read *.dat file from path
- * @return
- */
-template<typename _VectorType = glm::vec3>
-std::vector<_VectorType> readDATFile(const std::string& filePath){
-    std::fstream file(filePath, std::fstream::in);
-    if (!file)
-        throw std::runtime_error("File not found in function: \"readPaletteFromFile\"");
-
-    std::string str;
-    if (!file.good())
-        throw std::runtime_error(filePath + ", file not found");
-
-    std::vector<_VectorType> points;
-    while (file.good()){
-        std::getline(file, str);
-        cf::_removeWindowsSpecificCarriageReturn(str);
-
-        // remove non numbers, and non . ' '
-        for (size_t i = 0; i < str.size(); ++i){
-            char c = str[i];
-            if (c != ' ' && c != '.' && (c < '0' || c > '9')){
-                std::cout << "Warning: Unknown symbol detected, ASCII code: '" << (int)str[i] << "'" << std::endl;
-                str.erase(i, 1);
-                --i;
-            }
-        }
-
-        _VectorType tmp;
-        std::stringstream sstr(str);
-        int valueCounter = 0;
-        while (sstr.good()){
-            std::getline(sstr, str, ' ');
-            if (str.size()){
-                float value = std::stof(str);
-                tmp[valueCounter] = value;
-                ++valueCounter;
-                if (valueCounter >= 3)
-                    break;
-            }
-        }
-        if (valueCounter == 3)
-            points.push_back(tmp);
-    }
-    return points;
-}
 /**
  * @brief radian2degree Converts a radian value to a degree value
  * @param radianValue Radian value to be converted
@@ -153,36 +106,36 @@ struct Color{
     uint8_t g;
     uint8_t r;
 
-    Color  operator* (float value) const;
-    Color  operator/ (float value) const;
+    cf::Color  operator* (float value) const;
+    cf::Color  operator/ (float value) const;
 
-    Color& operator*=(float value);
-    Color& operator/=(float value);
+    cf::Color& operator*=(float value);
+    cf::Color& operator/=(float value);
 
-    Color  operator+ (const Color& c) const;
-    Color  operator- (const Color& c) const;
+    cf::Color  operator+ (const Color& c) const;
+    cf::Color  operator- (const Color& c) const;
 
-    Color& operator+=(const Color& c);
-    Color& operator-=(const Color& c);
+    cf::Color& operator+=(const Color& c);
+    cf::Color& operator-=(const Color& c);
 
     friend cf::Color operator*(float value, const cf::Color& c);
     friend cf::Color operator/(float value, const cf::Color& c);
 
-    bool operator==(const Color& c) const;
-    bool operator!=(const Color& c) const;
+    bool operator==(const cf::Color& c) const;
+    bool operator!=(const cf::Color& c) const;
 
-    bool operator< (const Color& c) const;
-    bool operator> (const Color& c) const;
-    bool operator<=(const Color& c) const;
-    bool operator>=(const Color& c) const;
+    bool operator< (const cf::Color& c) const;
+    bool operator> (const cf::Color& c) const;
+    bool operator<=(const cf::Color& c) const;
+    bool operator>=(const cf::Color& c) const;
 
-    friend std::ostream& operator<<(std::ostream& os, const Color& c);
+    friend std::ostream& operator<<(std::ostream& os, const cf::Color& c);
 
     /**
      * @brief invert Invert a color, for example cf::Color::BLACK will be changed to cf::Color::WHITE
      * @return Inverted cf::Color
      */
-    Color invert() const;
+    cf::Color invert() const;
 
     /**
      * @brief RandomColor Produces a color with random red, green and blue channel
@@ -235,13 +188,89 @@ struct Console {
      */
 	static void clearConsole();
 
+    /**
+     * @brief Simple function for console warnings
+     */
+    template<typename... Args>
+    static void printWarning(const Args&... args){
+        std::cerr << termcolor::yellow << termcolor::bold << "Warning:\n" << termcolor::reset << termcolor::bold;
+        _printData(args...);
+        std::cerr << termcolor::reset << '\n' << std::endl;
+    }
+
+    /**
+     * @brief Simple function for console error messages
+     */
+    template<typename... Args>
+    static void printError(const Args&... args){
+        std::cerr << termcolor::red << termcolor::bold << "Error:\n" << termcolor::reset << termcolor::bold;
+        _printData(args...);
+        std::cerr << termcolor::reset << '\n' << std::endl;
+    }
+
 private:
 	static void _console2foreground();
+
+    static void _printData(){}
+    template<typename _Front, typename... _Args>
+    static void _printData(const _Front& front, const _Args&... args){
+        std::cerr << front;
+        _printData(args...);
+    }
 };
+
+/**
+ * @brief readDATFile Reads a *.dat file
+ * @param filePath Read *.dat file from path
+ * @return
+ */
+template<typename _VectorType = glm::vec3>
+std::vector<_VectorType> readDATFile(const std::string& filePath){
+    std::fstream file(filePath, std::fstream::in);
+    if (!file)
+        throw std::runtime_error("File not found in function: \"readPaletteFromFile\"");
+
+    std::string str;
+    if (!file.good())
+        throw std::runtime_error(filePath + ", file not found");
+
+    std::vector<_VectorType> points;
+    while (file.good()){
+        std::getline(file, str);
+        cf::_removeWindowsSpecificCarriageReturn(str);
+
+        // remove non numbers, and non . ' '
+        for (size_t i = 0; i < str.size(); ++i){
+            char c = str[i];
+            if (c != ' ' && c != '.' && (c < '0' || c > '9')){
+                cf::Console::printWarning("Unknown symbol detected, ASCII code: '", int(str[i]), '\'');
+                str.erase(i, 1);
+                --i;
+            }
+        }
+
+        _VectorType tmp;
+        std::stringstream sstr(str);
+        int valueCounter = 0;
+        while (sstr.good()){
+            std::getline(sstr, str, ' ');
+            if (str.size()){
+                float value = std::stof(str);
+                tmp[valueCounter] = value;
+                ++valueCounter;
+                if (valueCounter >= 3)
+                    break;
+            }
+        }
+        if (valueCounter == 3)
+            points.push_back(tmp);
+    }
+    return points;
+}
 
 }
 
-#if defined(CFCG_EXCEPTION_HANDLING)
+#ifdef CFCG_EXCEPTION_HANDLING
 #ifndef _WIN32
 #warning Warning!CFCG_EXCEPTION_HANDLING is windows specific(unlinke Windows, Unix can handle themselves)
 #else
@@ -253,7 +282,6 @@ int main(int argc, char** argv) {
 	catch (const std::exception& e) { error = e.what(); }
 	catch (const char* str) { error = str; }
 	catch (...) { error = "Unknown error"; }
-
 	std::cerr << "Exception captured:\n" << error << std::endl;
 	MessageBoxA(0, error.c_str(), "Exception captured!", MB_OK);
 	return -1;

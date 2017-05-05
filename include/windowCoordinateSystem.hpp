@@ -65,7 +65,7 @@ struct WindowCoordinateSystem : protected Window2D {
             cf::Window2D::drawLine(p1, p2, lineWidth, color);
         else {
             if (lineWidth > 1)
-                std::cerr << "Warning: Only default line type may use lineWidth parameter" << std::endl;
+                cf::Console::printWarning("Only default line type may use lineWidth parameter");
             cf::Window2D::drawSpecializedLine(p1, p2, type, color);
         }
     }
@@ -111,11 +111,11 @@ struct WindowCoordinateSystem : protected Window2D {
         if (std::abs(b) < cf::WindowCoordinateSystem::ZERO_COMPARE) {
             if (std::abs(a) < cf::WindowCoordinateSystem::ZERO_COMPARE){
                 if (std::abs(c) < cf::WindowCoordinateSystem::ZERO_COMPARE){
-                    std::cerr << "Warning: " << __func__ << " called with a=b=c=0, this is ALSWAYS TRUE for all x/y pairs" << std::endl;
+                    cf::Console::printWarning(__func__, " called with a=b=c=0, this is ALSWAYS TRUE for all x/y pairs");
                     this->clear(color);
                 }
                 else{
-                    std::cerr << "Warning: " << __func__ << " called with with a=b=0 and c != 0, this is ALWAYS FALSE for all x/y pairs" << std::endl;
+                    cf::Console::printWarning(__func__, " called with with a=b=0 and c != 0, this is ALWAYS FALSE for all x/y pairs");
                     return;
                 }
             }
@@ -212,7 +212,7 @@ struct WindowCoordinateSystem : protected Window2D {
             cf::Window2D::drawLine(p1, p2, lineWidth, color);
         else {
             if (lineWidth > 1)
-                std::cerr << "Warning: Only default line type may use lineWidth parameter" << std::endl;
+                cf::Console::printWarning("Only default line type may use lineWidth parameter");
             cf::Window2D::drawSpecializedLine(p1, p2, type, color);
         }
     }

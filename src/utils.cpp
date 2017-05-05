@@ -157,9 +157,7 @@ float Interval::translateIntervalPostion(const Interval& originalInterval, const
 
 
 bool Color::operator< (const Color& c) const{
-    static_assert(sizeof(c.r) + sizeof(c.g) + sizeof(c.b) <= sizeof(int),
-                  "Error: color2integer function generates undefined behavior!");
-
+    static_assert(sizeof(c.r) + sizeof(c.g) + sizeof(c.b) <= sizeof(int), "Error: color2integer function generates undefined behavior!");
     auto color2integer = [](const Color& color) -> int {
         return (int(color.r) << (sizeof(color.r) * 8 * 2)) +
                (int(color.g) << (sizeof(color.g) * 8 * 1)) +
@@ -356,9 +354,9 @@ int Console::readInt() {
     auto getString = []() -> std::string {
         std::string str = Console::readString();
         if (std::find(str.begin(), str.end(), ',') != str.end())
-            std::cout << "Warning: provided value is a floating point value, required type: int" << std::endl;
+            cf::Console::printWarning("provided value is a floating point value, required type: int");
         if (std::find(str.begin(), str.end(), '.') != str.end())
-            std::cout << "Warning: provided value is a floating point value, required type: int" << std::endl;
+            cf::Console::printWarning("provided value is a floating point value, required type: int");
         return str;
     };
 
@@ -397,7 +395,7 @@ void Console::_console2foreground() {
 	static HWND consoleHandle = GetConsoleWindow();
 	SetForegroundWindow(consoleHandle);
 #else
-	/// currently only supported on windows
+    /// currently only supported on windows
 #endif
 }
 
