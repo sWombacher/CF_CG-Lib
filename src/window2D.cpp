@@ -77,6 +77,12 @@ void Window2D::waitMouseInput(float &x, float &y) {
     y = this->m_MouseCallBackStorage[1];
 }
 
+cf::Point Window2D::waitMouseInput(){
+    cf::Point tmp;
+    this->waitMouseInput(tmp.x, tmp.y);
+    return tmp;
+}
+
 void Window2D::setColor(float x, float y, const Color& c){
     this->_convertFromNewInterval(x, y);
     this->_correctYValue(y);

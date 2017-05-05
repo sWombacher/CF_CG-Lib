@@ -41,7 +41,7 @@ int main(int argc, char** argv){
 // wait for user input and draw user points
     std::cout << "Please set a point\n\n";
     cf::PointVector userPoint; // default values of PointVector: (0 0 1)
-    coordinateSystem.waitMouseInput(userPoint[0], userPoint[1]);
+    userPoint = coordinateSystem.waitMouseInput();
     coordinateSystem.drawPoint(userPoint, cf::Color::RED);
     coordinateSystem.show();
 

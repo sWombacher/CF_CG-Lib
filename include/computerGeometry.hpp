@@ -23,12 +23,12 @@ namespace cf {
     /**
      * @brief PointVector Specialiaztion of general Vec3
      */
-    typedef PointVector_d PointVector;
+    typedef PointVector_ld PointVector;
 
     /**
      * @brief DirectionVector Specialiaztion of general Vec3, where component 'w' may not be written to
      */
-    typedef DirectionVector_d DirectionVector;
+    typedef DirectionVector_ld DirectionVector;
 }
 
 /**
@@ -149,8 +149,10 @@ public:
      */
     MY_TYPE& normalize(){
         static_assert(IS_POINTVECTOR, "Error: direction vector cannot be normalized!");
-        if (MY_TYPE::_EqualZero(this->m_Data.z))
-            throw std::runtime_error("Error: point vector cannot be normalized (w is 0)");
+        if (MY_TYPE::_EqualZero(this->m_Data.z)){
+            std::cerr << "Warning: Point vector cannot be normalized (point at infinity, w = 0)" << std::endl;
+            return *this;
+        }
 
         this->m_Data.x /= this->m_Data.z;
         this->m_Data.y /= this->m_Data.z;
@@ -241,7 +243,7 @@ public:
             std::cerr << "Warning: Normalizing point vector with w = 0  -> point at infinity" << std::endl;
             return { std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity() };
         }
-        if (MY_TYPE::_EqualZero(std::abs(this->m_Data.z - _ValueType(1.0))))
+        if (!MY_TYPE::_EqualZero(std::abs(this->m_Data.z - _ValueType(1.0))))
             std::cerr << "Warning: Applying temporary normalization to point vector (you may want to do this yourself)!" << std::endl;
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }

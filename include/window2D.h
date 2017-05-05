@@ -45,6 +45,12 @@ public:
     void waitMouseInput(float& x, float& y);
 
     /**
+     * @brief waitMouseInput Blocks until mouse input has been given
+     * @return
+     */
+    cf::Point waitMouseInput();
+
+    /**
      * @brief setWindowDisplayScale Scales the image before displaying
      * @param scale Window scale size
      */

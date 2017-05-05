@@ -39,10 +39,9 @@ int main(int, char**) {
                                                   << std::endl;
     window.drawAxis();
     window.show();
-    cf::Point point1;
 
     std::cout << "Please set a point on the window" << std::endl;
-    window.waitMouseInput(point1.x, point1.y);
+    cf::Point point1 = window.waitMouseInput();
     window.drawCircle(point1, 3, -1 /*fill circle*/, cf::Color::WHITE);
     window.show();
 
