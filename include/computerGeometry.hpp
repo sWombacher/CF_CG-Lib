@@ -278,7 +278,7 @@ public:
      * @brief length Calculates the vector length for Direction type vectors
      * @return Length of the underlying vector
      */
-    _ValueType length() const {
+    auto length() const {
         static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
         return std::sqrt(this->m_Data[0] * this->m_Data[0] + this->m_Data[1] * this->m_Data[1]);
     }

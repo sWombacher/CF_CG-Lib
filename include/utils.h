@@ -15,6 +15,15 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+// min/max might be defined and result
+// compile errors on Intervall initialisation
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
+
 // enable standard output for vec2, vec3 & vec4
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec);
 std::ostream& operator<<(std::ostream& of, const glm::vec3& vec);
