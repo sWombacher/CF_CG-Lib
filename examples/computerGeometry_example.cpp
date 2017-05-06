@@ -115,6 +115,20 @@ int main(int argc, char** argv){
     coordinateSystem.drawPoint(userPoint);
     coordinateSystem.show();
 
+// draw circle partitions around userPoint
+    coordinateSystem.waitKey();
+    coordinateSystem.drawCirclePart(userPoint, 23.f, 0.f, 90.f, cf::Color::RED, 2);
+    coordinateSystem.drawCirclePart(userPoint, 23.f, 90.f, 360.f, cf::Color::BLUE, 2);
+    coordinateSystem.show();
+
+    // alternatively
+    const cf::PointVector start = userPoint + cf::DirectionVector(17, -23, 0.0);
+    const cf::PointVector end = userPoint + cf::DirectionVector(23, 17, 0.0);
+    coordinateSystem.waitKey();
+    coordinateSystem.drawCirclePart(userPoint, start, end, cf::Color::GREEN, 3, true); // true -> small circle part
+    coordinateSystem.drawCirclePart(userPoint, start, end, cf::Color::ORANGE, 3, false); // false -> big circle part
+    coordinateSystem.show();
+
     std::cout << "Press enter to finish the process\n";
     coordinateSystem.waitKey();
     return 0;

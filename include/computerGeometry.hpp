@@ -23,12 +23,12 @@ namespace cf {
     /**
      * @brief PointVector Specialiaztion of general Vec3
      */
-    typedef PointVector_ld PointVector;
+    typedef PointVector_d PointVector;
 
     /**
      * @brief DirectionVector Specialiaztion of general Vec3, where component 'w' may not be written to
      */
-    typedef DirectionVector_ld DirectionVector;
+    typedef DirectionVector_d DirectionVector;
 }
 
 /**
@@ -284,7 +284,7 @@ public:
     }
 
     /**
-     * @brief getVector90Degree A vector that that has an angle of + or - 90 degree from the original vector (only available for direction type vectors)
+     * @brief getVector90Degree A vector that that has an angle of 90 degree from the original vector (only available for direction type vectors)
      * @return
      */
     MY_TYPE getVector90Degree() const{
