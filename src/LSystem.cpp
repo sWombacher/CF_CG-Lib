@@ -148,9 +148,9 @@ std::ostream& operator<<(std::ostream& os, const Interval& interval){
 
 LSystem_Controller::LSystem_Controller(size_t depth, const LSystem &LSystem) : m_Depth(depth), m_LSystem(LSystem){}
 
-LSystem_Controller::iterator LSystem_Controller::begin() { return iterator(this->m_LSystem, this->m_Depth, false); }
+LSystem_Controller::iterator LSystem_Controller::begin() const { return iterator(this->m_LSystem, this->m_Depth, false); }
 
-LSystem_Controller::iterator LSystem_Controller::end() { return iterator(this->m_LSystem, this->m_Depth, true ); }
+LSystem_Controller::iterator LSystem_Controller::end() const { return iterator(this->m_LSystem, this->m_Depth, true ); }
 
 const char &LSystem_Controller::iterator::operator*(){
     return this->m_LSystem.getProduction(this->m_CurrentProduction)->at(this->m_Positions.at(this->m_CurrentDepth).first);

@@ -54,7 +54,7 @@ int main(int argc, char** argv){
         // a grey image has been loaded
         // -> r/g/b values are equal
         // use the r channel as a reference grey channel
-        const cf::Color color = LUT[image.getColor(x, y).r];
+        const cf::Color& color = LUT[image.getColor(x, y).r];
         image.setColor(x, y, color);
     }
     }
@@ -76,9 +76,9 @@ int main(int argc, char** argv){
     //distribution(gen);
 
     for (unsigned int i = 0; i < LUT.size(); ++i){
-        LUT[i].r = colorDistribution(gen);
-        LUT[i].g = colorDistribution(gen);
-        LUT[i].b = colorDistribution(gen);
+        LUT[i].r = uint8_t(colorDistribution(gen));
+        LUT[i].g = uint8_t(colorDistribution(gen));
+        LUT[i].b = uint8_t(colorDistribution(gen));
     }
 
     // short version from above

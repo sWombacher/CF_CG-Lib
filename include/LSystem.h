@@ -93,8 +93,8 @@ struct LSystem_Controller{
         bool m_EndReached;
     };
 
-    iterator begin();
-    iterator end  ();
+    iterator begin() const;
+    iterator end  () const;
 
 private:
     const size_t m_Depth;

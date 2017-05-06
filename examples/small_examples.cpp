@@ -5,7 +5,7 @@
 
 int main(){
     // read ant string and print it
-    std::string antStr = cf::readAntString(CHAOS_FILE_PATH "Ant_10.ant");
+    const std::string antStr = cf::readAntString(CHAOS_FILE_PATH "Ant_10.ant");
     std::cout << "Ant string:\t" << antStr << '\n' << std::endl;
 
 
@@ -30,8 +30,8 @@ int main(){
 
     // convert between degrees/radians
     // Note: OpenGL uses degree, glm radians (see 'window_3D_example.cpp')
-    float deg = cf::degree2radian(180.f);
-    float rad = cf::radian2degree(glm::pi<float>() / 2.f);
+    const float deg = cf::degree2radian(180.f);
+    const float rad = cf::radian2degree(glm::pi<float>() / 2.f);
     std::cout << "180 degree in radian:  " << deg << std::endl
               << " Pi half   in degree:  " << rad << std::endl
               << std::endl;
@@ -39,7 +39,7 @@ int main(){
 
     // print floating point values with different precisions
     // based on: http://www.cplusplus.com/reference/iomanip/setprecision/
-    double pi_approx = 3.14159;
+    const double pi_approx = 3.14159;
     std::cout << "Different pi approximation outputs:\n"
               << std::setprecision(5) << pi_approx << "\t\t"
               << std::setprecision(9) << pi_approx << "\t\t"

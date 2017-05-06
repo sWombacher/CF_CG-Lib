@@ -17,7 +17,7 @@ public:
 // create a cylinder
 // direction and length of this vector will be drawn as a cylinder later on
         glm::vec4 dir(this->m_Length, 0, 0, 1);
-        float radianValue = cf::degree2radian(this->m_Angle); // glm library uses radian format
+        const float radianValue = cf::degree2radian(this->m_Angle); // glm library uses radian format
 
         // rotation around x-axis,
         // since 'dir' lies on the x-axis the rotation doesn't do anything :)

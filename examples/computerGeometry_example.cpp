@@ -20,7 +20,7 @@ int main(int argc, char** argv){
         filePath = argv[1];
 
     // read dat file as cf::PointVector type
-    std::vector<cf::PointVector> points = cf::readDATFile<cf::PointVector>(filePath);
+    const std::vector<cf::PointVector> points = cf::readDATFile<cf::PointVector>(filePath);
 
 /// part 1
 // create coordinate system and draw all points and lines
@@ -40,8 +40,7 @@ int main(int argc, char** argv){
 
 // wait for user input and draw user points
     std::cout << "Please set a point\n\n";
-    cf::PointVector userPoint; // default values of PointVector: (0 0 1)
-    userPoint = coordinateSystem.waitMouseInput();
+    const cf::PointVector userPoint = coordinateSystem.waitMouseInput();
     coordinateSystem.drawPoint(userPoint, cf::Color::RED);
     coordinateSystem.show();
 
@@ -50,17 +49,17 @@ int main(int argc, char** argv){
     enum class PointDescription{ LEFTSIDE_OF_LINE, RIGHTSIDE_OF_LINE, ON_THE_LINE };
     auto calcSide = [&userPoint](const cf::PointVector& line_p1, const cf::PointVector& line_p2) -> PointDescription {
         // normalization not required
-        float scalarProduct = line_p1 % line_p2 * userPoint; // % crossproduct, * dot product
-        if (scalarProduct == 0.f)
+        const double scalarProduct = line_p1 % line_p2 * userPoint; // % crossproduct, * dot product
+        if (std::abs(scalarProduct) < 0.000001) // compare zero
             return PointDescription::ON_THE_LINE;
-        else if (scalarProduct < 0.f)
+        else if (scalarProduct < 0.0)
             return PointDescription::RIGHTSIDE_OF_LINE;
         else
             return PointDescription::LEFTSIDE_OF_LINE;
     };
-    PointDescription des0 = calcSide(points[0], points[1]);
-    PointDescription des1 = calcSide(points[1], points[2]);
-    PointDescription des2 = calcSide(points[2], points[0]);
+    const PointDescription des0 = calcSide(points[0], points[1]);
+    const PointDescription des1 = calcSide(points[1], points[2]);
+    const PointDescription des2 = calcSide(points[2], points[0]);
 
     if (des0 == des1 && des1 == des2){
         // all 3 descriptions have the same value
@@ -87,7 +86,8 @@ int main(int argc, char** argv){
 //  using line normal
     std::cout << "Press enter to draw a line between point0 and point2\n" << std::flush;
     coordinateSystem.waitKey();
-    cf::PointVector normal = points[2] % points[0];
+
+    const cf::PointVector normal = points[2] % points[0];
     coordinateSystem.drawLinearEquation(normal, cf::Color::BLACK, cf::Window2D::LineType::DEFAULT, 2);
     //coordinateSystem.drawLinearEquation(normal[0], normal[1], normal[2]); // alternatively
     coordinateSystem.show();
@@ -96,7 +96,8 @@ int main(int argc, char** argv){
 //  using PointVector and a direction
     std::cout << "Press enter to draw a line between point1 and point0\n";
     coordinateSystem.waitKey();
-    cf::DirectionVector dir = points[1] - points[0];
+
+    const cf::DirectionVector dir = points[1] - points[0];
     coordinateSystem.drawLinearEquation(points[1], dir, cf::Color::RED, cf::Window2D::LineType::DOT_1 /* cf::WindowCoordinateSystem::LineType::DOT_1 is also available */);
     coordinateSystem.show();
 
@@ -122,13 +123,16 @@ int main(int argc, char** argv){
     coordinateSystem.show();
 
     // alternatively
+    // Note:
+    //  start/end have to be the same distance to center point!
     const cf::PointVector start = userPoint + cf::DirectionVector(17, -23, 0.0);
     const cf::PointVector end = userPoint + cf::DirectionVector(23, 17, 0.0);
     coordinateSystem.waitKey();
-    coordinateSystem.drawCirclePart(userPoint, start, end, cf::Color::GREEN, 3, true); // true -> small circle part
-    coordinateSystem.drawCirclePart(userPoint, start, end, cf::Color::ORANGE, 3, false); // false -> big circle part
+    coordinateSystem.drawCirclePart(userPoint, start, end, cf::Color::GREEN, 3, true /* small circle part */);
+    coordinateSystem.drawCirclePart(userPoint, start, end, cf::Color::ORANGE, 3, false /* big circle part */);
     coordinateSystem.show();
 
+// end
     std::cout << "Press enter to finish the process\n";
     coordinateSystem.waitKey();
     return 0;

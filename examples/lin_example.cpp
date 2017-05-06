@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
               << std::endl;
 
     // most of the files provide F as a symbol
-    char symbol = 'F';
+    const char symbol = 'F';
     std::cout << "\nProductions to symbol: " << symbol << std::endl;
 
     // display production
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     //std::cout << "Press enter to finish the process";
     //cf::Console::waitKey();
 
-    cf::LSystem_Controller con(2, ls);
+    const cf::LSystem_Controller con(2, ls);
     for (const auto& e : con)
         std::cout << e << std::flush;
     std::cout << std::endl;

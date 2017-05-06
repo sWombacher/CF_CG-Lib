@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     ifs.read(filePath);
 
     // output all parsed data of IFS file
-    std::string align = " :  ";
+    const std::string align = " :  ";
     std::cout << "Name"               << align << ifs.getName()               << '\n'
               << "Num transformation" << align << ifs.getNumTransformations() << '\n'
               << "Interval X min"     << align << ifs.getRangeX().min         << '\n'

@@ -98,11 +98,11 @@ int main(int argc, char** argv){
         filePath_palFile = argv[2];
     }
 
-    cf::WindowRasterized img = cf::WindowRasterized(filePath_heightMap.c_str());
+    const cf::WindowRasterized img = cf::WindowRasterized(filePath_heightMap.c_str());
     // if you have very large images, you may want to resize that image for performance
     //img.resize(255, 255);
 
-    std::vector<cf::Color> col = cf::readPaletteFromFile(filePath_palFile.c_str());
+    const std::vector<cf::Color> col = cf::readPaletteFromFile(filePath_palFile.c_str());
     img.show();
 
     MyWindow::printWindowUsage();
