@@ -74,7 +74,7 @@ public:
     }
 
     template<bool PV_RHS, typename _VType>
-    auto operator+ (const Vec3<PV_RHS, _VType>& rhs) const{
+    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) + _VType(0))> operator+ (const Vec3<PV_RHS, _VType>& rhs) const{
         Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) + _VType(0))> tmp;
         for (size_t i = 0; i < 3; ++i)
             tmp[i] = this->m_Data[i] + rhs.m_Data[i];
@@ -89,7 +89,7 @@ public:
     }
 
     template<bool PV_RHS, typename _VType>
-    auto operator- (const Vec3<PV_RHS, _VType>& rhs) const{
+    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) - _VType(0))> operator- (const Vec3<PV_RHS, _VType>& rhs) const{
         Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) - _VType(0))> tmp;
         for (size_t i = 0; i < 3; ++i)
             tmp[i] = this->m_Data[i] - rhs.m_Data[i];
@@ -128,7 +128,7 @@ public:
      * @return
      */
     template<bool PV_RHS, typename _VType>
-    auto operator% (const Vec3<PV_RHS, _VType>& rhs) const{
+    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) * _ValueType(0) - _ValueType(0))> operator% (const Vec3<PV_RHS, _VType>& rhs) const{
         Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) * _ValueType(0) - _ValueType(0))> tmp = *this;
         tmp %= rhs;
         return tmp;
@@ -171,7 +171,7 @@ public:
      * @return
      */
     template<bool PV_RHS, typename _VType>
-    auto operator*(const Vec3<PV_RHS, _VType>& rhs) const{
+    decltype(_VType(0) * _ValueType(0) * (_VType(0) + _ValueType(0))) operator*(const Vec3<PV_RHS, _VType>& rhs) const{
         const auto& md = this->m_Data;
         const auto& rd = rhs.m_Data;
         return md[0] * rd[0] + md[1] * rd[1] + md[2] * rd[2];
@@ -278,7 +278,7 @@ public:
      * @brief length Calculates the vector length for Direction type vectors
      * @return Length of the underlying vector
      */
-    auto length() const {
+    decltype(_ValueType(0) * _ValueType(0) + _ValueType(0)) length() const {
         static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
         return std::sqrt(this->m_Data[0] * this->m_Data[0] + this->m_Data[1] * this->m_Data[1]);
     }

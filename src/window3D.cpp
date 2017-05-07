@@ -24,8 +24,8 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
     // Enable perspective projection with fovy, aspect, zNear and zFar
 
     // Compute aspect ratio of the new window
-    GLfloat aspect = (GLfloat)this->m_Width / (GLfloat)this->m_Height;
-    gluPerspective(45.0f, aspect, 0.1f, 1000.0f);
+    GLdouble aspect = GLdouble(this->m_Width) / GLdouble(this->m_Height);
+    gluPerspective(45.0, aspect, 0.1, 1000.0);
 
 	this->m_AdditionalKeyboardCallback = [this](unsigned char key, int x, int y) {
 		this->handleKeyboardInput(key, x, y);
@@ -39,6 +39,7 @@ Window3D::Window3D(int* argc, char** argv, int width, int height, const char* ti
 
     // enable lighting by default
     glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
 }
 Window3D::~Window3D(){
     glutDestroyWindow(this->m_WindowID);
@@ -301,9 +302,10 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
 
     const glm::vec3 rotVec = glm::normalize(glm::cross(startDir, dir));
 
+    const cf::Color c = Window3D::_AdjustColorOpgenGL(color);
     glPushMatrix();
     {
-        glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
+        glColor3b(char(c.r), char(c.g), char(c.b));
         glTranslatef(position.x, position.y, position.z);
 
         float angle = glm::angle(startDir, dir) / glm::pi<float>() * 180.f;
@@ -343,13 +345,13 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec4& 
 
 // Groch
 void Window3D::drawSphere(const glm::vec3& position, float diameter, const Color& color) const {
-
+    const cf::Color c = Window3D::_AdjustColorOpgenGL(color);
 	glPushMatrix();
 	{
-		glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
+        glColor3b(char(c.r), char(c.g), char(c.b));
 		glTranslatef(position.x, position.y, position.z);
 		glScalef(diameter, diameter, diameter);
-		glutSolidSphere(1.f, 10, 10);
+        glutSolidSphere(1.0, 10, 10);
 	}
 	glPopMatrix();
 }
@@ -357,13 +359,13 @@ void Window3D::drawSphere(const glm::vec3& position, float diameter, const Color
 
 // Groch
 void Window3D::drawCube(const glm::vec3& position, float size, const Color& color) const {
-
+    const cf::Color c = Window3D::_AdjustColorOpgenGL(color);
 	glPushMatrix();
 	{
-		glColor3f(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f);
+        glColor3b(char(c.r), char(c.g), char(c.b));
 		glTranslatef(position.x, position.y, position.z);
 		glScalef(size, size, size);
-		glutSolidCube(1.f);
+        glutSolidCube(1.0);
 	}
 	glPopMatrix();
 }
@@ -373,7 +375,7 @@ void Window3D::_AdjustCamera(){
     glLoadIdentity();             // Reset
 
     // Compute aspect ratio of the new window
-    GLfloat aspect = GLfloat(this->m_Width) / GLfloat(this->m_Height);
+    GLdouble aspect = GLdouble(this->m_Width) / GLdouble(this->m_Height);
 
     // Set the viewport to cover the new window
     glViewport(0, 0, this->m_Width, this->m_Height);
@@ -382,7 +384,7 @@ void Window3D::_AdjustCamera(){
     glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
 
     // Enable perspective projection with fovy, aspect, zNear and zFar
-    gluPerspective(45.0f, aspect, 0.1f, 1000.0f);
+    gluPerspective(45.0, aspect, 0.1, 1000.0);
 
     switch(this->m_CameraType){
     case CameraType::NONE:
@@ -433,6 +435,10 @@ void Window3D::_AdjustCamera(){
 void Window3D::_ZoomCamera(bool positveZoom){
     this->m_LookAtDistance += positveZoom ? this->m_DistAdjustment : -this->m_DistAdjustment;;
     this->m_DistAdjustment = std::abs(this->m_LookAtDistance) / 10.f + 0.1f;
+}
+
+Color Window3D::_AdjustColorOpgenGL(const Color &color){
+    return { uint8_t(color.r / 2), uint8_t(color.g / 2), uint8_t(color.b / 2) };
 }
 
 void Window3D::setMaxFPS(float maxFPS){

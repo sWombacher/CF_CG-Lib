@@ -291,13 +291,12 @@ int main(int argc, char** argv) {
 	catch (const std::exception& e) { error = e.what(); }
 	catch (const char* str) { error = str; }
 	catch (...) { error = "Unknown error"; }
-	std::cerr << "Exception captured:\n" << error << std::endl;
+    cf::Console::printError("Exception captured:\n", error);
 	MessageBoxA(0, error.c_str(), "Exception captured!", MB_OK);
 	return -1;
 }
 #define main CF_CG_MAIN
 #endif // _WIN32
 #endif // CFCG_EXCEPTION_HANDLING
-
 
 #endif

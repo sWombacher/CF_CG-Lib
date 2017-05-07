@@ -178,6 +178,8 @@ protected:
     void _AdjustCamera();
     void _ZoomCamera(bool positveZoom);
 
+    static cf::Color _AdjustColorOpgenGL(const cf::Color& color);
+
     // you may change this parameters to the center of your object / you own distance
     glm::vec3 m_LookAt = glm::vec3(0.f, 0.f, 0.f);
     float m_LookAtDistance = 10.f;
