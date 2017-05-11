@@ -36,6 +36,12 @@ if (USE_SYSTEM_LIBS)
     set(GLU_LIB)
     set(GLUT_LIB ${GLUT_LIBRARY})
 
+    # TEST
+    find_package(Eigen3 REQUIRED)
+    include_directories(${EIGEN3_INCLUDE_DIR})
+    message(${EIGEN3_INCLUDE_DIR})
+    # END TEST
+
 else()
     message("Using provided 3rd party libs")
 
@@ -81,7 +87,7 @@ else()
 endif()
 
 # enable c++11 features
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set output paths
