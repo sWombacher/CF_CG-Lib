@@ -85,8 +85,11 @@ struct WindowCoordinateSystem : protected Window2D {
             throw std::runtime_error("Error: Direction vector may only have values != 0 onf x and y coordinates");
 
         if (std::abs(drawingDirection.x) < cf::WindowCoordinateSystem::ZERO_COMPARE){
-            if (std::abs(drawingDirection.y) < cf::WindowCoordinateSystem::ZERO_COMPARE)
-                throw std::runtime_error("Error: At least one direction component (x/y) must be set!");
+            if (std::abs(drawingDirection.y) < cf::WindowCoordinateSystem::ZERO_COMPARE){
+                cf::Console::printWarning(__func__, " called with no direction x/y -> only the original point will be drawn");
+                this->setColor(pointVector.x, pointVector.y, color);
+                return;
+            }
             this->drawLine({pointVector.x, this->m_IntervalY.min}, {pointVector.x, this->m_IntervalY.max}, color, type, lineWidth);
         }
         else{
@@ -119,7 +122,6 @@ struct WindowCoordinateSystem : protected Window2D {
                     return;
                 }
             }
-
             // 0*y = 0
             // <=>  ax + c = 0
             // <=>  x = -c/a
@@ -195,7 +197,7 @@ struct WindowCoordinateSystem : protected Window2D {
                         continue;
 
                     if (current == e){
-                        points.erase(points.begin() + i);
+                        points.erase(points.begin() + int(i));
                         --i;
                         break;
                     }
@@ -225,7 +227,7 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param lineWidth Width of the line, Note: only available on default line type
      */
     void drawCircle(const cf::Point& center, float radius, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1){
-        int pixelRadius = std::round(this->convert_intervalLength_to_pixelLength(radius));
+        int pixelRadius = int(std::round(this->convert_intervalLength_to_pixelLength(radius)));
         if (pixelRadius <= 0)
             pixelRadius = 1;
         cf::Window2D::drawCircle(center, pixelRadius, lineWidth, color);

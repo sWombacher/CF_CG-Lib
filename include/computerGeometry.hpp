@@ -292,6 +292,28 @@ public:
         return { this->m_Data[1], -this->m_Data[0], _ValueType(0.0) };
     }
 
+    /**
+     * @brief operator== Equals operator
+     * @param rhs Other vector
+     * @return
+     */
+    bool operator== (const MY_TYPE& rhs) const{
+        for (int i = 0; i < 3; ++i){
+            if (!MY_TYPE::_EqualZero(rhs[i] - this->m_Data[i]))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @brief operator!= Not equals operator
+     * @param rhs Other vector
+     * @return
+     */
+    bool operator!= (const MY_TYPE& rhs) const { return !(*this == rhs); }
+
+
+
 private:
     template<bool b, typename _VType>
     friend class Vec3;
