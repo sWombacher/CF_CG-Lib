@@ -158,7 +158,6 @@ private:
     static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width);
     static const float ZERO_COMPARE;
 };
-const float cf::WindowCoordinateSystem::ZERO_COMPARE = 0.000001f;
 
 }
 

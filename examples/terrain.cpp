@@ -5,7 +5,7 @@
 #define CFCG_EXCEPTION_HANDLING
 #endif
 
-#include "windowRasterized.hpp"
+#include "windowRasterized.h"
 #include "window3D.h"
 
 struct MyWindow : public cf::Window3D {

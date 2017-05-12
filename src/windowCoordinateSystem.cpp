@@ -1,4 +1,4 @@
-#include "windowCoordinateSystem.hpp"
+#include "windowCoordinateSystem.h"
 
 namespace cf{
 
@@ -214,6 +214,7 @@ int WindowCoordinateSystem::_CALCULATE_HEIGHT(const Interval &range_x, const Int
     return int(width * (diff_y / diff_x));
 }
 
-
-
 }
+
+const float cf::WindowCoordinateSystem::ZERO_COMPARE = 0.000001f;
+

@@ -5,7 +5,7 @@
 #define CFCG_EXCEPTION_HANDLING
 #endif
 
-#include "windowRasterized.hpp"
+#include "windowRasterized.h"
 #include <iostream>
 #include <random>
 #include <string>

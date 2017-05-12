@@ -5,7 +5,7 @@
 #define CFCG_EXCEPTION_HANDLING
 #endif
 
-#include "windowVectorized.hpp"
+#include "windowVectorized.h"
 
 #include <string>
 #include <sstream>

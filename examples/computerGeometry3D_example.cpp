@@ -7,7 +7,7 @@
 
 
 #include "computerGeometry3D.hpp"
-#include "windowCoordinateSystem3D.hpp"
+#include "windowCoordinateSystem3D.h"
 
 int main(int argc, char** argv){
     cf::WindowCoordinateSystem3D system(&argc, argv);

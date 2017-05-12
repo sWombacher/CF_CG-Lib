@@ -1,7 +1,7 @@
 #ifndef COMPUTER_GEOMETRY_H_H
 #define COMPUTER_GEOMETRY_H_H
 
-#include "windowCoordinateSystem.hpp"
+#include "windowCoordinateSystem.h"
 #include "utils.h"
 #include <sstream>
 #include <fstream>
