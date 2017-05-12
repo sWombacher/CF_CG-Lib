@@ -16,17 +16,14 @@ struct WindowRasterized : protected Window2D {
      * @param windowName Name of the window
      * @param startColor Background color
      */
-    WindowRasterized(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0})
-        : Window2D(width, height, windowName, startColor)
-    {
-        this->setInvertYAxis(false);
-    }
+    WindowRasterized(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0});
 
     /**
      * @brief WindowRasterized Load image from file path
      * @param filePath Path to file
      */
-    WindowRasterized(const char* filePath) : Window2D(filePath) {}
+    WindowRasterized(const char* filePath);
+
     virtual ~WindowRasterized() = default;
 
     // publicly available functions  from class Window2D
