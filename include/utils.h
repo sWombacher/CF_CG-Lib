@@ -1,19 +1,19 @@
 #ifndef UTILS_H_H
 #define UTILS_H_H
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
-#include <inttypes.h>
 #include "termcolor.hpp"
+#include <inttypes.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
-#include <glm/gtx/rotate_vector.hpp>
 
 // min/max might be defined and result
 // compile errors on Intervall initialisation
@@ -33,14 +33,14 @@ std::ostream& operator<<(std::ostream& of, const glm::vec4& vec);
 std::ostream& operator<<(std::ostream& of, const glm::mat3x3& mat);
 std::ostream& operator<<(std::ostream& of, const glm::mat4x4& mat);
 
-namespace cf{
+namespace cf {
 
 /**
- * @brief _removeWindowsSpecificCarriageReturn Removes 'carriage return' characters in strings ('carriage return' may be read from unix system by providing windows files)
+ * @brief _removeWindowsSpecificCarriageReturn Removes 'carriage return' characters in strings ('carriage return' may be read
+ * from unix system by providing windows files)
  * @param str string containing 'carriage return', which will be removed
  */
 void _removeWindowsSpecificCarriageReturn(std::string& str);
-
 
 struct Color;
 
@@ -72,11 +72,10 @@ float radian2degree(float radianValue);
  */
 float degree2radian(float degreeValue);
 
-
 /**
  * @brief The Direction struct for getting absolute directions from a current direction and a relative direction
  */
-struct Direction{
+struct Direction {
     enum class AbsoluteDirection { NORTH, EAST, SOUTH, WEST, NUM_ABS_DIRS };
     enum class RelativeDirection { LEFT, FORWARD, RIGHT, NUM_REL_DIRS };
 
@@ -91,38 +90,38 @@ struct Direction{
     static std::string toString(RelativeDirection relDir);
 };
 
-
 /**
  * @brief The Interval struct provides functionallity to translate values from one interval into another
  */
-struct Interval{
-    Interval(float _min = 0, float _max = 0):min(_min), max(_max){}
+struct Interval {
+    Interval(float _min = 0, float _max = 0) : min(_min), max(_max) {}
     float min;
     float max;
 
     float translateIntervalPostion(const Interval& newInterval, float originalPosition) const;
-    static float translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval, float originalPosition);
+    static float translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval,
+                                          float originalPosition);
     friend std::ostream& operator<<(std::ostream& os, const Interval& interval);
 };
 
 /**
  * @brief The Color struct offers a class for rgb access
  */
-struct Color{
-    Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0) : b(blue), g(green), r(red){}
+struct Color {
+    Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0) : b(blue), g(green), r(red) {}
 
     uint8_t b;
     uint8_t g;
     uint8_t r;
 
-    cf::Color  operator* (float value) const;
-    cf::Color  operator/ (float value) const;
+    cf::Color operator*(float value) const;
+    cf::Color operator/(float value) const;
 
     cf::Color& operator*=(float value);
     cf::Color& operator/=(float value);
 
-    cf::Color  operator+ (const Color& c) const;
-    cf::Color  operator- (const Color& c) const;
+    cf::Color operator+(const Color& c) const;
+    cf::Color operator-(const Color& c) const;
 
     cf::Color& operator+=(const Color& c);
     cf::Color& operator-=(const Color& c);
@@ -133,8 +132,8 @@ struct Color{
     bool operator==(const cf::Color& c) const;
     bool operator!=(const cf::Color& c) const;
 
-    bool operator< (const cf::Color& c) const;
-    bool operator> (const cf::Color& c) const;
+    bool operator<(const cf::Color& c) const;
+    bool operator>(const cf::Color& c) const;
     bool operator<=(const cf::Color& c) const;
     bool operator>=(const cf::Color& c) const;
 
@@ -173,35 +172,34 @@ struct Console {
      * @brief readString Read a line into a std::string (includes spaces)
      * @return Read line
      */
-	static std::string readString();
+    static std::string readString();
 
     /**
      * @brief readFloat Reads a floatingpoint value
      * @return Read value
      */
-	static float readFloat();
+    static float readFloat();
 
     /**
      * @brief readInt Reads a integer value
      * @return Read value
      */
-	static int readInt();
+    static int readInt();
 
     /**
      * @brief waitKey Wait until key input (on windows also sets the console window active)
      */
-	static void waitKey();
+    static void waitKey();
 
     /**
      * @brief clearConsole Clears the console
      */
-	static void clearConsole();
+    static void clearConsole();
 
     /**
      * @brief Simple function for console warnings
      */
-    template<typename... Args>
-    static void printWarning(const Args&... args){
+    template <typename... Args> static void printWarning(const Args&... args) {
         std::cerr << termcolor::yellow << termcolor::bold << "Warning:\n" << termcolor::reset << termcolor::bold;
         _printData(args...);
         std::cerr << termcolor::reset << '\n' << std::endl;
@@ -210,19 +208,17 @@ struct Console {
     /**
      * @brief Simple function for console error messages
      */
-    template<typename... Args>
-    static void printError(const Args&... args){
+    template <typename... Args> static void printError(const Args&... args) {
         std::cerr << termcolor::red << termcolor::bold << "Error:\n" << termcolor::reset << termcolor::bold;
         _printData(args...);
         std::cerr << termcolor::reset << '\n' << std::endl;
     }
 
-private:
-	static void _console2foreground();
+  private:
+    static void _console2foreground();
 
-    static void _printData(){}
-    template<typename _Front, typename... _Args>
-    static void _printData(const _Front& front, const _Args&... args){
+    static void _printData() {}
+    template <typename _Front, typename... _Args> static void _printData(const _Front& front, const _Args&... args) {
         std::cerr << front;
         _printData(args...);
     }
@@ -233,8 +229,7 @@ private:
  * @param filePath Read *.dat file from path
  * @return
  */
-template<typename _VectorType = glm::vec3>
-std::vector<_VectorType> readDATFile(const std::string& filePath){
+template <typename _VectorType = glm::vec3> std::vector<_VectorType> readDATFile(const std::string& filePath) {
     std::fstream file(filePath, std::fstream::in);
     if (!file)
         throw std::runtime_error("File not found in function: \"readPaletteFromFile\"");
@@ -244,14 +239,14 @@ std::vector<_VectorType> readDATFile(const std::string& filePath){
         throw std::runtime_error(filePath + ", file not found");
 
     std::vector<_VectorType> points;
-    while (file.good()){
+    while (file.good()) {
         std::getline(file, str);
         cf::_removeWindowsSpecificCarriageReturn(str);
 
         // remove non numbers, and non . ' '
-        for (size_t i = 0; i < str.size(); ++i){
+        for (size_t i = 0; i < str.size(); ++i) {
             char c = str[i];
-            if (c != ' ' && c != '.' && (c < '0' || c > '9')){
+            if (c != ' ' && c != '.' && (c < '0' || c > '9')) {
                 cf::Console::printWarning("Unknown symbol detected, ASCII code: '", int(str[i]), '\'');
                 str.erase(i, 1);
                 --i;
@@ -261,9 +256,9 @@ std::vector<_VectorType> readDATFile(const std::string& filePath){
         _VectorType tmp;
         std::stringstream sstr(str);
         int valueCounter = 0;
-        while (sstr.good()){
+        while (sstr.good()) {
             std::getline(sstr, str, ' ');
-            if (str.size()){
+            if (str.size()) {
                 float value = std::stof(str);
                 tmp[valueCounter] = value;
                 ++valueCounter;
@@ -276,7 +271,6 @@ std::vector<_VectorType> readDATFile(const std::string& filePath){
     }
     return points;
 }
-
 }
 
 #ifdef CFCG_EXCEPTION_HANDLING
@@ -286,14 +280,19 @@ std::vector<_VectorType> readDATFile(const std::string& filePath){
 #include <windows.h>
 int CF_CG_MAIN(int argc, char** argv);
 int main(int argc, char** argv) {
-	std::string error;
-	try { return CF_CG_MAIN(argc, argv); }
-	catch (const std::exception& e) { error = e.what(); }
-	catch (const char* str) { error = str; }
-	catch (...) { error = "Unknown error"; }
+    std::string error;
+    try {
+        return CF_CG_MAIN(argc, argv);
+    } catch (const std::exception& e) {
+        error = e.what();
+    } catch (const char* str) {
+        error = str;
+    } catch (...) {
+        error = "Unknown error";
+    }
     cf::Console::printError("Exception captured:\n", error);
-	MessageBoxA(0, error.c_str(), "Exception captured!", MB_OK);
-	return -1;
+    MessageBoxA(0, error.c_str(), "Exception captured!", MB_OK);
+    return -1;
 }
 #define main CF_CG_MAIN
 #endif // _WIN32

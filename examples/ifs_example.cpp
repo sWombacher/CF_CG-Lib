@@ -4,12 +4,11 @@
 int main(int argc, char** argv) {
     // receive file name/path
     std::string filePath;
-    if (argc < 2){
+    if (argc < 2) {
         std::cout << "Please provide a .ifs file, if you want a different ifs file\n\n\n";
         filePath = CHAOS_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/chaos_files
         filePath += "Baum_3.ifs";
-    }
-    else
+    } else
         filePath = argv[1];
 
     // create IFS object
@@ -19,17 +18,17 @@ int main(int argc, char** argv) {
 
     // output all parsed data of IFS file
     const std::string align = " :  ";
-    std::cout << "Name"               << align << ifs.getName()               << '\n'
+    std::cout << "Name" << align << ifs.getName() << '\n'
               << "Num transformation" << align << ifs.getNumTransformations() << '\n'
-              << "Interval X min"     << align << ifs.getRangeX().min         << '\n'
-              << "Interval X max"     << align << ifs.getRangeX().max         << '\n'
-              << "Interval Y min"     << align << ifs.getRangeY().min         << '\n'
-              << "Interval Y max"     << align << ifs.getRangeY().max         << '\n'
-              << "\n\n" << std::endl;
+              << "Interval X min" << align << ifs.getRangeX().min << '\n'
+              << "Interval X max" << align << ifs.getRangeX().max << '\n'
+              << "Interval Y min" << align << ifs.getRangeY().min << '\n'
+              << "Interval Y max" << align << ifs.getRangeY().max << '\n'
+              << "\n\n"
+              << std::endl;
 
     for (std::size_t i = 0; i < ifs.getNumTransformations(); ++i)
-         std::cout << "Transformation " << i << ": \n" << ifs.getTransformation(i) << std::endl;
-
+        std::cout << "Transformation " << i << ": \n" << ifs.getTransformation(i) << std::endl;
 
     // calculate a simple matrix multiplication
     std::cout << "\nTransformation example:" << std::endl;

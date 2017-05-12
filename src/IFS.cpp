@@ -1,13 +1,12 @@
 #include "IFS.h"
 
-#include <stdexcept>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
+namespace cf {
 
-namespace cf{
-
-void IteratedFunctionSystem::read(const std::string &fiilePath){
+void IteratedFunctionSystem::read(const std::string& fiilePath) {
     std::fstream input(fiilePath, std::fstream::in);
     if (!input)
         throw std::runtime_error("File not found in function: \"IteratedFunctionSystem::read\"");
@@ -83,29 +82,19 @@ void IteratedFunctionSystem::read(const std::string &fiilePath){
     input.close();
 }
 
-std::size_t IteratedFunctionSystem::getNumTransformations() const{
-    return this->m_Transformations.size();
-}
+std::size_t IteratedFunctionSystem::getNumTransformations() const { return this->m_Transformations.size(); }
 
-const glm::mat3x3& IteratedFunctionSystem::getTransformation(std::size_t pos) const{
+const glm::mat3x3& IteratedFunctionSystem::getTransformation(std::size_t pos) const {
     if (pos >= this->m_Transformations.size())
         throw std::out_of_range("out of bound exception, in function \"IteratedFunctionSystem::getTransformation\"");
 
     return this->m_Transformations[pos];
 }
 
-const Interval& IteratedFunctionSystem::getRangeX() const{
-    return this->m_RangeX;
-}
-const Interval& IteratedFunctionSystem::getRangeY() const{
-    return this->m_RangeY;
-}
+const Interval& IteratedFunctionSystem::getRangeX() const { return this->m_RangeX; }
+const Interval& IteratedFunctionSystem::getRangeY() const { return this->m_RangeY; }
 
-const std::string& IteratedFunctionSystem::getName() const{
-    return this->m_Name;
-}
+const std::string& IteratedFunctionSystem::getName() const { return this->m_Name; }
 
-const std::vector<glm::mat3x3> &IteratedFunctionSystem::getAllTransformation() const{
-    return this->m_Transformations;
-}
+const std::vector<glm::mat3x3>& IteratedFunctionSystem::getAllTransformation() const { return this->m_Transformations; }
 }

@@ -3,14 +3,13 @@
 
 #include "utils.h"
 
-
-namespace cf{
+namespace cf {
 
 /**
  * @brief The IteratedFunctionSystem class
  * lazy people (like myself) may use the IFS tyepdef
  */
-struct IteratedFunctionSystem{
+struct IteratedFunctionSystem {
     /**
      * @brief read a *.ifs file from path
      * @param fiilePath Path to a *.ifs file
@@ -26,7 +25,7 @@ struct IteratedFunctionSystem{
     const std::string& getName() const;
     const std::vector<glm::mat3x3>& getAllTransformation() const;
 
-private:
+  private:
     std::string m_Name;
     std::vector<glm::mat3x3> m_Transformations;
 
@@ -35,7 +34,6 @@ private:
 };
 
 typedef IteratedFunctionSystem IFS; // short version for lazy people like myself :)
-
 }
 
 #endif // ITERATED_FUNCTION_SYSTEM_H_H

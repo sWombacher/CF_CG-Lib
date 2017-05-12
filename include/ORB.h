@@ -3,13 +3,13 @@
 
 #include "utils.h"
 
-namespace cf{
+namespace cf {
 
 /**
  * @brief The Orbit class
  * lazy people (like myself) may use the ORB tyepdef
  */
-struct Orbit{
+struct Orbit {
     /**
      * @brief read a *.orb file from path
      * @param filePath Path to a *.orb file
@@ -22,12 +22,12 @@ struct Orbit{
     const std::string& getName() const;
 
     const std::vector<glm::vec3>& getAllStartingPoints() const;
-    const std::vector<float>&     getAllFactors       () const;
+    const std::vector<float>& getAllFactors() const;
 
-    std::size_t getNumFactors       () const;
+    std::size_t getNumFactors() const;
     std::size_t getNumStartingPoints() const;
 
-private:
+  private:
     std::string m_Name;
     Interval m_IntervalX;
     Interval m_IntervalY;
@@ -37,7 +37,6 @@ private:
 };
 
 typedef Orbit ORB;
-
 }
 
 #endif

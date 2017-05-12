@@ -7,36 +7,39 @@
 
 #include "windowVectorized.h"
 
-#include <string>
-#include <sstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 int main(int, char**) {
-// read intervals from console
+    // read intervals from console
     cf::Interval range_x;
     std::cout << "Part 1: Demonstration of the correspondence between an \n";
     std::cout << "user defined float 2D-interval and an image matrix\n\n";
 
     std::cout << "Please provide a float interval for the x-axis:\n";
     std::cout << "(Min and max values between -10.0 and 10.0!)\n";
-    std::cout << "Interval: x-min: "; range_x.min = cf::Console::readFloat();
-    std::cout << "Interval: x-max: "; range_x.max = cf::Console::readFloat();
+    std::cout << "Interval: x-min: ";
+    range_x.min = cf::Console::readFloat();
+    std::cout << "Interval: x-max: ";
+    range_x.max = cf::Console::readFloat();
     std::cout << std::endl;
 
     cf::Interval range_y;
     std::cout << "Please provide a float interval for the y-axis:\n";
     std::cout << "(Min and max values between -10.0 and 10.0!)\n";
-    std::cout << "Interval: y-min: "; range_y.min = cf::Console::readFloat();
-    std::cout << "Interval: y-max: "; range_y.max = cf::Console::readFloat();
+    std::cout << "Interval: y-min: ";
+    range_y.min = cf::Console::readFloat();
+    std::cout << "Interval: y-max: ";
+    range_y.max = cf::Console::readFloat();
     cf::Console::clearConsole();
 
-
-// create window and print mouse input
+    // create window and print mouse input
     cf::WindowVectorized window(800, range_x, range_y, "Hello world", cf::Color::ORANGE);
     std::cout << "Created window size:\n"
-              << "Width : " << window.getWidth()  << std::endl
+              << "Width : " << window.getWidth() << std::endl
               << "Height: " << window.getHeight() << std::endl
-                                                  << std::endl;
+              << std::endl;
     window.drawAxis();
     window.show();
 
@@ -60,11 +63,10 @@ int main(int, char**) {
     window.waitKey();
     cf::Console::clearConsole();
 
-
-// take 2 points from console and draw a line and a rectangle
-//
-// first   point: use interval position
-// second  point: use pixel position
+    // take 2 points from console and draw a line and a rectangle
+    //
+    // first   point: use interval position
+    // second  point: use pixel position
     std::cout << "Enter float coordinates within interval for first point! \n";
     std::cout << "Please provide a float value for x within the interval: " << range_x << ":\n";
     point1.x = cf::Console::readFloat();
@@ -92,9 +94,8 @@ int main(int, char**) {
     window.drawCircle(point2, 3, -1, cf::Color::BLUE);
     window.show();
 
-
-// draw line and rectangle
-	cf::Console::clearConsole();
+    // draw line and rectangle
+    cf::Console::clearConsole();
     std::cout << "Press enter to draw a line\n";
     window.waitKey();
     window.drawLine(point1, point2, 2, cf::Color::BLACK);
@@ -105,8 +106,7 @@ int main(int, char**) {
     window.drawRectangle(point1, point2, 2, cf::Color::GREEN);
     window.show();
 
-
-// draw circle from point with radius to point2
+    // draw circle from point with radius to point2
     // calculate radius using pytagora
     const cf::Point vec_1_2 = point2 - point1;
     const float intervalLength = std::sqrt(vec_1_2.x * vec_1_2.x + vec_1_2.y * vec_1_2.y);
@@ -120,8 +120,7 @@ int main(int, char**) {
     window.drawCircle(point1, pixelLength, 2, cf::Color(127, 27, 127));
     window.show();
 
-
-// draw half circle from point2 towards point
+    // draw half circle from point2 towards point
     // calculate angle of straigt line from point to point2 and the positive x-axis
     // this can be calculated by 'tan(slope)'
     float angle = cf::radian2degree(std::atan(vec_1_2.y / vec_1_2.x)); // atan returns radian, we need degree :)

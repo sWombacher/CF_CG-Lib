@@ -1,21 +1,21 @@
 #ifndef LSYSTEM_H_H
 #define LSYSTEM_H_H
 
-#include <string>
-#include <memory>
 #include <map>
+#include <memory>
+#include <string>
 
 #include <glm/glm.hpp>
 
 #include "utils.h"
 
-namespace cf{
+namespace cf {
 
 /**
  * @brief The LindenmayerSystem class
  * lazy people (like myself) may use the IFS tyepdef
  */
-struct LindenmayerSystem{
+struct LindenmayerSystem {
 
     /**
      * @brief read a *.lin file from path
@@ -23,7 +23,7 @@ struct LindenmayerSystem{
      */
     void read(const std::string& filePath);
 
-    const std::string& getName () const;
+    const std::string& getName() const;
     char getAxiom() const;
 
     const std::string* getProduction(char symbol) const;
@@ -41,12 +41,11 @@ struct LindenmayerSystem{
 
     const std::map<char, const std::string>& getAllProductions() const;
 
-private:
+  private:
     std::string m_Name;
 
     char m_Axiom;
     std::map<char, const std::string> m_Productions;
-
 
     float m_Scale;
     float m_StartAngle;
@@ -54,14 +53,11 @@ private:
 
     bool m_ClearWindowEachTime;
 
-
     Interval m_RangeX;
     Interval m_RangeY;
 };
 
 typedef LindenmayerSystem LSystem; // short version for lazy people like myself :)
-
-
 
 /**
  * @brief The LSystem_Controller struct\n
@@ -74,7 +70,7 @@ typedef LindenmayerSystem LSystem; // short version for lazy people like myself 
       std::cout << c;
  \endverbatim
  */
-struct LSystem_Controller{
+struct LSystem_Controller {
     LSystem_Controller(size_t depth, const LSystem& LSystem);
 
     struct iterator {
@@ -82,7 +78,7 @@ struct LSystem_Controller{
         iterator& operator++();
         bool operator!=(const iterator& rhs);
 
-    private:
+      private:
         friend struct LSystem_Controller;
         iterator(const LSystem& lsystem, size_t depth, bool endIterator);
 
@@ -94,15 +90,12 @@ struct LSystem_Controller{
     };
 
     iterator begin() const;
-    iterator end  () const;
+    iterator end() const;
 
-private:
+  private:
     const size_t m_Depth;
     const LSystem& m_LSystem;
 };
-
-
 }
-
 
 #endif

@@ -1,11 +1,10 @@
 #ifndef WINDOW_2D_H_H
 #define WINDOW_2D_H_H
 
-#include <opencv2/opencv.hpp>
 #include "utils.h"
+#include <opencv2/opencv.hpp>
 
-
-namespace cf{
+namespace cf {
 struct Point;
 struct Line;
 struct Rect;
@@ -15,17 +14,19 @@ struct CirclePartition;
 /**
  * @brief The Window2D struct offers advanced features used by WindowRasterized/WindowVertorized
  */
-class Window2D{
-    static const int  DOT_VALUE = 4;
+class Window2D {
+    static const int DOT_VALUE = 4;
     static const int DASH_VALUE = 8;
 
-public:
-    Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals", const cf::Color& startColor = {0, 0, 0});
+  public:
+    Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals",
+             const cf::Color& startColor = {0, 0, 0});
     Window2D(const char* filePath);
     virtual ~Window2D();
 
     /**
-     * @brief show Show image, on first call it may require additional time to display content correctly (in those cases use waitKey(1000) )
+     * @brief show Show image, on first call it may require additional time to display content correctly (in those cases use
+     * waitKey(1000) )
      */
     void show() const;
     void clear(const cf::Color& color = cf::Color::WHITE);
@@ -54,7 +55,7 @@ public:
      * @brief setWindowDisplayScale Scales the image before displaying
      * @param scale Window scale size
      */
-    void  setWindowDisplayScale(float scale);
+    void setWindowDisplayScale(float scale);
     float getWindowDisplayScale() const;
 
     /**
@@ -64,7 +65,7 @@ public:
     void setInvertYAxis(bool invert);
     bool getInvertYAxis() const;
 
-    void  setColor(float x, float y, const Color& color);
+    void setColor(float x, float y, const Color& color);
     Color getColor(float x, float y) const;
 
     /**
@@ -97,11 +98,18 @@ public:
     /**
      * @brief The LineType enum Special line type used by one function of 'drawLine'
      */
-    enum class LineType{    DEFAULT = 0 /* normal line */ ,
-                              DOT_0 = Window2D::DOT_VALUE                          | 1,      DOT_1,      DOT_2,
-                             DASH_0 = Window2D::DASH_VALUE                         | 1,     DASH_1,     DASH_2,
-                         DOT_DASH_0 = Window2D::DOT_VALUE  | Window2D:: DASH_VALUE | 1, DOT_DASH_1, DOT_DASH_2
-                       };
+    enum class LineType {
+        DEFAULT = 0 /* normal line */,
+        DOT_0 = Window2D::DOT_VALUE | 1,
+        DOT_1,
+        DOT_2,
+        DASH_0 = Window2D::DASH_VALUE | 1,
+        DASH_1,
+        DASH_2,
+        DOT_DASH_0 = Window2D::DOT_VALUE | Window2D::DASH_VALUE | 1,
+        DOT_DASH_1,
+        DOT_DASH_2
+    };
 
     /**
      * @brief drawSpecializedLine Draws specialized line of width 1 (dotted and/or dashed lines)
@@ -121,7 +129,7 @@ public:
     /**
      * @brief resetInterval Set default interval (interval x: [0, image widht - 1], interval y: [0, image height - 1])
      */
-    void  resetInterval();
+    void resetInterval();
 
     /**
      * @brief saveImage Saves current image to harddrive
@@ -144,7 +152,6 @@ public:
      */
     void flippVertical();
 
-
     /**
      * @brief getIntervalX Const access to interval in x direction
      * @return
@@ -165,7 +172,7 @@ public:
      * @brief getHeight Acess to underlying image height
      * @return Height
      */
-    int getHeight()const;
+    int getHeight() const;
 
     /**
      * @brief getImage Direct access to the underlying image
@@ -179,7 +186,8 @@ public:
      * @param stepSize_x Dynamially set step size (x-axis), negative numbers indicate 10 steps for interval x
      * @param stepSize_y Dynamially set step size (y-axis), negative numbers indicate 10 steps for interval y
      */
-    void drawAxis(const cf::Color& color = cf::Color::BLACK, float stepSize_x = 1.f, float stepSize_y = 1.f, float interceptLength = 3.f);
+    void drawAxis(const cf::Color& color = cf::Color::BLACK, float stepSize_x = 1.f, float stepSize_y = 1.f,
+                  float interceptLength = 3.f);
 
     /**
      * @brief drawCirclePart Draws a part of a circle
@@ -197,7 +205,6 @@ public:
      * @param color Fill color
      */
     void floodFill(cf::Point startingPoint, const cf::Color& color);
-
 
     /**
      * @brief drawLine Draws a line from line class
@@ -230,16 +237,16 @@ public:
      */
     Window2D& operator=(const Window2D& rhs);
 
-protected:
+  protected:
     void _correctYValue(float& y) const;
     void _convertFromNewInterval(float& x, float& y) const;
     void _convertToNewInterval(float& x, float& y) const;
 
-	void _window2foreground() const;
+    void _window2foreground() const;
 
     cv::Mat m_Image;
 
-    bool  m_InvertYAxis;
+    bool m_InvertYAxis;
     const char* m_WindowName;
     float m_WindowScale;
 
@@ -252,44 +259,44 @@ protected:
     mutable bool m_FristShowCall = true;
 };
 
-
 // Note: cv::Point only allows int positions NOT floatingpoint
 /**
- * @brief The Point struct is a simple class for positon access on 2D images (imilar to cv::Point, but uses floats instead of integer)
+ * @brief The Point struct is a simple class for positon access on 2D images (imilar to cv::Point, but uses floats instead of
+ * integer)
  */
-struct Point{
-    Point(float val_x = 0.f, float val_y = 0.f):x(val_x), y(val_y){}
+struct Point {
+    Point(float val_x = 0.f, float val_y = 0.f) : x(val_x), y(val_y) {}
     float x;
     float y;
 
     bool operator==(const Point& p) const;
     bool operator!=(const Point& p) const;
 
-    Point  operator+ (const Point& p) const;
+    Point operator+(const Point& p) const;
     Point& operator+=(const Point& p);
 
-    Point  operator- (const Point& p) const;
+    Point operator-(const Point& p) const;
     Point& operator-=(const Point& p);
 
-    Point  operator* (float factor) const;
+    Point operator*(float factor) const;
     Point& operator*=(float factor);
 
-    Point  operator/ (float rhs) const;
+    Point operator/(float rhs) const;
     Point& operator/=(float rhs);
 
-    operator cv::Point () const;
+    operator cv::Point() const;
 
     friend Point operator*(float lhs, const Point& p);
     friend Point operator/(float lhs, const Point& p);
 };
 
-
 /**
  * @brief The Line struct Simple parameter wrapper struct
  */
-struct Line{
-    Line(cf::Point Point1, cf::Point Point2, int LineWidth, const cf::Color& Color, cf::Window2D::LineType LineType = cf::Window2D::LineType::DEFAULT)
-        : point1(Point1), point2(Point2), lineWidth(LineWidth), color(Color), lineType(LineType){}
+struct Line {
+    Line(cf::Point Point1, cf::Point Point2, int LineWidth, const cf::Color& Color,
+         cf::Window2D::LineType LineType = cf::Window2D::LineType::DEFAULT)
+        : point1(Point1), point2(Point2), lineWidth(LineWidth), color(Color), lineType(LineType) {}
 
     cf::Point point1;
     cf::Point point2;
@@ -300,9 +307,9 @@ struct Line{
 /**
  * @brief The Rect struct Simple parameter wrapper struct
  */
-struct Rect{
+struct Rect {
     Rect(cf::Point Point1, cf::Point Point2, int LineWidth, const cf::Color& Color)
-        : point1(Point1), point2(Point2), lineWidth(LineWidth), color(Color){}
+        : point1(Point1), point2(Point2), lineWidth(LineWidth), color(Color) {}
 
     cf::Point point1;
     cf::Point point2;
@@ -312,7 +319,7 @@ struct Rect{
 /**
  * @brief The Circle struct Simple parameter wrapper struct
  */
-struct Circle{
+struct Circle {
     Circle(const cf::Point& Center, int Radius, int LineWidth, const cf::Color& Color)
         : center(Center), radius(Radius), lineWidth(LineWidth), color(Color) {}
 
@@ -324,9 +331,9 @@ struct Circle{
 /**
  * @brief The CirclePartition struct Simple parameter wrapper struct
  */
-struct CirclePartition{
+struct CirclePartition {
     CirclePartition(cf::Point Center, int Radius, float StartAngle, float EndAngle, int LineWidth, const cf::Color& Color)
-        : center(Center), radius(Radius), startAngle(StartAngle), endAngle(EndAngle), lineWidth(LineWidth), color(Color){}
+        : center(Center), radius(Radius), startAngle(StartAngle), endAngle(EndAngle), lineWidth(LineWidth), color(Color) {}
 
     cf::Point center;
     int radius;
@@ -335,8 +342,6 @@ struct CirclePartition{
     int lineWidth;
     cf::Color color;
 };
-
-
 }
 
 #endif

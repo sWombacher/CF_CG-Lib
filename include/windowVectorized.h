@@ -3,7 +3,7 @@
 
 #include "window2D.h"
 
-namespace cf{
+namespace cf {
 
 /**
  * @brief The WindowVectorized struct Default class for images and raster operations
@@ -65,7 +65,6 @@ struct WindowVectorized : protected Window2D {
      */
     float convert_intervalLength_to_pixelLength(float intervalLength) const;
 
-
     /**
      * @brief getColor_imageSpace Get color from image x/y position
      * @param x X position
@@ -105,11 +104,10 @@ struct WindowVectorized : protected Window2D {
     using Window2D::clear;
     using Window2D::show;
 
-private:
+  private:
     static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width);
     inline void _invertY(cf::Point& p);
 };
-
 }
 
 #endif // WINDOW_VECTORIZED_H_H

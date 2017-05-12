@@ -3,7 +3,7 @@
 
 #include "window2D.h"
 
-namespace cf{
+namespace cf {
 
 /**
  * @brief The WindowCoordinateSystem struct Default class for images and raster operations
@@ -16,7 +16,7 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param width Image width in pixel (hight will be determind automatically)
      */
     WindowCoordinateSystem(int width, const cf::Interval& range_x, const cf::Interval& range_y,
-                     const char* windowName = "Computer Geometry", const cf::Color& startColor = cf::Color::WHITE);
+                           const char* windowName = "Computer Geometry", const cf::Color& startColor = cf::Color::WHITE);
 
     virtual ~WindowCoordinateSystem() = default;
 
@@ -54,7 +54,8 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param type Change line type to dot/dash/dot-dash
      * @param lineWidth Width of the line, Note: only available on default line type
      */
-    void drawLinearEquation(const cf::Point& pointVector, const glm::vec3& drawingDirection, const cf::Color& color = cf::Color::BLACK,
+    void drawLinearEquation(const cf::Point& pointVector, const glm::vec3& drawingDirection,
+                            const cf::Color& color = cf::Color::BLACK,
                             cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1);
 
     /**
@@ -113,7 +114,6 @@ struct WindowCoordinateSystem : protected Window2D {
      */
     float convert_intervalLength_to_pixelLength(float intervalLength) const;
 
-
     /**
      * @brief drawCirclePart Draw a partition of a circle
      * @param center Circle center
@@ -123,7 +123,8 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param color Circle color
      * @param lineWidth Line width of the circle
      */
-    void drawCirclePart(const cf::Point& center, float radius, float startAngle, float endAngle, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1);
+    void drawCirclePart(const cf::Point& center, float radius, float startAngle, float endAngle,
+                        const cf::Color& color = cf::Color::BLACK, int lineWidth = 1);
 
     /**
      * @brief drawCirclePart Draw a partition of a circle
@@ -134,7 +135,8 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param lineWidth Line width
      * @param smallerAngle Choose wich part of the Circle should be drawn (default: smaller part of the circle)
      */
-    void drawCirclePart(const cf::Point& center, const cf::Point& p0, const cf::Point& p1, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1, bool smallerAngle = true);
+    void drawCirclePart(const cf::Point& center, const cf::Point& p0, const cf::Point& p1,
+                        const cf::Color& color = cf::Color::BLACK, int lineWidth = 1, bool smallerAngle = true);
 
     // publicly available functions from class Window2D
     using Window2D::getWindowDisplayScale;
@@ -154,11 +156,10 @@ struct WindowCoordinateSystem : protected Window2D {
     using Window2D::clear;
     using Window2D::show;
 
-private:
+  private:
     static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width);
     static const float ZERO_COMPARE;
 };
-
 }
 
 #endif // WINDOW_COORDINATE_SYSTEM_H_H

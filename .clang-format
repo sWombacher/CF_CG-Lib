@@ -6,5 +6,5 @@ IndentFunctionDeclarationAfterType: true
 PointerBindsToType: true
 BreakBeforeBraces: Attach
 BreakConstructorInitializersBeforeComma: false
-NamespaceIndentation: All
 IndentWidth: 4
+ColumnLimit: 128
