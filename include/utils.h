@@ -246,7 +246,7 @@ template <typename _VectorType = glm::vec3> std::vector<_VectorType> readDATFile
         // remove non numbers, and non . ' '
         for (size_t i = 0; i < str.size(); ++i) {
             char c = str[i];
-            if (c != ' ' && c != '.' && (c < '0' || c > '9')) {
+            if (c != ' ' && c != '.' && (c < '0' || c > '9') && c != '-' && c != '+') {
                 cf::Console::printWarning("Unknown symbol detected, ASCII code: '", int(str[i]), '\'');
                 str.erase(i, 1);
                 --i;
