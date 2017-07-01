@@ -35,55 +35,22 @@ if (USE_SYSTEM_LIBS)
     set(GL_LIB ${OPENGL_LIBRARIES})
     set(GLU_LIB)
     set(GLUT_LIB ${GLUT_LIBRARY})
-
-    # TEST
-    find_package(Eigen3 REQUIRED)
-    include_directories(${EIGEN3_INCLUDE_DIR})
-    message(${EIGEN3_INCLUDE_DIR})
-    # END TEST
-
 else()
-    message("Using provided 3rd party libs")
-
-    include_directories(3rdparty/include)
     if (NOT CMAKE_SIZEOF_VOID_P MATCHES "8")
         message(SEND_ERROR "Error:\nProvided libraries are 64bit versions,\nif you have a 64bit system try changing your compiler to a x86_x64 compiler\nNote: you may have to delete the cmake cache to do so")
-    endif()	
-	
-    set(LIB_DIR 3rdparty/lib/${CMAKE_SYSTEM_NAME})
-    if (WIN32 OR CYGWIN)
-        file(GLOB GLUT_LIB_DEBUG ${LIB_DIR}/Debug/freeglut*.lib)
-        file(GLOB GLUT_LIB_RELEASE ${LIB_DIR}/Release/freeglut*.lib)
-
-        file(GLOB OpenCV_LIBS_DEBUG ${LIB_DIR}/Debug/*opencv*.lib)
-        file(GLOB OpenCV_LIBS_RELEASE ${LIB_DIR}/Release/*opencv*.lib)
-    elseif (APPLE)
-        find_package(GLUT REQUIRED)
-        find_package(OpenGL REQUIRED)
-        set(GL_LIB ${OPENGL_LIBRARIES})
-        set(GLU_LIB)
-        set(GLUT_LIB ${GLUT_LIBRARY})
-
-        file(GLOB OpenCV_LIBS ${LIB_DIR}/*)
-    else()
-        find_library(GL_LIB NAMES GL)
-        find_library(GLU_LIB NAMES GLU)
-        find_library(GLUT_LIB NAMES glut PATHS ${LIB_DIR} NO_DEFAULT_PATH)
-
-        file(GLOB tmp ${LIB_DIR}/*opencv*${CMAKE_SHARED_MODULE_SUFFIX})
-        foreach(file ${tmp})
-            get_filename_component(name ${file} NAME_WE)
-
-            # remove prefix
-            # NOTE: the  ^  at the beginning is itentional, do not change
-            string(REGEX REPLACE "^${CMAKE_SHARED_MODULE_PREFIX}" "" name ${name})
-            find_library(file NAMES ${name} PATHS ${LIB_DIR} NO_DEFAULT_PATH)
-            set(OpenCV_LIBS ${OpenCV_LIBS} ${file})
-        endforeach()
     endif()
+	if (NOT 3RD_PARTY_DIR)
+		message(SEND_ERROR "3RD_PARTY_DIR has to be set...")
+	endif()
+	
+	message("Using provided 3rd party libs")
+	include_directories(${3RD_PARTY_DIR}/include)
+	
+	file(GLOB GLUT_LIB_DEBUG ${3RD_PARTY_DIR}/Debug/freeglut*.lib)
+	file(GLOB GLUT_LIB_RELEASE ${3RD_PARTY_DIR}/Release/freeglut*.lib)
 
-    SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_CURRENT_LIST_DIR}/3rdparty/lib/${CMAKE_SYSTEM_NAME}")
+	file(GLOB OpenCV_LIBS_DEBUG ${3RD_PARTY_DIR}/Debug/*opencv*.lib)
+	file(GLOB OpenCV_LIBS_RELEASE ${3RD_PARTY_DIR}/Release/*opencv*.lib)
 endif()
 
 # enable c++11 features
@@ -92,24 +59,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set output paths
 if (WIN32 OR CYGWIN)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) # executeable
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) # executeable
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # shared libs
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib) # static libs
 else()
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE}) # executeable
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
-endif()
-
-# endable openmp support
-if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
-    find_package(OpenMP)
-    if (OPENMP_FOUND)
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        add_definitions(-DOPENMP_ENABLED)
-        message("OpenMP enabled")
-    endif()
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE}) # executeable
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # shared libs
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}) # static libs
 endif()
 
 # find all header and source files
@@ -120,10 +76,10 @@ file(GLOB SRC_FILES src/*.cpp src/*.c)
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES})
 if (WIN32 OR CYGWIN)
     # copy dlls
-    file(GLOB tmp ${LIB_DIR}/dlls/Debug/*)
+    file(GLOB tmp ${3RD_PARTY_DIR}/dlls/Debug/*)
     file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
 
-    file(GLOB tmp ${LIB_DIR}/dlls/Release/*)
+    file(GLOB tmp ${3RD_PARTY_DIR}/dlls/Release/*)
     file(COPY ${tmp} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
 
     target_link_libraries(${PROJECT_NAME} debug ${GLUT_LIB_DEBUG} optimized ${GLUT_LIB_RELEASE})
