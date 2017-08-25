@@ -9,32 +9,31 @@ namespace cf {
 
 struct WindowCoordinateSystem3D : protected Window3D {
     // thread safty:
-    // every functin has to start with
+    // every functin has to start with (some execptions)
     //  std::lock_guard<std::mutex> guard(this->m_Mutex);
 
     WindowCoordinateSystem3D(int* argc, char** argv, const Interval& interval = {-1.5, 1.5}, int width = 800,
                              int height = 600, const char* title = "chaos and fractals");
 
     void drawPlane(const glm::vec4& vec, const cf::Color& color = cf::Color::RED, uint8_t alpha = 127);
-    void drawLine(const glm::vec4& point, const glm::vec4& dir, const cf::Color& color = cf::Color::BLUE, float size = 0.01f);
-    void drawSphere(const glm::vec4& center, const cf::Color& color = cf::Color::GREEN, float radius = 0.05f);
+    void drawPlane(const glm::vec3& normal, const glm::vec3& point, const cf::Color& color = cf::Color::RED, uint8_t alpha = 127);
+
+    void drawPoint(const glm::vec3& pos, const cf::Color& color = cf::Color::BLACK, uint8_t alpha = 255, float radius = 0.05f);
+    void drawLine(const glm::vec3 &point, const glm::vec3 &dir, const cf::Color& color = cf::Color::BLUE, float lineThickness = 3.f);
+    void drawSphere(const glm::vec3& center, float radius, uint8_t alpha = 255, const cf::Color& color = cf::Color::GREEN);
+    void drawCircle(const glm::vec3& center, const glm::vec3 normal, float radius, const cf::Color& color = cf::Color::GREY, float lineThickness = 5.f);
 
     void clearWindow(const cf::Color& color = cf::Color::WHITE);
 
     unsigned char waitKey();
 
-
-    /// TEST
     template<typename _Function>
-    int beginDrawing(_Function f){
-        std::thread thread(f);
-        int res = this->startDrawing();
+    int beginDrawing(_Function&& f){
+        std::thread thread(std::forward<_Function>(f));
+        const int res = this->startDrawing();
         thread.join();
         return res;
     }
-    /// END TEST
-
-
 
   private:
     Interval m_Interval;
@@ -56,12 +55,13 @@ struct WindowCoordinateSystem3D : protected Window3D {
         cf::Color color;
         glm::vec3 point0;
         glm::vec3 point1;
-        float size;
+        float thickness;
     };
-    struct Point {
+    struct Sphere {
+        char alpha;
         cf::Color color;
         glm::vec3 pos;
-        float size;
+        float radius;
     };
     struct Plane {
         char alpha;
@@ -69,9 +69,17 @@ struct WindowCoordinateSystem3D : protected Window3D {
         glm::vec3 normal;
         std::vector<glm::vec3> points;
     };
+    struct Circle {
+        cf::Color color;
+        glm::vec3 normal;
+        glm::vec3 center;
+        float radius;
+        float thickness;
+    };
 
+    std::vector<Sphere> m_Spheres;
+    std::vector<Circle> m_Circles;
     std::vector<Plane> m_Planes;
-    std::vector<Point> m_Points;
     std::vector<Line> m_Lines;
 
     cf::Color m_BackgroundColor = cf::Color::WHITE;

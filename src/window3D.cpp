@@ -298,7 +298,7 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec3& 
 
     const glm::vec3 rotVec = glm::normalize(glm::cross(startDir, dir));
 
-    const cf::Color c = Window3D::_AdjustColorOpgenGL(color);
+    const cf::Color c = Window3D::_AdjustColorOpenGL(color);
     glPushMatrix();
     {
         glColor3b(char(c.r), char(c.g), char(c.b));
@@ -343,7 +343,7 @@ void Window3D::drawCylinder(const glm::vec3& drawingDirection, const glm::vec4& 
 
 // Groch
 void Window3D::drawSphere(const glm::vec3& position, float diameter, const Color& color) const {
-    const cf::Color c = Window3D::_AdjustColorOpgenGL(color);
+    const cf::Color c = Window3D::_AdjustColorOpenGL(color);
     glPushMatrix();
     {
         glColor3b(char(c.r), char(c.g), char(c.b));
@@ -356,7 +356,7 @@ void Window3D::drawSphere(const glm::vec3& position, float diameter, const Color
 
 // Groch
 void Window3D::drawCube(const glm::vec3& position, float size, const Color& color) const {
-    const cf::Color c = Window3D::_AdjustColorOpgenGL(color);
+    const cf::Color c = Window3D::_AdjustColorOpenGL(color);
     glPushMatrix();
     {
         glColor3b(char(c.r), char(c.g), char(c.b));
@@ -426,7 +426,7 @@ void Window3D::_ZoomCamera(bool positveZoom) {
     this->m_DistAdjustment = std::abs(this->m_LookAtDistance) / 10.f + 0.1f;
 }
 
-Color Window3D::_AdjustColorOpgenGL(const Color& color) {
+Color Window3D::_AdjustColorOpenGL(const Color& color) {
     return {uint8_t(color.r / 2), uint8_t(color.g / 2), uint8_t(color.b / 2)};
 }
 
