@@ -2,8 +2,8 @@
 #define COMPUTER_GEOMETRY_H_H
 
 #include "utils.h"
-#include <Eigen/Core>
-
+#include <glm/glm.hpp>
+/*
 namespace cf {
 
 template <typename _ValueType = double> class Vec4 {
@@ -43,5 +43,5 @@ template <typename _ValueType = double> class Vec4 {
 
 template <typename _VType> std::ostream& operator<<(std::ostream& os, const cf::Vec4<_VType>& rhs) { return os; }
 }
-
+*/
 #endif
