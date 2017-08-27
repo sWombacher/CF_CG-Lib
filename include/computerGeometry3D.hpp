@@ -277,6 +277,35 @@ template <typename _ValueType> struct MultiVector {
         if (this->m_Data.empty())
             return;
 
+        // sort outerProducts by TYPE
+        for (auto& e : this->m_Data) {
+            if (e.outerProduct.empty())
+                continue;
+
+            decltype(e.outerProduct) blade = { e.type };
+            blade.insert(blade.end(), e.outerProduct.begin(), e.outerProduct.end());
+            const auto cpy = blade;
+            std::sort(blade.begin(), blade.end());
+
+            // calc swap distance
+            size_t swapDist = 0;
+            for (size_t i = 0; i < cpy.size(); ++i){
+                const auto range = std::equal_range(blade.begin(), blade.end(), cpy[i]);
+                if (std::distance(range.first, range.second) != 1)
+                    throw std::runtime_error("Error: Incorrect range!");
+
+                swapDist += size_t(std::abs(int(i) - std::distance(blade.begin(), range.first)));
+            }
+            if (swapDist){
+                if (swapDist & 1) // test for odd number of swaps
+                    e.factor *= _ValueType(-1.0);
+
+                e.type = blade.front();
+                e.outerProduct.clear();
+                e.outerProduct.insert(e.outerProduct.end(), std::next(blade.begin()), blade.end());
+            }
+        }
+
         // sort blades
         std::sort(this->m_Data.begin(), this->m_Data.end(),
                   [](const Blade& lhs, const Blade& rhs) { return lhs.type2int() < rhs.type2int(); });
