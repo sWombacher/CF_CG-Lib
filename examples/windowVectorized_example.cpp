@@ -112,7 +112,7 @@ int main(int, char**) {
     const float intervalLength = std::sqrt(vec_1_2.x * vec_1_2.x + vec_1_2.y * vec_1_2.y);
 
     // convert length from interval length to pixel length
-    const int pixelLength = int(std::round(window.convert_intervalLength_to_pixelLength(intervalLength)));
+    const auto pixelLength = int(std::round(window.convert_intervalLength_to_pixelLength(intervalLength)));
 
     // draw
     std::cout << "\n\n\nPress enter to draw a circle (point1 as center, point2 on circle line)\n";

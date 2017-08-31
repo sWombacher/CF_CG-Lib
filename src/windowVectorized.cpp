@@ -41,7 +41,7 @@ float cf::WindowVectorized::convert_intervalLength_to_pixelLength(float interval
 }
 
 cf::Color cf::WindowVectorized::getColor_imageSpace(int x, int y) const {
-    const cv::Vec3b& c = this->m_Image.at<cv::Vec3b>(y, x);
+    const auto& c = this->m_Image.at<cv::Vec3b>(y, x);
     return {c[2], c[1], c[0]};
 }
 

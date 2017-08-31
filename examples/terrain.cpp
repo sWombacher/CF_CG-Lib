@@ -12,9 +12,9 @@ struct MyWindow : public cf::Window3D {
     MyWindow(int* argc, char** argv, const cf::WindowRasterized& heightMap, const std::vector<cf::Color>& colorMapping)
         : cf::Window3D(argc, argv), m_HeightMap(heightMap), m_ColorMapping(colorMapping) {}
 
-    virtual ~MyWindow() = default;
+    ~MyWindow() override = default;
 
-    virtual void draw() override {
+    void draw() override {
         this->clear();
         static const float minHeight = 0.f;
         static const float maxHeight = 30.f;

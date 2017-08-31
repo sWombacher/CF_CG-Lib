@@ -270,7 +270,7 @@ void Window2D::drawAxis(const cf::Color& color, float stepSize_x, float stepSize
         int pixelLength = horizontalLine ? this->m_Image.rows : this->m_Image.cols;
         const cf::Interval& interval = horizontalLine ? this->m_IntervalX : this->m_IntervalY;
 
-        int startPos = int(interval.min / stepSize);
+        auto startPos = int(interval.min / stepSize);
         int iterationCounter = helperLines_occurence - std::abs(startPos % helperLines_occurence);
 
         float verticalLineHeight = (interval.max - interval.min) / float(pixelLength) * interceptLength * lineWidth;

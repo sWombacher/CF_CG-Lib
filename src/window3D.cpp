@@ -77,7 +77,7 @@ void _DrawingFunction() {
     if (windowPtr->m_MaxFPS > 0.f) {
         using namespace std::chrono;
         system_clock::time_point current = system_clock::now(), next;
-        int timePerFrameInMS = int((1.f / windowPtr->m_MaxFPS) * 1000.f);
+        auto timePerFrameInMS = int((1.f / windowPtr->m_MaxFPS) * 1000.f);
         next = system_clock::now();
         int numMilliseconds = int(duration_cast<milliseconds>(next - current).count());
         if (numMilliseconds < timePerFrameInMS)

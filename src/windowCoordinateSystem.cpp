@@ -132,7 +132,7 @@ void WindowCoordinateSystem::drawLinearEquation(float slope, float yIntercept, c
             }
         }
         if (points.size() != 2)
-            throw std::runtime_error(std::string("Error: In function \"") + __func__ + "\" this shouldn't have happened :)");
+            throw std::runtime_error(std::string(R"(Error: In function ")") + __func__ + R"(" this shouldn't have happened :))");
     }
     p1 = points[0];
     p2 = points[1];
@@ -148,7 +148,7 @@ void WindowCoordinateSystem::drawLinearEquation(float slope, float yIntercept, c
 }
 
 void WindowCoordinateSystem::drawCircle(const Point& center, float radius, const Color& color, int lineWidth) {
-    int pixelRadius = int(std::round(this->convert_intervalLength_to_pixelLength(radius)));
+    auto pixelRadius = int(std::round(this->convert_intervalLength_to_pixelLength(radius)));
     if (pixelRadius <= 0)
         pixelRadius = 1;
     cf::Window2D::drawCircle(center, pixelRadius, lineWidth, color);
@@ -164,7 +164,7 @@ float WindowCoordinateSystem::convert_intervalLength_to_pixelLength(float interv
 
 void WindowCoordinateSystem::drawCirclePart(const Point& center, float radius, float startAngle, float endAngle,
                                             const Color& color, int lineWidth) {
-    const int pixelRadius = static_cast<int>(std::round(this->convert_intervalLength_to_pixelLength(radius)));
+    const auto pixelRadius = static_cast<int>(std::round(this->convert_intervalLength_to_pixelLength(radius)));
     Window2D::drawCirclePart(center, pixelRadius, startAngle, endAngle, lineWidth, color);
 }
 

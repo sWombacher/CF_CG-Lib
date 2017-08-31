@@ -179,8 +179,8 @@ void cf::WindowCoordinateSystem3D::draw() {
 
         // draw one side
         glBegin(GL_POLYGON);
-        for (size_t i = 0; i < e.points.size(); ++i)
-            glVertex3f(e.points[i].x, e.points[i].y, e.points[i].z);
+        for (auto point : e.points)
+            glVertex3f(point.x, point.y, point.z);
         glEnd();
 
         // draw other side

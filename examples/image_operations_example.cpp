@@ -3,7 +3,7 @@
 int main(int argc, char** argv) {
     // window2D provides a lot of image operations
     // additional operations can be utilized by using opencv directly
-    typedef cf::WindowRasterized Image;
+    using Image = cf::WindowRasterized;
 
     std::string image_path1, image_path2;
     if (argc < 3) {
@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     img1.show();
     img2.show();
 
-    std::cout << "Press keys on a window \"Result\", to blend image1 to image2";
+    std::cout << R"(Press keys on a window "Result", to blend image1 to image2)";
 
     // blend image2 above image1
     const int minWidth = std::min(img1.getWidth(), img2.getWidth());

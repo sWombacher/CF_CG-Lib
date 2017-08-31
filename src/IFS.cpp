@@ -9,7 +9,7 @@ namespace cf {
 void IteratedFunctionSystem::read(const std::string& fiilePath) {
     std::fstream input(fiilePath, std::fstream::in);
     if (!input)
-        throw std::runtime_error("File not found in function: \"IteratedFunctionSystem::read\"");
+        throw std::runtime_error(R"(File not found in function: "IteratedFunctionSystem::read")");
 
     std::string str;
     std::getline(input, str);
@@ -86,7 +86,7 @@ std::size_t IteratedFunctionSystem::getNumTransformations() const { return this-
 
 const glm::mat3x3& IteratedFunctionSystem::getTransformation(std::size_t pos) const {
     if (pos >= this->m_Transformations.size())
-        throw std::out_of_range("out of bound exception, in function \"IteratedFunctionSystem::getTransformation\"");
+        throw std::out_of_range(R"(out of bound exception, in function "IteratedFunctionSystem::getTransformation")");
 
     return this->m_Transformations[pos];
 }

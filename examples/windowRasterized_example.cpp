@@ -75,10 +75,10 @@ int main(int argc, char** argv) {
     // std::uniform_real_distribution<float> distribution(-1.f, 10.f);
     // distribution(gen);
 
-    for (unsigned int i = 0; i < LUT.size(); ++i) {
-        LUT[i].r = uint8_t(colorDistribution(gen));
-        LUT[i].g = uint8_t(colorDistribution(gen));
-        LUT[i].b = uint8_t(colorDistribution(gen));
+    for (auto & i : LUT) {
+        i.r = uint8_t(colorDistribution(gen));
+        i.g = uint8_t(colorDistribution(gen));
+        i.b = uint8_t(colorDistribution(gen));
     }
 
     // short version from above

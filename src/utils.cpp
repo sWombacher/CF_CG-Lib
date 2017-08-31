@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <random>
 
-typedef unsigned int uint; // may not be defined (for example on windows)
+using uint = unsigned int; // may not be defined (for example on windows)
 
 std::ostream& operator<<(std::ostream& of, const glm::vec2& vec) {
     of << '(' << vec[0] << ',' << vec[1] << ')';
@@ -39,7 +39,7 @@ namespace cf {
 std::vector<Color> readPaletteFromFile(const std::string& filePath) {
     std::fstream file(filePath, std::fstream::in);
     if (!file)
-        throw std::runtime_error("File not found in function: \"readPaletteFromFile\"");
+        throw std::runtime_error(R"(File not found in function: "readPaletteFromFile")");
 
     std::string str;
     if (!file.good()) {
@@ -66,7 +66,7 @@ std::vector<Color> readPaletteFromFile(const std::string& filePath) {
             throw std::runtime_error(str.c_str());
         }
 
-        LUT.push_back(Color(rgb[0], rgb[1], rgb[2]));
+        LUT.emplace_back(rgb[0], rgb[1], rgb[2]);
     }
     return LUT;
 }
@@ -74,7 +74,7 @@ std::vector<Color> readPaletteFromFile(const std::string& filePath) {
 std::string readAntString(const std::string& filePath) {
     std::fstream file(filePath, std::fstream::in);
     if (!file)
-        throw std::runtime_error("File not found in function: \"readAntString\"");
+        throw std::runtime_error(R"(File not found in function: "readAntString")");
 
     std::string str;
     if (!file.good()) {
@@ -94,7 +94,7 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
                                                           RelativeDirection relativeMovement) {
     switch (relativeMovement) {
     case RelativeDirection::LEFT: {
-        int dir = int(currentDirection);
+        auto dir = int(currentDirection);
         --dir;
         if (dir < 0)
             dir += int(AbsoluteDirection::NUM_ABS_DIRS);
@@ -102,7 +102,7 @@ Direction::AbsoluteDirection Direction::getNextiDirection(AbsoluteDirection curr
         return static_cast<AbsoluteDirection>(dir);
     }
     case RelativeDirection::RIGHT: {
-        int dir = int(currentDirection);
+        auto dir = int(currentDirection);
         ++dir;
         if (dir >= int(AbsoluteDirection::NUM_ABS_DIRS))
             dir -= int(AbsoluteDirection::NUM_ABS_DIRS);
@@ -207,12 +207,12 @@ Color Color::operator-(const Color& c) const {
 }
 
 Color& Color::operator*=(float value) {
-    cv::Vec3b* e1 = reinterpret_cast<cv::Vec3b*>(this);
+    auto* e1 = reinterpret_cast<cv::Vec3b*>(this);
     (*e1) *= value;
     return *this;
 }
 Color& Color::operator/=(float value) {
-    cv::Vec3b* e1 = reinterpret_cast<cv::Vec3b*>(this);
+    auto* e1 = reinterpret_cast<cv::Vec3b*>(this);
     (*e1) /= value;
     return *this;
 }

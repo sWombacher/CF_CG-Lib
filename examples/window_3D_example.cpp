@@ -7,8 +7,8 @@ class MyWindow : public cf::Window3D {
         this->m_AngleAdjustment = 2.0f;  // speed up  rotation
         this->m_CameraAdjustment = 0.1f; // slow down camera movement
     }
-    virtual ~MyWindow() = default;
-    virtual void draw() override {
+    ~MyWindow() override = default;
+    void draw() override {
         // clear all and redraw axis
         this->clear();
         this->drawAxis(2.f);

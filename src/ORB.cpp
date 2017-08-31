@@ -7,7 +7,7 @@ namespace cf {
 void Orbit::read(const std::string& filePath) {
     std::fstream input(filePath, std::fstream::in);
     if (!input)
-        throw std::runtime_error("File not found in function: \"Orbit::read\"");
+        throw std::runtime_error(R"(File not found in function: "Orbit::read")");
 
     std::string str;
     std::getline(input, str);
@@ -56,7 +56,7 @@ void Orbit::read(const std::string& filePath) {
         if (values.size() != 3)
             throw std::runtime_error("Wrong format in Orb-File (starting point format)");
 
-        this->m_StartPoints.push_back(glm::vec3(values[0], values[1], values[2]));
+        this->m_StartPoints.emplace_back(values[0], values[1], values[2]);
     }
 
     std::getline(input, str);
