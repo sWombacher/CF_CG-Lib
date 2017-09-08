@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <array>
 
 #include "termcolor.hpp"
 #include <inttypes.h>
@@ -150,6 +151,36 @@ struct Color {
      * @return Random cf::Color
      */
     static cf::Color RandomColor();
+
+
+    template<int _Size>
+    struct SimpleEndlessIterator{
+        void operator++() {
+            ++this->m_Iter;
+            if (this->m_Iter == this->m_Colors.cend())
+                this->m_Iter = this->m_Colors.cbegin();
+        }
+        const cf::Color& operator*() const { return *this->m_Iter; }
+        SimpleEndlessIterator(SimpleEndlessIterator&&) = default;
+
+    private:
+        friend Color;
+        typedef std::array<cf::Color, _Size> ARRAY;
+        const ARRAY m_Colors;
+        typename ARRAY::const_iterator m_Iter;
+        typename ARRAY::const_iterator m_EndIter;
+        typename ARRAY::const_iterator m_BeginIter;
+
+        SimpleEndlessIterator(const ARRAY& rhs) : m_Colors(rhs){
+            this->m_Iter = this->m_Colors.begin();
+        }
+    };
+    template<typename... _Colors>
+    static SimpleEndlessIterator<sizeof...(_Colors)> CreateEndlessColorIterator(const _Colors&... colors){
+        typename SimpleEndlessIterator<sizeof... (_Colors)>::ARRAY tmpColors = { colors... };
+        return SimpleEndlessIterator<sizeof...(_Colors)>(tmpColors);
+    }
+
 
     static const Color MAGENTA;
     static const Color YELLOW;
