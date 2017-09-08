@@ -212,11 +212,43 @@ template <typename _ValueType> struct MultiVector {
     template <typename _VType>
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator*(const MultiVector<_VType>& rhs) const {
         using vt = decltype(_ValueType(1) * _VType(1));
+        using MVEC = MultiVector<vt>;
 
-        MultiVector<vt> result;
+        MVEC result;
         for (const auto& e_lhs : this->m_Data) {
             for (const auto& e_rhs : rhs.m_Data) {
                 /// TODO
+                const size_t sumSize = e_lhs.outerProduct.size() + e_rhs.outerProduct.size();
+                if (sumSize == 0) {
+                    // simple case
+                    const int t0 = int(e_lhs.type);
+                    const int t1 = int(e_lhs.type);
+                    vt value = 0.0;
+                    if (t0 == t1 && t0 >= int(Blade::TYPE::E1) && t0 <= int(Blade::TYPE::E3))
+                        value = 1.0;
+                    else if (t0 == int(Blade::TYPE::E0) && t1 == int(MultiVector<_VType>::Blade::TYPE::EINF))
+                        value = 1.0; /// TODO check
+                    else if (t0 == int(Blade::TYPE::EINF) && t1 == int(MultiVector<_VType>::Blade::TYPE::E0))
+                        value = -1.0; /// TODO check
+
+                    result.m_Data.emplace_back(MVEC::Blade::TYPE::VALUE, value);
+                } else if (sumSize == 1) {
+                    // advanced case
+                    // we can use
+                    // a . (b ^ c) = (a . b) * c - (a . c) * b
+                    // (b ^ c) . a = - a . (b ^ c)
+                    // where . = inner product, ^ = outer product, * = geometry product
+                    MVEC a, b, c;
+                    if (e_lhs.outerProduct.size()) {
+                        /// TODO
+                    } else {
+                        /// TODO
+                    }
+                    return ((a * b) & c) - ((a * c) & b);
+
+                } else {
+                    // hard case
+                }
             }
         }
         result._createConsistentData();
@@ -282,21 +314,21 @@ template <typename _ValueType> struct MultiVector {
             if (e.outerProduct.empty())
                 continue;
 
-            decltype(e.outerProduct) blade = { e.type };
+            decltype(e.outerProduct) blade = {e.type};
             blade.insert(blade.end(), e.outerProduct.begin(), e.outerProduct.end());
             const auto cpy = blade;
             std::sort(blade.begin(), blade.end());
 
             // calc swap distance
             size_t swapDist = 0;
-            for (size_t i = 0; i < cpy.size(); ++i){
+            for (size_t i = 0; i < cpy.size(); ++i) {
                 const auto range = std::equal_range(blade.begin(), blade.end(), cpy[i]);
                 if (std::distance(range.first, range.second) != 1)
                     throw std::runtime_error("Error: Incorrect range!");
 
                 swapDist += size_t(std::abs(int(i) - std::distance(blade.begin(), range.first)));
             }
-            if (swapDist){
+            if (swapDist) {
                 if (swapDist & 1) // test for odd number of swaps
                     e.factor *= _ValueType(-1.0);
 
