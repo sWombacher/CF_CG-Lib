@@ -19,6 +19,11 @@ int main(int argc, char** argv) {
     vec += vec_f - 12.0_e0;
     std::cout << v << '\n' << vec_f << '\n' << vec << std::endl;
 
+    auto res = 1.0_e1 ^ 1.0_e2;
+    res *= 1.0_e1;
+    std::cout << "Result: " << res << std::endl;
+    return 0;
+
     cf::WindowCoordinateSystem3D system(&argc, argv);
     system.beginDrawing([&]() {
         // system.drawPlane({1, 1, 1, 0}, cf::Color::RED, 127);

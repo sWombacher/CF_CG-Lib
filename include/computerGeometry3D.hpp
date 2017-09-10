@@ -52,6 +52,7 @@ template <typename _ValueType> struct MultiVector {
             this->factor = _ValueType(rhs.factor);
             for (const auto& t : rhs.outerProduct)
                 this->outerProduct.push_back(Blade::TYPE(int(t)));
+            this->sortBladeTypes();
         }
         Blade(TYPE t, const _ValueType& f) : type(t), factor(f) {}
         TYPE type;
@@ -66,6 +67,37 @@ template <typename _ValueType> struct MultiVector {
                 res += int(e);
             }
             return res;
+        }
+        void sortBladeTypes() {
+            if (this->outerProduct.empty())
+                return;
+
+            // temporary add type to vector
+            this->outerProduct.insert(this->outerProduct.begin(), this->type);
+
+            // use insertion sort approach for sorting
+            size_t numSwaps = 0;
+            for (size_t i = 1; i < this->outerProduct.size(); ++i) {
+                for (size_t k = i; k > 0; --k) {
+                    if (int(this->outerProduct[k]) < int(this->outerProduct[k - 1])) {
+                        ++numSwaps;
+                        std::swap(this->outerProduct[k], this->outerProduct[k - 1]);
+                    } else
+                        break;
+                }
+            }
+            if (numSwaps & 1)
+                this->factor *= _ValueType(-1.0);
+
+            // remove first element
+            this->type = this->outerProduct.front();
+            this->outerProduct.erase(this->outerProduct.begin());
+
+            // error checking, TYPE::VALUE may only be standalone
+            // always the last element (after sorting)
+            // outerProduct.size() > 1 is implicit, see function begin
+            if (/* this->outerProduct.size() > 1 && */ this->outerProduct.back() == TYPE::VALUE)
+                throw std::runtime_error("Error: Blade::TYPE::VALUE in outerProducts!");
         }
 
         static std::string TYPE_TO_STRING(const TYPE& type) {
@@ -115,6 +147,8 @@ template <typename _ValueType> struct MultiVector {
             os << (first ? "" : " + ") << e;
             first = false;
         }
+        if (first)
+            os << '0';
         os << std::endl;
         return os;
     }
@@ -213,48 +247,99 @@ template <typename _ValueType> struct MultiVector {
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator*(const MultiVector<_VType>& rhs) const {
         using vt = decltype(_ValueType(1) * _VType(1));
         using MVEC = MultiVector<vt>;
+        using BLADE = typename MVEC::Blade;
 
         MVEC result;
         for (const auto& e_lhs : this->m_Data) {
             for (const auto& e_rhs : rhs.m_Data) {
-                /// TODO
                 const size_t sumSize = e_lhs.outerProduct.size() + e_rhs.outerProduct.size();
                 if (sumSize == 0) {
                     // simple case
                     const int t0 = int(e_lhs.type);
-                    const int t1 = int(e_lhs.type);
-                    vt value = 0.0;
+                    const int t1 = int(e_rhs.type);
+
+                    if (t0 == int(Blade::TYPE::VALUE)) {
+                        result.m_Data.emplace_back(typename MVEC::Blade::TYPE(int(e_lhs.type)), e_lhs.factor * e_rhs.factor);
+                        continue;
+                    }
+                    if (t1 == int(Blade::TYPE::VALUE)) {
+                        result.m_Data.emplace_back(typename MVEC::Blade::TYPE(int(e_rhs.type)), e_lhs.factor * e_rhs.factor);
+                        continue;
+                    }
+                    vt value;
                     if (t0 == t1 && t0 >= int(Blade::TYPE::E1) && t0 <= int(Blade::TYPE::E3))
                         value = 1.0;
                     else if (t0 == int(Blade::TYPE::E0) && t1 == int(MultiVector<_VType>::Blade::TYPE::EINF))
-                        value = 1.0; /// TODO check
+                        value = -1.0;
                     else if (t0 == int(Blade::TYPE::EINF) && t1 == int(MultiVector<_VType>::Blade::TYPE::E0))
-                        value = -1.0; /// TODO check
+                        value = -1.0;
+                    else
+                        value = 0.0;
 
-                    result.m_Data.emplace_back(MVEC::Blade::TYPE::VALUE, value);
+                    result.m_Data.emplace_back(MVEC::Blade::TYPE::VALUE, value * e_lhs.factor * e_rhs.factor);
                 } else if (sumSize == 1) {
                     // advanced case
                     // we can use
                     // a . (b ^ c) = (a . b) * c - (a . c) * b
                     // (b ^ c) . a = - a . (b ^ c)
                     // where . = inner product, ^ = outer product, * = geometry product
-                    MVEC a, b, c;
-                    if (e_lhs.outerProduct.size()) {
-                        /// TODO
+                    BLADE a, b, c;
+                    vt factor;
+                    if (e_lhs.outerProduct.empty()) {
+                        a = e_lhs;
+                        b = e_rhs;
+                        factor = vt(1.0);
                     } else {
-                        /// TODO
+                        a = e_rhs;
+                        b = e_lhs;
+                        factor = vt(-1.0);
                     }
-                    return ((a * b) & c) - ((a * c) & b);
-
+                    c.factor = factor;
+                    c.type = b.outerProduct.front();
+                    b.outerProduct.clear();
+                    const MVEC mvec_a(a), mvec_b(b), mvec_c(c);
+                    const MVEC res = ((mvec_a * mvec_b) & mvec_c) - ((mvec_a * mvec_c) & mvec_b);
+                    result.m_Data.insert(result.m_Data.end(), res.m_Data.begin(), res.m_Data.end());
                 } else {
                     // hard case
+                    // here we use
+                    // (a1 ^ b1 ^ ... ^ n1) . (a2 ^ b2 ^ ... ^ m2) = (a1 ^ b1 ^ ... ^ n1) . (a2 ^ (b2 ^ ... ^ m2) )
+                    // to be able to use the same equations from above (advanced case), with
+                    //
+                    // (a1 ^ b1 ^ ... ^ n1) = a
+                    //  a2 = b
+                    // (b2 ^ ... ^ m2) = c
+                    //
+                    // NOTE:
+                    //  hard and advanced case are very very similar
+                    //  hance they CAN be merged, however
+                    //  it is not recommended due to mathmatical understanding
+                    BLADE a, b, c;
+                    vt factor;
+                    if (e_lhs.outerProduct.empty()) {
+                        a = e_lhs;
+                        b = e_rhs;
+                        factor = 1.0;
+                    } else {
+                        a = e_rhs;
+                        b = e_lhs;
+                        factor = -1.0;
+                    }
+                    c = b;
+                    c.factor = factor;
+                    b.outerProduct.clear();
+                    c.type = c.outerProduct.front();
+                    c.outerProduct.erase(c.outerProduct.begin());
+                    const MVEC mvec_a(a), mvec_b(b), mvec_c(c);
+                    const MVEC res = ((mvec_a * mvec_b) & mvec_c) - ((mvec_a * mvec_c) & mvec_b);
+                    result.m_Data.insert(result.m_Data.end(), res.m_Data.begin(), res.m_Data.end());
                 }
             }
         }
         result._createConsistentData();
         return result;
     }
-    template <typename _VType> MultiVector<_ValueType>& operator*=(const MultiVector<_VType>& rhs) const {
+    template <typename _VType> MultiVector<_ValueType>& operator*=(const MultiVector<_VType>& rhs) {
         *this = *this * rhs;
         return *this;
     }
@@ -263,17 +348,63 @@ template <typename _ValueType> struct MultiVector {
     template <typename _VType>
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator%(const MultiVector<_VType>& rhs) const {
         using vt = decltype(_ValueType(1) * _VType(1));
+        using MVEC = MultiVector<vt>;
+        using BLADE = typename MVEC::Blade;
 
-        MultiVector<vt> result;
+        MVEC result;
         for (const auto& e_lhs : this->m_Data) {
             for (const auto& e_rhs : rhs.m_Data) {
-                /// TODO
+                if (int(e_lhs.type) == int(BLADE::TYPE::VALUE)) {
+                    BLADE blade = e_rhs;
+                    blade.factor *= vt(e_lhs.factor);
+                    result.m_Data.push_back(std::move(blade));
+                    continue;
+                }
+                if (int(e_rhs.type) == int(BLADE::TYPE::VALUE)) {
+                    BLADE blade = e_lhs;
+                    blade.factor *= vt(-e_rhs.factor);
+                    result.m_Data.push_back(std::move(blade));
+                    continue;
+                }
+                auto findType = [](const BLADE& blade, typename BLADE::TYPE type) -> bool {
+                    if (blade.type == type)
+                        return true;
+                    for (const auto& e : blade.outerProduct) {
+                        if (e == type)
+                            return true;
+                    }
+                    return false;
+                };
+
+                const BLADE& blade(e_lhs);
+                bool found = findType(blade, typename BLADE::TYPE(int(e_rhs.type)));
+                for (const auto& e : e_rhs.outerProduct)
+                    found |= findType(blade, typename BLADE::TYPE(int(e)));
+
+                if (found) {
+                    // simple case
+                    // result is 0
+                    // we don't have to do anything
+                } else {
+                    // advanced case
+                    // add all blades & sort blades, beaware of
+                    //   +e1^e2 = -e2^e1
+                    // while sorting
+                    BLADE blade2insert(e_lhs);
+                    blade2insert.factor *= vt(e_rhs.factor);
+                    blade2insert.outerProduct.push_back(typename BLADE::TYPE(int(e_rhs.type)));
+                    for (const auto& e : e_rhs.outerProduct)
+                        blade2insert.outerProduct.push_back(typename BLADE::TYPE(int(e)));
+
+                    // blade sorting will be done in '_createConsistentData' function at the end
+                    result.m_Data.push_back(std::move(blade2insert));
+                }
             }
         }
         result._createConsistentData();
         return result;
     }
-    template <typename _VType> MultiVector<_ValueType>& operator%=(const MultiVector<_VType>& rhs) const {
+    template <typename _VType> MultiVector<_ValueType>& operator%=(const MultiVector<_VType>& rhs) {
         *this = *this % rhs;
         return *this;
     }
@@ -281,7 +412,7 @@ template <typename _ValueType> struct MultiVector {
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator^(const MultiVector<_VType>& rhs) const {
         return *this % rhs;
     }
-    template <typename _VType> MultiVector<_ValueType>& operator^=(const MultiVector<_VType>& rhs) const {
+    template <typename _VType> MultiVector<_ValueType>& operator^=(const MultiVector<_VType>& rhs) {
         return *this %= rhs;
     }
 
@@ -310,33 +441,8 @@ template <typename _ValueType> struct MultiVector {
             return;
 
         // sort outerProducts by TYPE
-        for (auto& e : this->m_Data) {
-            if (e.outerProduct.empty())
-                continue;
-
-            decltype(e.outerProduct) blade = {e.type};
-            blade.insert(blade.end(), e.outerProduct.begin(), e.outerProduct.end());
-            const auto cpy = blade;
-            std::sort(blade.begin(), blade.end());
-
-            // calc swap distance
-            size_t swapDist = 0;
-            for (size_t i = 0; i < cpy.size(); ++i) {
-                const auto range = std::equal_range(blade.begin(), blade.end(), cpy[i]);
-                if (std::distance(range.first, range.second) != 1)
-                    throw std::runtime_error("Error: Incorrect range!");
-
-                swapDist += size_t(std::abs(int(i) - std::distance(blade.begin(), range.first)));
-            }
-            if (swapDist) {
-                if (swapDist & 1) // test for odd number of swaps
-                    e.factor *= _ValueType(-1.0);
-
-                e.type = blade.front();
-                e.outerProduct.clear();
-                e.outerProduct.insert(e.outerProduct.end(), std::next(blade.begin()), blade.end());
-            }
-        }
+        for (auto& e : this->m_Data)
+            e.sortBladeTypes();
 
         // sort blades
         std::sort(this->m_Data.begin(), this->m_Data.end(),
@@ -347,7 +453,7 @@ template <typename _ValueType> struct MultiVector {
             const int id_back = this->m_Data[size_t(i)].type2int();
             if (id_front == id_back) {
                 this->m_Data[size_t(i - 1)].factor += this->m_Data[size_t(i)].factor;
-                this->m_Data[size_t(i)].factor = _ValueType(0.0);
+                this->m_Data.erase(this->m_Data.begin() + i--);
             }
             id_front = id_back;
         }
