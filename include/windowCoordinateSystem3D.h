@@ -179,7 +179,7 @@ struct WindowCoordinateSystem3D : protected Window3D {
         if (spaceType != SPACE_TYPE::IPNS)
             throw std::runtime_error("Error: Point has to be in IPNS");
 
-        glm::tvec3<_ValueType, glm::precision::aligned_highp> pos;
+        glm::tvec3<_ValueType, glm::precision::highp> pos;
         const auto& blades = vec.getData();
         for (const auto& e : blades) {
             if (e.outerProduct.size())
@@ -209,7 +209,7 @@ struct WindowCoordinateSystem3D : protected Window3D {
             dual = *mulVec; // invert blade
 
         const auto& vec = spaceType == SPACE_TYPE::IPNS ? mulVec : dual;
-        glm::tvec3<_ValueType, glm::precision::aligned_highp> pos;
+        glm::tvec3<_ValueType, glm::precision::highp> pos;
         _ValueType einf = 0.f;
         const auto& blades = vec.getData();
         for (const auto& e : blades) {

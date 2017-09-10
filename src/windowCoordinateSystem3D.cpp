@@ -18,7 +18,7 @@ void cf::WindowCoordinateSystem3D::drawPlane(const glm::vec4& vec, const cf::Col
     std::lock_guard<std::mutex> guard(this->m_WriteMutex);
     WindowCoordinateSystem3D::Plane p;
     p.color = Window3D::_AdjustColorOpenGL(color);
-    p.normal = vec;
+    p.normal = glm::vec3(vec.x, vec.y, vec.z);
     p.alpha = alpha / 2; // opengl uses 0 to 127... i don't know why
 
     const auto& min = this->m_Interval.min;

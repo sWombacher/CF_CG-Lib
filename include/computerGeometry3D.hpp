@@ -274,7 +274,7 @@ template <typename _ValueType> struct MultiVector {
                     else if (t0 == int(Blade::TYPE::EINF) && t1 == int(MultiVector<_VType>::Blade::TYPE::E0))
                         value = -1.0;
                     else
-                        value = 0.0;
+                        continue;
 
                     result.m_Data.emplace_back(MVEC::Blade::TYPE::VALUE, value * e_lhs.factor * e_rhs.factor);
                 } else if (sumSize == 1) {
@@ -299,6 +299,14 @@ template <typename _ValueType> struct MultiVector {
                     b.outerProduct.clear();
                     const MVEC mvec_a(a), mvec_b(b), mvec_c(c);
                     const MVEC res = ((mvec_a * mvec_b) & mvec_c) - ((mvec_a * mvec_c) & mvec_b);
+
+					/// TEST
+					MVEC t0 = mvec_a * mvec_b;
+					MVEC t1 = t0 & mvec_c;
+					MVEC r1 = (mvec_a * mvec_b) & mvec_c;
+					MVEC r2 = (mvec_a * mvec_c) & mvec_b;
+					MVEC r12 = r1 - r2;
+					/// END TEST
                     result.m_Data.insert(result.m_Data.end(), res.m_Data.begin(), res.m_Data.end());
                 } else {
                     // hard case
@@ -362,7 +370,7 @@ template <typename _ValueType> struct MultiVector {
                 }
                 if (int(e_rhs.type) == int(BLADE::TYPE::VALUE)) {
                     BLADE blade = e_lhs;
-                    blade.factor *= vt(-e_rhs.factor);
+                    blade.factor *= vt(e_rhs.factor);
                     result.m_Data.push_back(std::move(blade));
                     continue;
                 }
@@ -420,6 +428,9 @@ template <typename _ValueType> struct MultiVector {
     template <typename _VType>
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator&(const MultiVector<_VType>& rhs) const {
         const auto& lhs = *this;
+		/// TODO
+		/// Blade::TYPE::VALUE have to be handelt differently
+		/// <number> & <multi vector> = factor ^ multivector
         return (lhs % rhs) + (lhs * rhs);
     }
     template <typename _VType> MultiVector<decltype(_ValueType(1) * _VType(1))> operator&=(const MultiVector<_VType>& rhs) {
@@ -437,8 +448,11 @@ template <typename _ValueType> struct MultiVector {
     }
 
     inline void _createConsistentData() {
-        if (this->m_Data.empty())
-            return;
+		if (this->m_Data.empty()) {
+			// if we dont have data set value to 0
+			this->m_Data.emplace_back(Blade::TYPE::VALUE, 0.0);
+			return;
+		}
 
         // sort outerProducts by TYPE
         for (auto& e : this->m_Data)
@@ -463,6 +477,10 @@ template <typename _ValueType> struct MultiVector {
             if (MultiVector<_ValueType>::_CmpZero(this->m_Data[i].factor))
                 this->m_Data.erase(this->m_Data.begin() + int(i--));
         }
+
+		// if we dont have data set value to 0
+		if (this->m_Data.empty()) 
+			this->m_Data.emplace_back(Blade::TYPE::VALUE, 0.0);
     }
 
     template <typename T> static bool _CmpZero(const T& value) { return std::abs(value) < T(0.000001); }
