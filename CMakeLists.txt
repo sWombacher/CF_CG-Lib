@@ -54,8 +54,8 @@ else()
 	file(GLOB OpenCV_LIBS_RELEASE ${3RD_PARTY_DIR}/Release/*opencv*.lib)
 endif()
 
-# enable c++11 features
-set(CMAKE_CXX_STANDARD 11)
+# enable c++14 features
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set output paths

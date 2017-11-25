@@ -4,6 +4,7 @@
 #pragma once
 #include "utils.h"
 #include <algorithm>
+#include <type_traits>
 
 namespace cf {
 
@@ -428,10 +429,26 @@ template <typename _ValueType> struct MultiVector {
     template <typename _VType>
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator&(const MultiVector<_VType>& rhs) const {
         const auto& lhs = *this;
-		/// TODO
-        /// Blade::TYPE::VALUE have to be handeld differently
-		/// <number> & <multi vector> = factor ^ multivector
-        return (lhs % rhs) + (lhs * rhs);
+        MultiVector<_VType> rhs_noValue;
+        MultiVector<_ValueType> lhs_noValue;
+
+        decltype(MultiVector<_ValueType>::operator&(rhs)) res;
+        auto foo = [&res](const auto& original, auto& cpy, const auto& other){
+            for (const auto& data : original.m_Data){
+                if (data.type != std::decay<decltype(original)>::type::Blade::TYPE::VALUE)
+                    cpy.m_Data.emplace_back(data.type, data.factor);
+                else{
+                    typename std::decay<decltype(res)>::type tmp;
+                    tmp.m_Data.emplace_back(std::decay<decltype(tmp.m_Data.front())>::type::Blade::TYPE::VALUE, data.factor);
+                    res += tmp % other;
+                }
+            }
+        };
+        foo(lhs, lhs_noValue, rhs);
+        foo(rhs, rhs_noValue, lhs_noValue);
+        res += (lhs_noValue % rhs_noValue) + (lhs_noValue * rhs_noValue);
+        res._createConsistentData();
+        return res;
     }
     template <typename _VType> MultiVector<decltype(_ValueType(1) * _VType(1))> operator&=(const MultiVector<_VType>& rhs) {
         *this = *this & rhs;
