@@ -65,23 +65,12 @@ struct WindowCoordinateSystem3D : protected Window3D {
                     continue;
                 }
                 switch (e.type) {
-                case TYPE::E1:
-                    euclidian.x = e.factor;
-                    break;
-                case TYPE::E2:
-                    euclidian.y = e.factor;
-                    break;
-                case TYPE::E3:
-                    euclidian.z = e.factor;
-                    break;
-                case TYPE::E0:
-                    e0 = e.factor;
-                    break;
-                case TYPE::EINF:
-                    einf = e.factor;
-                    break;
-                default:
-                    break;
+                case TYPE::E1: euclidian.x = e.factor; break;
+                case TYPE::E2: euclidian.y = e.factor; break;
+                case TYPE::E3: euclidian.z = e.factor; break;
+                case TYPE::E0: e0 = e.factor; break;
+                case TYPE::EINF: einf = e.factor; break;
+                default: break;
                 }
             }
         };
@@ -142,28 +131,14 @@ struct WindowCoordinateSystem3D : protected Window3D {
     void drawMultiVector(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
         const MULTI_VECTOR_TYPE type = getMultiVectorType(spaceType, vec);
         switch (type) {
-        case MULTI_VECTOR_TYPE::CIRCLE:
-            this->_drawCircle(spaceType, vec, color, alpha);
-            break;
-        case MULTI_VECTOR_TYPE::LINE:
-            this->_drawLine(spaceType, vec, color, alpha);
-            break;
-        case MULTI_VECTOR_TYPE::PLANE:
-            this->_drawPlane(spaceType, vec, color, alpha);
-            break;
-        case MULTI_VECTOR_TYPE::POINT:
-            this->_drawPoint(spaceType, vec, color, alpha);
-            break;
-        case MULTI_VECTOR_TYPE::POINT_PAIR:
-            this->_drawPointPair(spaceType, vec, color, alpha);
-            break;
-        case MULTI_VECTOR_TYPE::SPHERE:
-            this->_drawSphere(spaceType, vec, color, alpha);
-            break;
+        case MULTI_VECTOR_TYPE::CIRCLE: this->_drawCircle(spaceType, vec, color, alpha); break;
+        case MULTI_VECTOR_TYPE::LINE: this->_drawLine(spaceType, vec, color, alpha); break;
+        case MULTI_VECTOR_TYPE::PLANE: this->_drawPlane(spaceType, vec, color, alpha); break;
+        case MULTI_VECTOR_TYPE::POINT: this->_drawPoint(spaceType, vec, color, alpha); break;
+        case MULTI_VECTOR_TYPE::POINT_PAIR: this->_drawPointPair(spaceType, vec, color, alpha); break;
+        case MULTI_VECTOR_TYPE::SPHERE: this->_drawSphere(spaceType, vec, color, alpha); break;
 
-        case MULTI_VECTOR_TYPE::UNKOWN:
-        default:
-            throw std::runtime_error("Error: Unkown Vector type");
+        case MULTI_VECTOR_TYPE::UNKOWN: default: throw std::runtime_error("Error: Unkown Vector type");
         }
     }
 
@@ -187,17 +162,10 @@ struct WindowCoordinateSystem3D : protected Window3D {
 
             using TYPE = typename cf::MultiVector<_ValueType>::Blade::TYPE;
             switch (e.type) {
-            case TYPE::E1:
-                pos.x = e.factor;
-                break;
-            case TYPE::E2:
-                pos.y = e.factor;
-                break;
-            case TYPE::E3:
-                pos.z = e.factor;
-                break;
-            default:
-                break;
+            case TYPE::E1: pos.x = e.factor; break;
+            case TYPE::E2: pos.y = e.factor; break;
+            case TYPE::E3: pos.z = e.factor; break;
+            default: break;
             }
         }
         this->drawPoint(pos, color, alpha);
@@ -218,26 +186,16 @@ struct WindowCoordinateSystem3D : protected Window3D {
 
             using TYPE = typename cf::MultiVector<_ValueType>::Blade::TYPE;
             switch (e.type) {
-            case TYPE::E1:
-                pos.x = e.factor;
-                break;
-            case TYPE::E2:
-                pos.y = e.factor;
-                break;
-            case TYPE::E3:
-                pos.z = e.factor;
-                break;
-            case TYPE::EINF:
-                einf = e.factor;
-                break;
-            default:
-                break;
+            case TYPE::E1: pos.x = e.factor; break;
+            case TYPE::E2: pos.y = e.factor; break;
+            case TYPE::E3: pos.z = e.factor; break;
+            case TYPE::EINF: einf = e.factor; break;
+            default: break;
             }
         }
         einf *= 2.f;
         const float simpleInnerProduct = glm::dot(pos, pos);
-        const bool imaginarySphere = simpleInnerProduct > einf;
-        if (imaginarySphere)
+        if (simpleInnerProduct > einf)
             alpha /= 2;
 
         const float radius = std::sqrt(std::abs(einf - simpleInnerProduct));
@@ -263,20 +221,11 @@ struct WindowCoordinateSystem3D : protected Window3D {
 
             using TYPE = typename cf::MultiVector<_ValueType>::Blade::TYPE;
             switch (e.type) {
-            case TYPE::E1:
-                normal.x = e.factor;
-                break;
-            case TYPE::E2:
-                normal.y = e.factor;
-                break;
-            case TYPE::E3:
-                normal.z = e.factor;
-                break;
-            case TYPE::EINF:
-                einf = float(e.factor);
-                break;
-            default:
-                break;
+            case TYPE::E1: normal.x = e.factor; break;
+            case TYPE::E2: normal.y = e.factor; break;
+            case TYPE::E3: normal.z = e.factor; break;
+            case TYPE::EINF: einf = float(e.factor); break;
+            default: break;
             }
         }
         const glm::vec3 pos = normal * float(-einf);
