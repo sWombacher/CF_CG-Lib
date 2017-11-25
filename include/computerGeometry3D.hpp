@@ -320,7 +320,7 @@ template <typename _ValueType> struct MultiVector {
                     //
                     // NOTE:
                     //  hard and advanced case are very very similar
-                    //  hance they CAN be merged, however
+                    //  hence they CAN be merged, however
                     //  it is not recommended due to mathmatical understanding
                     BLADE a, b, c;
                     vt factor;
@@ -429,7 +429,7 @@ template <typename _ValueType> struct MultiVector {
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator&(const MultiVector<_VType>& rhs) const {
         const auto& lhs = *this;
 		/// TODO
-		/// Blade::TYPE::VALUE have to be handelt differently
+        /// Blade::TYPE::VALUE have to be handeld differently
 		/// <number> & <multi vector> = factor ^ multivector
         return (lhs % rhs) + (lhs * rhs);
     }

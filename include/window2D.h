@@ -72,7 +72,7 @@ class Window2D {
      * @brief drawCircle Draws a circle around the center
      * @param point Point within interval_x and interval_y
      * @param radius Circle radius in pixel (not effected by intervals)
-     * @param lineWidth Pixelwidth of line (not effected by intervals)
+     * @param lineWidth Pixelwidth of line (not effected by intervals), negative values fills the rectangle
      * @param color Circle color
      */
     void drawCircle(cf::Point center, int radius, int lineWidth, const cf::Color& color);
@@ -81,7 +81,7 @@ class Window2D {
      * @brief drawRectangle Draws a rectangle from two diagonal points
      * @param point1 Point within interval_x and interval_y, has to be the diagonal point to point2
      * @param point2 Point within interval_x and interval_y, has to be the diagonal point to point1
-     * @param lineWidth LineWidth pixelwidth of line (not effected by intervals)
+     * @param lineWidth LineWidth pixelwidth of line (not effected by intervals), negative values fills the rectangle
      * @param color Rectangle color
      */
     void drawRectangle(cf::Point point1, cf::Point point2, int lineWidth, const cf::Color& color);
