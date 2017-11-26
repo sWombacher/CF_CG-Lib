@@ -229,7 +229,7 @@ void cf::WindowCoordinateSystem3D::draw() {
         {
             glTranslatef(e.center.x, e.center.y, e.center.z);
 
-            static const glm::vec3 circleNormal(0.f, 0.f, 1.f);
+            static const glm::vec3 circleNormal(0.f, 0.f, 1.f); /// TODO: handle case 'linearly dependent'
             const float angle = cf::radian2degree(std::acos(glm::dot(e.normal, circleNormal)));
             if (!WindowCoordinateSystem3D::_CmpZero(angle)){
                 const glm::vec3 rotVec = glm::cross(e.normal, circleNormal);

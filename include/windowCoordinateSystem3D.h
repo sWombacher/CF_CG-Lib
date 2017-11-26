@@ -12,7 +12,7 @@ namespace cf {
 struct WindowCoordinateSystem3D : protected Window3D {
     // thread safty:
     // every functin has to start with (some execptions)
-    //  std::lock_guard<std::mutex> guard(this->m_WriteMutex);
+    // std::lock_guard<std::mutex> guard(this->m_WriteMutex);
 
     WindowCoordinateSystem3D(int* argc, char** argv, const Interval& interval = {-1.5, 1.5}, int width = 800, int height = 600,
                              const char* title = "chaos and fractals");
@@ -55,8 +55,9 @@ struct WindowCoordinateSystem3D : protected Window3D {
 
         auto extractDataFromVector = [&](const decltype(mulVec.getData())& data) {
             euclidian = glm::vec3();
-            e0 = 0.f;
+            outerproducts = false;
             einf = 0.f;
+            e0 = 0.f;
 
             using TYPE = typename VEC::Blade::TYPE;
             for (const auto& e : data) {
@@ -112,13 +113,12 @@ struct WindowCoordinateSystem3D : protected Window3D {
         const VEC circleMid = opns_vec * 1.0_einf * opns_vec;
         extractDataFromVector(circleMid.getData());
 
-        // if circleMid contains outerProducts or the factor of einf is 0 then I don't know the type... sry :(
         if (!outerproducts && !cmp_zero(einf)) {
             // circle/line type?
             // finite circleMid represent a circle
             // infinite circleMid represent a line
-            const bool containsEuclidian = cmp_zero(euclidian.x) | cmp_zero(euclidian.y) | cmp_zero(euclidian.z);
-            const bool containsE0 = cmp_zero(e0);
+            const bool containsEuclidian = !cmp_zero(euclidian.x) | !cmp_zero(euclidian.y) | !cmp_zero(euclidian.z);
+            const bool containsE0 = !cmp_zero(e0);
             if (containsE0)
                 return MULTI_VECTOR_TYPE::CIRCLE;
             if (!containsEuclidian)
@@ -221,8 +221,8 @@ struct WindowCoordinateSystem3D : protected Window3D {
         this->_drawPoint(SPACE_TYPE::IPNS, p1, color, alpha);
     }
     template <typename _ValueType>
-    void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
-        std::runtime_error("_drawLine not yet implemented");
+    void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t){
+        throw std::runtime_error("_drawLine not yet implemented");
     }
     template <typename _ValueType>
     void _drawPlane(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& mulVec, const cf::Color& color, uint8_t alpha) {
@@ -251,8 +251,41 @@ struct WindowCoordinateSystem3D : protected Window3D {
         this->drawPlane(normal, pos, color, alpha);
     }
     template <typename _ValueType>
-    void _drawCircle(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
-        std::runtime_error("_drawCircle not yet implemented");
+    void _drawCircle(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t){
+        cf::MultiVector<_ValueType> ipns = vec;
+        cf::MultiVector<_ValueType> opns = *vec;
+        if (spaceType != SPACE_TYPE::IPNS)
+            std::swap(ipns, opns);
+
+        glm::vec3 normal;
+        for (const auto& e : ipns.getData()){
+            if (e.outerProduct.size() == 1){
+                // all blades are sorted -> e0 may only be on outerProduct on all e1-3
+                using Type = typename std::decay<decltype(e)>::type::TYPE;
+                if (Type::E0 == e.outerProduct.front()) {
+                    switch(e.type){
+                    case Type::E1: normal.x = e.factor; break;
+                    case Type::E2: normal.x = e.factor; break;
+                    case Type::E3: normal.z = e.factor; break;
+                    default: break;
+                    }
+                }
+            }
+        }
+        if (this->_CmpVec3(normal, glm::vec3(0.f, 0.f, 0.f)))
+            throw std::runtime_error("Unable to draw circle");
+
+        using namespace cf::literals;
+        MultiVector<_ValueType> circleCenter = opns * 1.0_einf * opns;
+        circleCenter = circleCenter / (-_ValueType(circleCenter * 1.0_einf)); // normalize point
+
+        const _ValueType radius = _ValueType(opns * opns);
+        const glm::vec3 center(
+            float(circleCenter * 1.0_e1),
+            float(circleCenter * 1.0_e2),
+            float(circleCenter * 1.0_e3)
+        );
+        this->drawCircle(center, normal, radius, color);
     }
 
     void draw() override;
