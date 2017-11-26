@@ -129,6 +129,7 @@ struct WindowCoordinateSystem3D : protected Window3D {
 
     template <typename _ValueType>
     void drawMultiVector(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
+        std::cout << "Drawing vector (" << (spaceType == SPACE_TYPE::IPNS ? "IPNS" : "OPNS") << "):\n"  << vec << std::endl;
         const MULTI_VECTOR_TYPE type = getMultiVectorType(spaceType, vec);
         switch (type) {
         case MULTI_VECTOR_TYPE::CIRCLE: this->_drawCircle(spaceType, vec, color, alpha); break;
@@ -216,8 +217,8 @@ struct WindowCoordinateSystem3D : protected Window3D {
         const auto p1 = (v - std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
 
         // points are IPNS only
-        this->drawMultiVector(SPACE_TYPE::IPNS, p0, color, alpha);
-        this->drawMultiVector(SPACE_TYPE::IPNS, p1, color, alpha);
+        this->_drawPoint(SPACE_TYPE::IPNS, p0, color, alpha);
+        this->_drawPoint(SPACE_TYPE::IPNS, p1, color, alpha);
     }
     template <typename _ValueType>
     void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
