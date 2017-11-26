@@ -26,6 +26,9 @@ static cf::ldMultiVector operator"" _E(long double value);
 static cf::ldMultiVector operator"" _value(long double value);
 }
 
+/// TODO
+/// operators and value in front
+
 template <typename _ValueType> struct MultiVector {
     MultiVector() = default;
 
@@ -199,7 +202,70 @@ template <typename _ValueType> struct MultiVector {
         return result;
     }
 
-    // addition/subtraction
+    // conversion operator to _ValueType
+    template<typename _VType>
+    explicit operator _VType () const{
+        static_assert(std::is_arithmetic<_VType>::value);
+        if (this->m_Data.empty())
+            return _ValueType(0);
+
+        if (this->m_Data.size() > 1 || this->m_Data.front().type != Blade::TYPE::VALUE)
+            throw std::runtime_error("Error: Conversion from MultiVector to value not possible");
+
+        return this->m_Data.front().factor;
+    }
+
+    // divison operator for values
+    template<typename _VType>
+    MultiVector<decltype(_ValueType(1) / _VType(1))> operator/ (const _VType& value) const {
+        static_assert(std::is_arithmetic<_VType>::value);
+        MultiVector<decltype(_ValueType(1) / _VType(1))> res = *this;
+        for (auto& e : res.m_Data)
+            e.factor /= value;
+
+        res._createConsistentData();
+        return res;
+    }
+    template<typename _VType>
+    MultiVector<decltype(_ValueType(1) / _VType(1))>& operator/=(const _VType& value) {
+        *this = *this / value;
+        return *this;
+    }
+
+    // addition/subtraction multivector with constant
+    template<typename _VType>
+    MultiVector<_ValueType> operator+(const _VType& value) const{
+        static_assert(std::is_arithmetic<_VType>::value);
+        MultiVector<_ValueType> result = *this;
+        bool valueFound = false;
+        for (auto& e : result.m_Data){
+            if (e.type == Blade::TYPE::VALUE){
+                e.factor += value;
+                valueFound = true;
+            }
+        }
+        if (!valueFound)
+            result.m_Data.emplace_back(Blade::TYPE::VALUE, value);
+
+        result._createConsistentData();
+        return result;
+    }
+    template<typename _VType>
+    MultiVector<_ValueType>& operator+=(const _VType& value) {
+        *this = *this + value;
+        return *this;
+    }
+    template<typename _VType>
+    MultiVector<_ValueType> operator-(const _VType& value) const{
+        return *this + (-value);
+    }
+    template<typename _VType>
+    MultiVector<_ValueType>& operator-=(const _VType& value) {
+        *this = *this - value;
+        return *this;
+    }
+
+    // addition/subtraction two multivectors
     template <typename _VType>
     MultiVector<decltype(_ValueType(1) + _VType(1))> operator+(const MultiVector<_VType>& rhs) const {
         using vt = decltype(_ValueType(1) + _VType(1));

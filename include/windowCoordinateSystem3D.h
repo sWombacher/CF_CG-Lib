@@ -12,7 +12,7 @@ namespace cf {
 struct WindowCoordinateSystem3D : protected Window3D {
     // thread safty:
     // every functin has to start with (some execptions)
-    //  std::lock_guard<std::mutex> guard(this->m_Mutex);
+    //  std::lock_guard<std::mutex> guard(this->m_WriteMutex);
 
     WindowCoordinateSystem3D(int* argc, char** argv, const Interval& interval = {-1.5, 1.5}, int width = 800, int height = 600,
                              const char* title = "chaos and fractals");
@@ -202,9 +202,23 @@ struct WindowCoordinateSystem3D : protected Window3D {
         this->drawSphere(pos, radius, alpha, color);
     }
     template <typename _ValueType>
-    void _drawPointPair(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {}
+    void _drawPointPair(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
+        cf::MultiVector<_ValueType> dual;
+        if (spaceType != SPACE_TYPE::OPNS)
+            dual = *vec;
+
+        using namespace cf::literals;
+        const auto& v = spaceType == SPACE_TYPE::OPNS ? vec : dual;
+        const auto res = std::sqrt(_ValueType(v*v));
+        const auto p0 = (v + std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
+        const auto p1 = (v - std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
+        this->_drawPoint(spaceType, p0, color, alpha);
+        this->_drawPoint(spaceType, p1, color, alpha);
+    }
     template <typename _ValueType>
-    void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {}
+    void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
+        std::runtime_error("_drawLine not yet implemented");
+    }
     template <typename _ValueType>
     void _drawPlane(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& mulVec, const cf::Color& color, uint8_t alpha) {
         cf::MultiVector<_ValueType> dual;
@@ -232,7 +246,9 @@ struct WindowCoordinateSystem3D : protected Window3D {
         this->drawPlane(normal, pos, color, alpha);
     }
     template <typename _ValueType>
-    void _drawCircle(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {}
+    void _drawCircle(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
+        std::runtime_error("_drawCircle not yet implemented");
+    }
 
     void draw() override;
     void handleKeyboardInput(unsigned char key, int, int) override;

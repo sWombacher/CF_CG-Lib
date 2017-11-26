@@ -11,12 +11,26 @@ int main(int argc, char** argv) {
     using namespace cf::literals;
     using Blade = cf::dMultiVector::Blade;
     using STYPE = cf::WindowCoordinateSystem3D::SPACE_TYPE;
-    cf::dMultiVector vec(Blade(Blade::TYPE::E0, 1.0), Blade(Blade::TYPE::E1, 2.0), Blade(Blade::TYPE::E2, 0.0));
 
     cf::WindowCoordinateSystem3D system(&argc, argv);
     system.beginDrawing([&]() {
-        vec = 1.0_e0 + 1.0_einf;
-        system.drawMultiVector(STYPE::IPNS, vec, cf::Color::GREEN, 127);
+        /*
+        system.drawMultiVector(STYPE::IPNS, 1.0_e0 + 1.0_einf, cf::Color::GREEN, 127);
+
+        system.drawMultiVector(STYPE::IPNS, 1.0_e1, cf::Color::RED, 127);
+        system.drawMultiVector(STYPE::IPNS, 1.0_e2, cf::Color::BLUE, 127);
+        system.drawMultiVector(STYPE::IPNS, 1.0_e3, cf::Color::GREEN, 127);
+        */
+
+        const auto s0 = -1.0_e1 - 0.22_einf + 1.0_e0;
+        const auto s1 = -0.72_einf + 1.0_e0;
+        const auto s2 = 1.0_e2 - 0.22_einf + 1.0_e0;
+//        system.drawMultiVector(STYPE::IPNS, s0, cf::Color::RED, 127);
+//        system.drawMultiVector(STYPE::IPNS, s1, cf::Color::GREEN, 127);
+//        system.drawMultiVector(STYPE::IPNS, s2, cf::Color::BLUE, 127);
+
+        system.drawMultiVector(STYPE::IPNS, s0 % s1 % s2, cf::Color::BLACK, 255);
+
     });
     return 0;
 }
