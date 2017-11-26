@@ -150,9 +150,12 @@ struct WindowCoordinateSystem3D : protected Window3D {
     std::mutex m_KeyEventMutex;
 
     template <typename _ValueType>
-    void _drawPoint(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
+    void _drawPoint(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& v, const cf::Color& color, uint8_t alpha) {
         if (spaceType != SPACE_TYPE::IPNS)
             throw std::runtime_error("Error: Point has to be in IPNS");
+
+        using namespace cf::literals;
+        cf::MultiVector<_ValueType> vec = v / (-_ValueType(v * 1.0_einf)); // normalize point
 
         glm::tvec3<_ValueType, glm::precision::highp> pos;
         const auto& blades = vec.getData();
@@ -209,11 +212,12 @@ struct WindowCoordinateSystem3D : protected Window3D {
 
         using namespace cf::literals;
         const auto& v = spaceType == SPACE_TYPE::OPNS ? vec : dual;
-        const auto res = std::sqrt(_ValueType(v*v));
         const auto p0 = (v + std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
         const auto p1 = (v - std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
-        this->_drawPoint(spaceType, p0, color, alpha);
-        this->_drawPoint(spaceType, p1, color, alpha);
+
+        // points are IPNS only
+        this->drawMultiVector(SPACE_TYPE::IPNS, p0, color, alpha);
+        this->drawMultiVector(SPACE_TYPE::IPNS, p1, color, alpha);
     }
     template <typename _ValueType>
     void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
