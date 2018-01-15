@@ -15,7 +15,8 @@ int main(int argc, char** argv) {
     std::string filePath;
     if (argc < 2) {
         std::cout << "Please add a filename as a command line argument to specify output path.\n";
-        filePath = "Heightmap.png";
+        filePath = CHAOS_FILE_PATH;
+        filePath += "Heightmap.png";
     } else
         filePath = argv[1];
 
@@ -44,5 +45,9 @@ int main(int argc, char** argv) {
     // save heightmap
     window.saveImage(filePath.c_str());
     std::cout << "Finished generating terrain!" << std::endl;
+
+    std::cout << "Press enter to finish the process";
+    cf::Console::waitKey();
+
     return 0;
 }

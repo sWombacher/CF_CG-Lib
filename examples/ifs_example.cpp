@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
     if (argc < 2) {
         std::cout << "Please provide a .ifs file, if you want a different ifs file\n\n\n";
         filePath = CHAOS_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/chaos_files
-        filePath += "Baum_3.ifs";
+        filePath += "Sierpinski.ifs";
+        //filePath += "Baum_3.ifs";
     } else
         filePath = argv[1];
 
