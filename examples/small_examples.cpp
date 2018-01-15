@@ -14,6 +14,25 @@ int main() {
     const std::string antStr = cf::readAntString(CHAOS_FILE_PATH "Ant_10.ant");
     std::cout << "Ant string:\t" << antStr << '\n' << std::endl;
 
+    // iterate through some colors
+    // option 1:
+    std::cout << "Iterate throgh colors, option 1:\n";
+    const auto colors = {cf::Color::GREEN, cf::Color::RandomColor()};
+    for (const auto& e : colors)
+        std::cout << e << "\t\t";
+    std::cout << "\n\n";
+
+    // option 2:
+    std::cout << "Iterate throgh colors, option 2:\n";
+
+    // use as many colors as you like ;)
+    auto iter = cf::Color::CreateEndlessColorIterator(cf::Color::BLACK, cf::Color::RandomColor());
+    for (int i = 0; i < 3; ++i) {
+        std::cout << *iter << '\n';
+        ++iter;
+    }
+    std::cout << std::endl;
+
     // read pal file and print a color
     std::vector<cf::Color> pal = cf::readPaletteFromFile(CHAOS_FILE_PATH "Chaos_ant.pal");
     std::cout << "Palette at index 4:\t\t" << pal[4] << std::endl;

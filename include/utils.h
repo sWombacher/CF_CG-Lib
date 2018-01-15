@@ -160,6 +160,7 @@ struct Color {
             if (this->m_Iter == this->m_Colors.cend())
                 this->m_Iter = this->m_Colors.cbegin();
         }
+        void operator++(int){ ++(*this); }
         const cf::Color& operator*() const { return *this->m_Iter; }
         SimpleEndlessIterator(SimpleEndlessIterator&&) = default;
 
