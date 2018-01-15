@@ -1,20 +1,24 @@
 
 #include "window2D.h"
+#include <atomic>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 namespace cf {
 
-Window2D::Window2D(int width, int height, const char* windowName, const cf::Color& c)
-    : m_Image(height, width, CV_8UC3, cv::Scalar(c.b, c.g, c.r)), m_InvertYAxis(false), m_WindowName(windowName),
-      m_WindowScale(1.f), m_IntervalX(0, this->m_Image.cols - 1), m_IntervalY(0, this->m_Image.rows - 1) {
-    if (!this->m_WindowName)
-        this->m_WindowName = "";
+Window2D::Window2D(int width, int height, const std::string& windowName, const cf::Color& c)
+    : m_Image(height, width, CV_8UC3, cv::Scalar(c.b, c.g, c.r)), m_InvertYAxis(false),
+      m_WindowName(Window2D::_CreateUniqueWindowName(windowName)), m_WindowScale(1.f), m_IntervalX(0, this->m_Image.cols - 1),
+      m_IntervalY(0, this->m_Image.rows - 1) {
 
     cv::namedWindow(this->m_WindowName);
 }
 
-Window2D::Window2D(const char* filePath)
-    : m_InvertYAxis(false), m_WindowName(filePath), m_WindowScale(1.f), m_IntervalX(0, 0), m_IntervalY(0, 0) {
-    if (!filePath)
-        throw std::runtime_error("Error: filePath musn't be a nullpointer");
+Window2D::Window2D(const std::string& filePath)
+    : m_InvertYAxis(false), m_WindowName(Window2D::_CreateUniqueWindowName(filePath)), m_WindowScale(1.f), m_IntervalX(0, 0),
+      m_IntervalY(0, 0) {
 
     this->m_Image = cv::imread(filePath, CV_LOAD_IMAGE_COLOR);
     this->m_IntervalX.max = this->m_Image.cols - 1;
@@ -313,16 +317,17 @@ void Window2D::_convertToNewInterval(float& x, float& y) const {
     y = Interval::translateIntervalPostion(Interval(0, this->m_Image.rows - 1), this->m_IntervalY, y);
 }
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 void Window2D::_window2foreground() const {
 #ifdef _WIN32
     static HWND windowHandle = (HWND)cvGetWindowHandle(this->m_WindowName);
     SetForegroundWindow(windowHandle);
 #else
 #endif
+}
+
+std::string Window2D::_CreateUniqueWindowName(const std::string& name) {
+    static std::atomic_int32_t windowCounter(1);
+    return "Window " + std::to_string(windowCounter++) + ": " + name;
 }
 
 bool Point::operator==(const Point& p) const { return this->x == p.x && this->y == p.y; }
@@ -360,4 +365,4 @@ Point::operator cv::Point() const { return cv::Point(std::round(this->x), std::r
 
 Point operator*(float factor, const Point& p) { return p * factor; }
 Point operator/(float lhs, const Point& p) { return p * lhs; }
-}
+} // namespace cf

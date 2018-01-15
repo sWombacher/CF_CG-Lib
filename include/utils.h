@@ -152,7 +152,6 @@ struct Color {
      */
     static cf::Color RandomColor();
 
-
     template<int _Size>
     struct SimpleEndlessIterator{
         void operator++() {
@@ -162,26 +161,32 @@ struct Color {
         }
         void operator++(int){ ++(*this); }
         const cf::Color& operator*() const { return *this->m_Iter; }
+        const cf::Color& operator->() const { return *this->m_Iter; }
         SimpleEndlessIterator(SimpleEndlessIterator&&) = default;
 
     private:
         friend Color;
-        typedef std::array<cf::Color, _Size> ARRAY;
-        const ARRAY m_Colors;
+        using ARRAY = const std::array<const cf::Color, _Size>;
+
+        ARRAY m_Colors;
         typename ARRAY::const_iterator m_Iter;
-        typename ARRAY::const_iterator m_EndIter;
-        typename ARRAY::const_iterator m_BeginIter;
 
         SimpleEndlessIterator(const ARRAY& rhs) : m_Colors(rhs){
-            this->m_Iter = this->m_Colors.begin();
+            this->m_Iter = this->m_Colors.cbegin();
         }
     };
-    template<typename... _Colors>
-    static SimpleEndlessIterator<sizeof...(_Colors)> CreateEndlessColorIterator(const _Colors&... colors){
-        typename SimpleEndlessIterator<sizeof... (_Colors)>::ARRAY tmpColors = { colors... };
-        return SimpleEndlessIterator<sizeof...(_Colors)>(tmpColors);
-    }
 
+    /**
+     * @brief CreateEndlessColorIterator creates an iterator, which cycles through alls provided colors
+     * @param colors All colors
+     * @return Iterator
+     */
+    template<typename... _Colors>
+    static SimpleEndlessIterator<sizeof...(_Colors)> CreateEndlessColorIterator(_Colors&&... colors){
+        constexpr const size_t SIZE = sizeof...(_Colors);
+        using CArray = typename SimpleEndlessIterator<SIZE>::ARRAY;
+        return SimpleEndlessIterator<SIZE>(CArray{ std::forward<_Colors>(colors)... });
+    }
 
     static const Color MAGENTA;
     static const Color YELLOW;

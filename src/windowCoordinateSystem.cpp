@@ -3,7 +3,7 @@
 namespace cf {
 
 cf::WindowCoordinateSystem::WindowCoordinateSystem(int width, const cf::Interval& range_x, const cf::Interval& range_y,
-                                                   const char* windowName, const cf::Color& startColor)
+                                                   const std::string& windowName, const cf::Color& startColor)
     : Window2D(1, 1, windowName, startColor) {
     this->setInvertYAxis(true);
     this->setInterval(range_x, range_y, width);
@@ -132,7 +132,8 @@ void WindowCoordinateSystem::drawLinearEquation(float slope, float yIntercept, c
             }
         }
         if (points.size() != 2)
-            throw std::runtime_error(std::string(R"(Error: In function ")") + __func__ + R"(" this shouldn't have happened :))");
+            throw std::runtime_error(std::string(R"(Error: In function ")") + __func__ +
+                                     R"(" this shouldn't have happened :))");
     }
     p1 = points[0];
     p2 = points[1];
@@ -213,6 +214,6 @@ int WindowCoordinateSystem::_CALCULATE_HEIGHT(const Interval& range_x, const Int
     float diff_x = range_x.max - range_x.min;
     return int(width * (diff_y / diff_x));
 }
-}
+} // namespace cf
 
 const float cf::WindowCoordinateSystem::ZERO_COMPARE = 0.000001f;

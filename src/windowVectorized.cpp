@@ -2,13 +2,13 @@
 namespace cf {
 
 cf::WindowVectorized::WindowVectorized(int width, const cf::Interval& range_x, const cf::Interval& range_y,
-                                       const char* windowName, const cf::Color& startColor)
+                                       const std::string& windowName, const cf::Color& startColor)
     : Window2D(1, 1, windowName, startColor) {
     this->setInvertYAxis(true);
     this->setInterval(range_x, range_y, width);
 }
 
-cf::WindowVectorized::WindowVectorized(const char* filePath, int width, const cf::Interval& range_x,
+cf::WindowVectorized::WindowVectorized(const std::string& filePath, int width, const cf::Interval& range_x,
                                        const cf::Interval& range_y)
     : Window2D(filePath) {
     this->setInvertYAxis(true);
@@ -58,4 +58,4 @@ int cf::WindowVectorized::_CALCULATE_HEIGHT(const cf::Interval& range_x, const c
 }
 
 void cf::WindowVectorized::_invertY(cf::Point& p) { p.y = this->getHeight() - 1 - p.y; }
-}
+} // namespace cf

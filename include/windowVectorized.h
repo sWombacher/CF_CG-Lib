@@ -16,7 +16,7 @@ struct WindowVectorized : protected Window2D {
      * @param range_y Interval in y direction
      */
     WindowVectorized(int width, const cf::Interval& range_x, const cf::Interval& range_y,
-                     const char* windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::BLACK);
+                     const std::string& windowName = "Chaos and Fractals", const cf::Color& startColor = cf::Color::BLACK);
 
     /**
      * @brief WindowVectorized Image reading constructoor
@@ -25,7 +25,7 @@ struct WindowVectorized : protected Window2D {
      * @param range_x Interval in x direction
      * @param range_y Interval in y direction
      */
-    WindowVectorized(const char* filePath, int width, const cf::Interval& range_x, const cf::Interval& range_y);
+    WindowVectorized(const std::string& filePath, int width, const cf::Interval& range_x, const cf::Interval& range_y);
 
     virtual ~WindowVectorized() = default;
 
@@ -81,33 +81,33 @@ struct WindowVectorized : protected Window2D {
     void setColor_imageSpace(int x, int y, const cf::Color& color);
 
     // publicly available functions from class Window2D
-    using Window2D::getWindowDisplayScale;
-    using Window2D::setWindowDisplayScale;
-    using Window2D::drawSpecializedLine;
+    using Window2D::LineType;
+    using Window2D::clear;
+    using Window2D::drawAxis;
+    using Window2D::drawCircle;
     using Window2D::drawCirclePart;
-    using Window2D::waitMouseInput;
+    using Window2D::drawLine;
     using Window2D::drawRectangle;
+    using Window2D::drawSpecializedLine;
+    using Window2D::floodFill;
+    using Window2D::getColor;
+    using Window2D::getHeight;
+    using Window2D::getImage;
     using Window2D::getIntervalX;
     using Window2D::getIntervalY;
-    using Window2D::drawCircle;
-    using Window2D::saveImage;
-    using Window2D::getHeight;
-    using Window2D::floodFill;
     using Window2D::getWidth;
-    using Window2D::drawLine;
-    using Window2D::getColor;
+    using Window2D::getWindowDisplayScale;
+    using Window2D::saveImage;
     using Window2D::setColor;
-    using Window2D::drawAxis;
-    using Window2D::LineType;
-    using Window2D::getImage;
-    using Window2D::waitKey;
-    using Window2D::clear;
+    using Window2D::setWindowDisplayScale;
     using Window2D::show;
+    using Window2D::waitKey;
+    using Window2D::waitMouseInput;
 
   private:
     static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width);
     inline void _invertY(cf::Point& p);
 };
-}
+} // namespace cf
 
 #endif // WINDOW_VECTORIZED_H_H

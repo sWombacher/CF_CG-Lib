@@ -16,40 +16,40 @@ struct WindowRasterized : protected Window2D {
      * @param windowName Name of the window
      * @param startColor Background color
      */
-    WindowRasterized(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals",
+    WindowRasterized(int width = 800, int height = 600, const std::string& windowName = "Chaos and Fractals",
                      const cf::Color& startColor = {0, 0, 0});
 
     /**
      * @brief WindowRasterized Load image from file path
      * @param filePath Path to file
      */
-    WindowRasterized(const char* filePath);
+    WindowRasterized(const std::string& filePath);
 
     virtual ~WindowRasterized() = default;
 
     // publicly available functions  from class Window2D
-    using Window2D::getWindowDisplayScale;
-    using Window2D::setWindowDisplayScale;
+    using Window2D::LineType;
+    using Window2D::clear;
+    using Window2D::drawCircle;
+    using Window2D::drawLine;
+    using Window2D::drawRectangle;
     using Window2D::drawSpecializedLine;
     using Window2D::flippHorizontal;
-    using Window2D::waitMouseInput;
-    using Window2D::drawRectangle;
     using Window2D::flippVertical;
-    using Window2D::drawCircle;
-    using Window2D::saveImage;
-    using Window2D::getHeight;
     using Window2D::floodFill;
-    using Window2D::getWidth;
-    using Window2D::drawLine;
-    using Window2D::getImage;
     using Window2D::getColor;
-    using Window2D::setColor;
-    using Window2D::LineType;
-    using Window2D::waitKey;
+    using Window2D::getHeight;
+    using Window2D::getImage;
+    using Window2D::getWidth;
+    using Window2D::getWindowDisplayScale;
     using Window2D::resize;
-    using Window2D::clear;
+    using Window2D::saveImage;
+    using Window2D::setColor;
+    using Window2D::setWindowDisplayScale;
     using Window2D::show;
+    using Window2D::waitKey;
+    using Window2D::waitMouseInput;
 };
-}
+} // namespace cf
 
 #endif // WINDOW_RASTERIZED_H_H

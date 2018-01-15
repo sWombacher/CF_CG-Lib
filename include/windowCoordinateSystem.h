@@ -16,7 +16,7 @@ struct WindowCoordinateSystem : protected Window2D {
      * @param width Image width in pixel (hight will be determind automatically)
      */
     WindowCoordinateSystem(int width, const cf::Interval& range_x, const cf::Interval& range_y,
-                           const char* windowName = "Computer Geometry", const cf::Color& startColor = cf::Color::WHITE);
+                           const std::string& windowName = "Computer Geometry", const cf::Color& startColor = cf::Color::WHITE);
 
     virtual ~WindowCoordinateSystem() = default;
 
@@ -139,27 +139,27 @@ struct WindowCoordinateSystem : protected Window2D {
                         const cf::Color& color = cf::Color::BLACK, int lineWidth = 1, bool smallerAngle = true);
 
     // publicly available functions from class Window2D
-    using Window2D::getWindowDisplayScale;
-    using Window2D::setWindowDisplayScale;
-    using Window2D::waitMouseInput;
+    using Window2D::LineType;
+    using Window2D::clear;
+    using Window2D::drawAxis;
+    using Window2D::floodFill;
+    using Window2D::getColor;
+    using Window2D::getHeight;
     using Window2D::getIntervalX;
     using Window2D::getIntervalY;
-    using Window2D::saveImage;
-    using Window2D::getHeight;
-    using Window2D::floodFill;
     using Window2D::getWidth;
-    using Window2D::getColor;
+    using Window2D::getWindowDisplayScale;
+    using Window2D::saveImage;
     using Window2D::setColor;
-    using Window2D::drawAxis;
-    using Window2D::LineType;
-    using Window2D::waitKey;
-    using Window2D::clear;
+    using Window2D::setWindowDisplayScale;
     using Window2D::show;
+    using Window2D::waitKey;
+    using Window2D::waitMouseInput;
 
   private:
     static int _CALCULATE_HEIGHT(const cf::Interval& range_x, const cf::Interval& range_y, int width);
     static const float ZERO_COMPARE;
 };
-}
+} // namespace cf
 
 #endif // WINDOW_COORDINATE_SYSTEM_H_H

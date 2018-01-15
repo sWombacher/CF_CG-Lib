@@ -15,13 +15,13 @@ struct CirclePartition;
  * @brief The Window2D struct offers advanced features used by WindowRasterized/WindowVertorized
  */
 class Window2D {
-    static const int DOT_VALUE = 4;
-    static const int DASH_VALUE = 8;
+    static constexpr const int DOT_VALUE = 4;
+    static constexpr const int DASH_VALUE = 8;
 
   public:
-    Window2D(int width = 800, int height = 600, const char* windowName = "Chaos and Fractals",
-             const cf::Color& startColor = {0, 0, 0});
-    Window2D(const char* filePath);
+    Window2D(int width = 800, int height = 600, const std::string& windowName = "Lab",
+             const cf::Color& startColor = cf::Color::BLACK);
+    Window2D(const std::string& filePath);
     virtual ~Window2D();
 
     /**
@@ -243,11 +243,12 @@ class Window2D {
     void _convertToNewInterval(float& x, float& y) const;
 
     void _window2foreground() const;
+    static std::string _CreateUniqueWindowName(const std::string& name);
 
     cv::Mat m_Image;
 
     bool m_InvertYAxis;
-    const char* m_WindowName;
+    const std::string m_WindowName;
     float m_WindowScale;
 
     cf::Interval m_IntervalX;
@@ -342,6 +343,6 @@ struct CirclePartition {
     int lineWidth;
     cf::Color color;
 };
-}
+} // namespace cf
 
 #endif
