@@ -19,9 +19,13 @@ int main(int argc, char** argv) {
             system.waitKey();
             system.clearWindow();
         };
+
+// IPNS
         const auto s0 = -1.0_e1 - 0.22_einf + 1.0_e0;
-        const auto s1 = -0.72_einf + 1.0_e0;
-        const auto s2 = 1.0_e2 - 0.22_einf + 1.0_e0;
+        const auto s1 = 1.0_e2 - 0.22_einf + 1.0_e0;
+        const auto s2 = -0.72_einf + 1.0_e0;
+
+        drawNext("Points");
 
         drawNext("Spheres");
         system.drawMultiVector(STYPE::IPNS, s0, cf::Color::BLUE, 255);
@@ -33,6 +37,8 @@ int main(int argc, char** argv) {
 
         drawNext("Point pair");
         system.drawMultiVector(STYPE::IPNS, s0 % s1 % s2, cf::Color::BLACK, 255);
+
+// OPNS
 
     });
     return 0;
