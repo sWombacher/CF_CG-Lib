@@ -5,7 +5,8 @@
 #define CFCG_EXCEPTION_HANDLING
 #endif
 
-#include "InfInt.h"
+#include "BigIntegerLibrary.hh"
+
 #include "utils.h"
 #include <iomanip> // set precision
 
@@ -43,11 +44,11 @@ int main() {
     std::cout << "Dat file at index 0:\t" << dat[0] << std::endl << std::endl;
 
     // calculation with very very large ints :)
-    InfInt veryBigNumber = "999999999999999999999999999999999";
+    BigInteger veryBigNumber = stringToBigInteger("999999999999999999999999999999999");
     veryBigNumber *= veryBigNumber;
     veryBigNumber /= 10;
-    veryBigNumber += InfInt(111111111111111111) + 1;
-    std::cout << "Very big number calculation result:\n" << veryBigNumber << std::endl << std::endl;
+    veryBigNumber += BigInteger(111111111111111111) + 1;
+    std::cout << "Very big number calculation result:\n" << bigIntegerToString(veryBigNumber) << std::endl << std::endl;
 
     // convert between degrees/radians
     // Note: OpenGL uses degree, glm radians (see 'window_3D_example.cpp')

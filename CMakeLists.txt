@@ -73,8 +73,10 @@ endif()
 file(GLOB HEADERS_FILES include/*.h include/*.hpp)
 file(GLOB SRC_FILES src/*.cpp src/*.c)
 
+file(GLOB THIRD_PARTY_FILES 3rdparty/required_include/* 3rdparty/required_src/*)
+
 # create chaos lib
-add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES})
+add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES} ${THIRD_PARTY_FILES})
 if (WIN32 OR CYGWIN)
     # copy dlls
     file(GLOB tmp ${3RD_PARTY_DIR}/dlls/Debug/*)
