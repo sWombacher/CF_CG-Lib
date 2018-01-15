@@ -1,3 +1,10 @@
+#ifdef _WIN32
+// enable exception handling for windows
+// this requires 'int main(int, char**)' function definition
+// therefore 'int main()' is dissabled
+#define CFCG_EXCEPTION_HANDLING
+#endif
+
 #include "windowRasterized.h"
 
 int main(int argc, char** argv) {
