@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <mutex>
 
 #include "termcolor.hpp"
 #include <inttypes.h>
@@ -259,6 +260,14 @@ struct Console {
         std::cerr << front;
         _printData(args...);
     }
+};
+
+struct SimpleSignal {
+    SimpleSignal();
+    void waitSignal();
+    void fireSignal();
+private:
+    std::mutex m_Mutex;
 };
 
 /**

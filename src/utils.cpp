@@ -383,4 +383,18 @@ void Console::_console2foreground() {
 /// currently only supported on windows
 #endif
 }
+
+SimpleSignal::SimpleSignal() {
+    this->m_Mutex.lock();
+}
+
+void SimpleSignal::waitSignal() {
+    this->m_Mutex.try_lock();
+    this->m_Mutex.lock();
+}
+
+void SimpleSignal::fireSignal() {
+    this->m_Mutex.unlock();
+}
+
 }
