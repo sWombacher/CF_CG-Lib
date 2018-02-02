@@ -1,8 +1,9 @@
 #ifndef UTILS_H_H
 #define UTILS_H_H
 
-#include <fstream>
+#include <condition_variable>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -263,11 +264,11 @@ struct Console {
 };
 
 struct SimpleSignal {
-    SimpleSignal();
     void waitSignal();
     void fireSignal();
 private:
     std::mutex m_Mutex;
+    std::condition_variable m_ConditionVariable;
 };
 
 /**

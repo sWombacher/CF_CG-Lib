@@ -384,17 +384,13 @@ void Console::_console2foreground() {
 #endif
 }
 
-SimpleSignal::SimpleSignal() {
-    this->m_Mutex.lock();
-}
-
 void SimpleSignal::waitSignal() {
-    this->m_Mutex.try_lock();
-    this->m_Mutex.lock();
+    std::unique_lock<std::mutex> lock(this->m_Mutex);
+    this->m_ConditionVariable.wait(lock);
 }
 
 void SimpleSignal::fireSignal() {
-    this->m_Mutex.unlock();
+    this->m_ConditionVariable.notify_one();
 }
 
 }

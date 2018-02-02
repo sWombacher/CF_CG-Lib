@@ -15,17 +15,22 @@ Window3DObject &Window3DObject::createWindow3DObject(int *argc, char **argv, int
     if (window)
         throw std::runtime_error("Only one Instance of 'Window3D' and/or 'Window3DObject' is allowed");
 
-    std::mutex signal;
-    signal.lock();
-    Window3DObject::_RenderThread = std::thread([&]{
-        // well... new is bad...
+    cf::SimpleSignal signal;
+    Window3DObject::_RenderThread = std::thread([=, &signal]{
+        // well... 'new' is bad...
         // but its a private constructor so...
-        // std::make_unique is hard to use..
+        // std::make_unique is hard to use...
+        // maybe add friend declaration...
         window = std::unique_ptr<Window3DObject>(new Window3DObject(argc, argv, width, height, title));
-        signal.unlock();
+
+        // offer main thread some time before notifying
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        signal.fireSignal();
+
         window->startDrawing();
     });
-    signal.lock();
+    signal.waitSignal();
+    window->setMaxFPS(60.f);
     return *window;
 }
 

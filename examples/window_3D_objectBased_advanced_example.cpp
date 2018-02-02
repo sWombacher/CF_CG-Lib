@@ -15,32 +15,32 @@ struct Sphere{
 
 class MyClass{
 public:
-    void operator()(cf::Window3DObject& window){
+    MyClass()
+        : m_DataRead(&this->m_Spheres[0]), m_DataWrite(&this->m_Spheres[1]){}
+
+    void draw(cf::Window3DObject& window){
         window.clear();
         window.drawAxis();
-        for (const auto& e : this->m_Spheres[this->m_DataRead])
+
+        // only read data from one buffer
+        // don't access 'm_ReadData' more than once per draw call!
+        const auto& spheres = *this->m_DataRead;
+
+        for (const auto& e : spheres)
             window.drawSphere(e.pos, e.radius, e.color);
-
-        // signal 'swapBuffer' the end of the frame
-        this->m_Signal.fireSignal();
     }
-
     void setNextData(const std::vector<Sphere>& data){
-        this->m_Spheres[this->m_DataWrite] = data;
-        this->_swapBuffer();
-    }
+        // write new sphere data
+        *this->m_DataWrite = data;
 
+        // ready new content to be drawn
+        std::swap(this->m_DataRead, this->m_DataWrite);
+    }
 private:
-    void _swapBuffer(){
-        std::swap(m_DataRead, m_DataWrite);
-
-        // wait until current frame has been finished
-        this->m_Signal.waitSignal();
-    }
-    size_t m_DataRead = 0;
-    size_t m_DataWrite = 1;
-    cf::SimpleSignal m_Signal;
     std::array<std::vector<Sphere>, 2> m_Spheres;
+
+    std::vector<Sphere>* m_DataRead;
+    std::vector<Sphere>* m_DataWrite;
 };
 
 
@@ -54,21 +54,20 @@ int main(int argc, char** argv) {
     window.printWindowUsage();
 
     MyClass classObj;
-    window.setDrawingFunction([&](cf::Window3DObject& window){ classObj(window); });
-
-    // update frames all the time
-    // required for redraw after 'window.waitKeyPressed(updateTime)'
-    window.setMaxFPS(60.f);
+    window.setDrawingFunction([&](cf::Window3DObject& window){
+        classObj.draw(window);
+    });
 
     // draw circle
     std::vector<Sphere> data;
     for (float degree = 0.f; degree < 360.f; degree += angle){
+        const float radian = cf::degree2radian(degree);
         Sphere sphere;
         sphere.color = cf::Color::RandomColor();
         sphere.radius = sphereRadius;
         sphere.pos.z = 0.f;
-        sphere.pos.x = std::cos(cf::degree2radian(degree)) * circleRadius;
-        sphere.pos.y = std::sin(cf::degree2radian(degree)) * circleRadius;
+        sphere.pos.x = std::cos(radian) * circleRadius;
+        sphere.pos.y = std::sin(radian) * circleRadius;
 
         data.push_back(sphere);
         classObj.setNextData(data);
