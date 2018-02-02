@@ -205,7 +205,7 @@ template <typename _ValueType> struct MultiVector {
     // conversion operator to _ValueType
     template<typename _VType>
     explicit operator _VType () const{
-        static_assert(std::is_arithmetic<_VType>::value);
+        static_assert(std::is_arithmetic<_VType>::value, "not a arithmetic type");
         if (this->m_Data.empty())
             return _ValueType(0);
 
@@ -218,7 +218,7 @@ template <typename _ValueType> struct MultiVector {
     // divison operator for values
     template<typename _VType>
     MultiVector<decltype(_ValueType(1) / _VType(1))> operator/ (const _VType& value) const {
-        static_assert(std::is_arithmetic<_VType>::value);
+        static_assert(std::is_arithmetic<_VType>::value, "not a arithmetic type");
         MultiVector<decltype(_ValueType(1) / _VType(1))> res = *this;
         for (auto& e : res.m_Data)
             e.factor /= value;
@@ -235,7 +235,7 @@ template <typename _ValueType> struct MultiVector {
     // addition/subtraction multivector with constant
     template<typename _VType>
     MultiVector<_ValueType> operator+(const _VType& value) const{
-        static_assert(std::is_arithmetic<_VType>::value);
+        static_assert(std::is_arithmetic<_VType>::value, "not a arithmetic type");
         MultiVector<_ValueType> result = *this;
         bool valueFound = false;
         for (auto& e : result.m_Data){

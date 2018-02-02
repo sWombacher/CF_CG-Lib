@@ -10,7 +10,7 @@
 #include "utils.h"
 #include <iomanip> // set precision
 
-int main() {
+int main(int, char**) {
     // read ant string and print it
     const std::string antStr = cf::readAntString(CHAOS_FILE_PATH "Ant_10.ant");
     std::cout << "Ant string:\t" << antStr << '\n' << std::endl;
@@ -47,7 +47,7 @@ int main() {
     BigInteger veryBigNumber = stringToBigInteger("999999999999999999999999999999999");
     veryBigNumber *= veryBigNumber;
     veryBigNumber /= 10;
-    veryBigNumber += BigInteger(111111111111111111) + 1;
+    veryBigNumber += (BigInteger(1111111111) + 1234567890) * 987654321;
     std::cout << "Very big number calculation result:\n" << bigIntegerToString(veryBigNumber) << std::endl << std::endl;
 
     // convert between degrees/radians
