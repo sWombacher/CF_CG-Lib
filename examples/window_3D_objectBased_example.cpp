@@ -22,14 +22,14 @@ void simpleKeyboardHandler(unsigned char key, int x, int y) {
 class MyClass {
   public:
     // draw functon
-    void operator()(cf::Window3DObject& window) {
+    void draw(cf::Window3DObject& window) {
         window.clear();
         window.drawAxis();
         window.drawCylinder(glm::vec3(0.f, 1.f, 0.f), glm::vec3(0.f, 0.f, 0.f), 1.f, cf::Color::GREEN);
     }
 
     // key input handler
-    void operator()(unsigned char key, int x, int y) {
+    void handleInput(unsigned char key, int x, int y) {
         std::cout << "Key pressed: " << key << ", at position: " << x << "  " << y << std::endl;
     }
 };
@@ -41,16 +41,18 @@ int main(int argc, char** argv) {
     // use a function pointer as drawing/keyinput function
     window.setDrawingFunction(simpleDrawingFunction);
     window.setKeyboardInputFunction(simpleKeyboardHandler);
+    std::cout << "Press any key to continue (3D Windiw)" << std::endl;
     window.waitKeyPressed();
 
     // use a class as a drawing/keyinput function
     MyClass obj;
     window.setDrawingFunction([&](cf::Window3DObject& window){
-        obj(window);
+        obj.draw(window);
     });
     window.setKeyboardInputFunction([&](unsigned char k, int x, int y){
-        obj(k, x, y);
+        obj.handleInput(k, x, y);
     });
+    std::cout << "Press any key to exit (3D Windiw)" << std::endl;
     window.waitKeyPressed();
 
     // this function probably throws an exception/erros
