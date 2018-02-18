@@ -39,8 +39,6 @@ struct Window3DObject final : private Window3D {
     void exit();
 
   private:
-    friend std::unique_ptr<Window3DObject>;
-
     Window3DObject(int* argc, char** argv, int width = 800, int height = 600, const char* title = "chaos and fractals");
     void draw() override;
     void handleKeyboardInput(unsigned char key, int x, int y) override;
