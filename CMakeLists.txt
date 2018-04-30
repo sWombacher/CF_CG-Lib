@@ -77,7 +77,6 @@ file(GLOB THIRD_PARTY_FILES 3rdparty/required_include/* 3rdparty/required_src/*)
 
 # create chaos lib
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} ${HEADERS_FILES} ${THIRD_PARTY_FILES})
-add_library(${PROJECT_NAME}_shared SHARED ${SRC_FILES} ${HEADERS_FILES} ${THIRD_PARTY_FILES})
 if (WIN32 OR CYGWIN)
     # copy dlls
     file(GLOB tmp ${3RD_PARTY_DIR}/dlls/Debug/*)
@@ -108,7 +107,6 @@ else()
         message(SEND_ERROR "please set CMAKE_BUILD_TYPE to \"Debug\" or \"Release\" (case sensitive)")
     endif()
     target_link_libraries(${PROJECT_NAME} ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
-    target_link_libraries(${PROJECT_NAME}_shared ${GL_LIB} ${GLU_LIB} ${GLUT_LIB} ${OpenCV_LIBS})
 endif()
 
 # add define
@@ -136,7 +134,8 @@ else()
     message("Warning: Solutions directory not found")
 endif()
 
+
 option(COMPILE_WITH_PYTHON_SUPPORT boolean false)
 if (${COMPILE_WITH_PYTHON_SUPPORT})
-    add_subdirectory(swig)
+	add_subdirectory(swig)
 endif()
