@@ -8,7 +8,7 @@
 
 namespace cf {
 
-struct Window3DObject final : private Window3D {
+struct Window3DObject final : protected Window3D {
     using Window3D::printWindowUsage;
     using Window3D::MouseButtonEvent;
     using Window3D::disableLighting;
