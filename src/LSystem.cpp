@@ -18,13 +18,8 @@ void LindenmayerSystem::read(const std::string& filePath) {
     this->m_Name = str.substr(str.rfind(' ') + 1);
 
     // read axiom
-    std::getline(input, str);
-    _removeWindowsSpecificCarriageReturn(str);
-    if (str.size() > 1) {
-        this->m_Axiom = 'A';
-        this->m_Productions.emplace('A', str);
-    } else
-        this->m_Axiom = str[0];
+    std::getline(input, this->m_Axiom);
+    _removeWindowsSpecificCarriageReturn(this->m_Axiom);
 
     // read num productions
     std::getline(input, str);
@@ -90,7 +85,7 @@ void LindenmayerSystem::read(const std::string& filePath) {
 }
 
 const std::string& LindenmayerSystem::getName() const { return this->m_Name; }
-char LindenmayerSystem::getAxiom() const { return this->m_Axiom; }
+const std::string& LindenmayerSystem::getAxiom() const { return this->m_Axiom; }
 
 const std::string* LindenmayerSystem::getProduction(char symbol) const {
     auto found = this->m_Productions.find(symbol);
@@ -117,14 +112,38 @@ std::ostream& operator<<(std::ostream& os, const Interval& interval) {
     return os;
 }
 
-LSystem_Controller::LSystem_Controller(size_t depth, const LSystem& LSystem) : m_Depth(depth), m_LSystem(LSystem) {}
+LSystem_Controller::LSystem_Controller(size_t depth, const LSystem& LSystem)
+    : m_Depth(depth), m_Productions(LSystem.getAllProductions()) {
+    const auto& axiom = LSystem.getAxiom();
+    if (axiom.empty())
+        throw std::runtime_error("Error: No Axiom");
+    else if (axiom.size() == 1)
+        this->m_Axiom = axiom.front();
+    else {
+        // add axiom to productions and add a simple symbol for it
+        char symbol = 'A';
+        while (this->m_Productions.find(symbol) != this->m_Productions.end())
+            ++symbol;
 
-LSystem_Controller::iterator LSystem_Controller::begin() const { return iterator(this->m_LSystem, this->m_Depth, false); }
+        // symbol may be > 'Z', but could colide with other symbols of a production
+        if (symbol > 'Z')
+            throw std::runtime_error("Error: Unable to find suitable symbol");
 
-LSystem_Controller::iterator LSystem_Controller::end() const { return iterator(this->m_LSystem, this->m_Depth, true); }
+        this->m_Axiom = symbol;
+        this->m_Productions.emplace(symbol, LSystem.getAxiom());
+    }
+}
+
+LSystem_Controller::iterator LSystem_Controller::begin() const {
+    return iterator(this->m_Axiom, this->m_Productions, this->m_Depth, false);
+}
+
+LSystem_Controller::iterator LSystem_Controller::end() const {
+    return iterator(this->m_Axiom, this->m_Productions, this->m_Depth, true);
+}
 
 const char& LSystem_Controller::iterator::operator*() {
-    return this->m_LSystem.getProduction(this->m_CurrentProduction)->at(this->m_Positions.at(this->m_CurrentDepth).first);
+    return this->m_Productions.at(this->m_CurrentProduction).at(size_t(this->m_Positions.at(this->m_CurrentDepth).first));
 }
 
 LSystem_Controller::iterator& LSystem_Controller::iterator::operator++() {
@@ -132,7 +151,7 @@ LSystem_Controller::iterator& LSystem_Controller::iterator::operator++() {
         throw std::runtime_error("Bound exception");
 
     while (true) {
-        const std::string& cur_production = *this->m_LSystem.getProduction(this->m_CurrentProduction);
+        const std::string& cur_production = this->m_Productions.at(this->m_CurrentProduction);
         auto& cur_pos = this->m_Positions[this->m_CurrentDepth];
         ++cur_pos.first;
 
@@ -147,8 +166,8 @@ LSystem_Controller::iterator& LSystem_Controller::iterator::operator++() {
             this->m_CurrentProduction = this->m_Positions[this->m_CurrentDepth].second;
         } else {
             // check for terminal symbol
-            char curSymbol = cur_production[cur_pos.first];
-            if (this->m_LSystem.getProduction(curSymbol) == nullptr)
+            char curSymbol = cur_production[size_t(cur_pos.first)];
+            if (this->m_Productions.find(curSymbol) == this->m_Productions.end())
                 return *this;
 
             // go down
@@ -169,10 +188,10 @@ bool LSystem_Controller::iterator::operator!=(const LSystem_Controller::iterator
     return this->m_Positions != rhs.m_Positions;
 }
 
-LSystem_Controller::iterator::iterator(const LSystem& lsystem, size_t depth, bool endIterator)
-    : m_Positions(depth, {endIterator ? (1 << 31) : -1, '\0'}), m_LSystem(lsystem), m_EndReached(endIterator) {
-    this->m_CurrentProduction = lsystem.getAxiom();
+LSystem_Controller::iterator::iterator(char axiom, const ProductionMap& lsystem, size_t depth, bool endIterator)
+    : m_Positions(depth, {endIterator ? (1 << 31) : -1, '\0'}), m_Productions(lsystem), m_CurrentProduction(axiom),
+      m_EndReached(endIterator) {
     if (!endIterator)
         this->operator++();
 }
-}
+} // namespace cf

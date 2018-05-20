@@ -24,7 +24,7 @@ struct LindenmayerSystem {
     void read(const std::string& filePath);
 
     const std::string& getName() const;
-    char getAxiom() const;
+    const std::string& getAxiom() const;
 
     const std::string* getProduction(char symbol) const;
 
@@ -43,8 +43,7 @@ struct LindenmayerSystem {
 
   private:
     std::string m_Name;
-
-    char m_Axiom;
+    std::string m_Axiom;
     std::map<char, const std::string> m_Productions;
 
     float m_Scale;
@@ -79,13 +78,15 @@ struct LSystem_Controller {
         bool operator!=(const iterator& rhs);
 
       private:
+        using ProductionMap = std::decay<decltype(LSystem().getAllProductions())>::type;
+
         friend struct LSystem_Controller;
-        iterator(const LSystem& lsystem, size_t depth, bool endIterator);
+        iterator(char axiom, const ProductionMap& lsystem, size_t depth, bool endIterator);
 
         std::vector<std::pair<int, char>> m_Positions;
+        const ProductionMap& m_Productions;
         char m_CurrentProduction = '\0';
         size_t m_CurrentDepth = 0;
-        const LSystem& m_LSystem;
         bool m_EndReached;
     };
 
@@ -93,8 +94,9 @@ struct LSystem_Controller {
     iterator end() const;
 
   private:
+    char m_Axiom;
     const size_t m_Depth;
-    const LSystem& m_LSystem;
+    iterator::ProductionMap m_Productions;
 };
 }
 
