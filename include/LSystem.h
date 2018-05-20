@@ -73,18 +73,19 @@ struct LSystem_Controller {
     LSystem_Controller(size_t depth, const LSystem& LSystem);
 
     struct iterator {
+        iterator() = default; // required for swig
         const char& operator*();
         iterator& operator++();
         bool operator!=(const iterator& rhs);
 
       private:
-        using ProductionMap = std::decay<decltype(LSystem().getAllProductions())>::type;
+        using ProductionMap = std::map<char, const std::string>;
 
         friend struct LSystem_Controller;
         iterator(char axiom, const ProductionMap& lsystem, size_t depth, bool endIterator);
 
         std::vector<std::pair<int, char>> m_Positions;
-        const ProductionMap& m_Productions;
+        const ProductionMap* m_Productions = nullptr;
         char m_CurrentProduction = '\0';
         size_t m_CurrentDepth = 0;
         bool m_EndReached;

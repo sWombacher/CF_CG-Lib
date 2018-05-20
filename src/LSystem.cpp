@@ -143,7 +143,7 @@ LSystem_Controller::iterator LSystem_Controller::end() const {
 }
 
 const char& LSystem_Controller::iterator::operator*() {
-    return this->m_Productions.at(this->m_CurrentProduction).at(size_t(this->m_Positions.at(this->m_CurrentDepth).first));
+    return this->m_Productions->at(this->m_CurrentProduction).at(size_t(this->m_Positions.at(this->m_CurrentDepth).first));
 }
 
 LSystem_Controller::iterator& LSystem_Controller::iterator::operator++() {
@@ -151,7 +151,7 @@ LSystem_Controller::iterator& LSystem_Controller::iterator::operator++() {
         throw std::runtime_error("Bound exception");
 
     while (true) {
-        const std::string& cur_production = this->m_Productions.at(this->m_CurrentProduction);
+        const std::string& cur_production = this->m_Productions->at(this->m_CurrentProduction);
         auto& cur_pos = this->m_Positions[this->m_CurrentDepth];
         ++cur_pos.first;
 
@@ -167,7 +167,7 @@ LSystem_Controller::iterator& LSystem_Controller::iterator::operator++() {
         } else {
             // check for terminal symbol
             char curSymbol = cur_production[size_t(cur_pos.first)];
-            if (this->m_Productions.find(curSymbol) == this->m_Productions.end())
+            if (this->m_Productions->find(curSymbol) == this->m_Productions->end())
                 return *this;
 
             // go down
@@ -189,7 +189,7 @@ bool LSystem_Controller::iterator::operator!=(const LSystem_Controller::iterator
 }
 
 LSystem_Controller::iterator::iterator(char axiom, const ProductionMap& lsystem, size_t depth, bool endIterator)
-    : m_Positions(depth, {endIterator ? (1 << 31) : -1, '\0'}), m_Productions(lsystem), m_CurrentProduction(axiom),
+    : m_Positions(depth, {endIterator ? (1 << 31) : -1, '\0'}), m_Productions(&lsystem), m_CurrentProduction(axiom),
       m_EndReached(endIterator) {
     if (!endIterator)
         this->operator++();

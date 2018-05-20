@@ -20,8 +20,8 @@ struct IteratedFunctionSystem {
 
     const glm::mat3x3& getTransformation(std::size_t pos) const;
 
-    const Interval& getRangeX() const;
-    const Interval& getRangeY() const;
+    const cf::Interval& getRangeX() const;
+    const cf::Interval& getRangeY() const;
     const std::string& getName() const;
     const std::vector<glm::mat3x3>& getAllTransformation() const;
 

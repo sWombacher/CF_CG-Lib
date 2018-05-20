@@ -16,8 +16,8 @@ struct Orbit {
      */
     void read(const std::string& filePath);
 
-    const Interval& getRangeX() const;
-    const Interval& getRangeY() const;
+    const cf::Interval& getRangeX() const;
+    const cf::Interval& getRangeY() const;
 
     const std::string& getName() const;
 

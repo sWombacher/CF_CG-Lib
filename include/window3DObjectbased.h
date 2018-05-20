@@ -2,13 +2,13 @@
 #define WINDOW_3D_OBJECT_H_H
 
 #include "window3D.h"
+#include "internal.hpp"
 
-#include <mutex>
 #include <thread>
 
 namespace cf {
 
-struct Window3DObject final : protected Window3D {
+struct Window3DObject : protected Window3D {
     using Window3D::printWindowUsage;
     using Window3D::MouseButtonEvent;
     using Window3D::disableLighting;
@@ -45,29 +45,10 @@ struct Window3DObject final : protected Window3D {
     bool handleMousePressedMovement(MouseButton button, int x, int y) override;
     void handleMousePressEvent(MouseButton button, MouseButtonEvent event, int x, int y) override;
 
-    template <typename _ReturnType, typename... _Args> struct _ProtectedFunction;
-    template <typename _ReturnType, typename... _Args> struct _ProtectedFunction<_ReturnType(_Args...)> {
-        template <typename _PT> void set(_PT&& forwardRef) {
-            std::lock_guard<std::mutex> lg(this->m_Mutex);
-            this->m_ProtectType = std::forward<_PT>(forwardRef);
-        }
-        template <typename... _FunctionArgs> _ReturnType operator()(_FunctionArgs&&... args) {
-            std::lock_guard<std::mutex> lg(this->m_Mutex);
-            if (this->m_ProtectType)
-                return this->m_ProtectType(std::forward<_FunctionArgs>(args)...);
-
-            // return default values if no function has been defined
-            return _ReturnType();
-        }
-
-      private:
-        std::mutex m_Mutex;
-        std::function<_ReturnType(_Args...)> m_ProtectType;
-    };
-    _ProtectedFunction<void(Window3DObject&)> m_DrawingFunction;
-    _ProtectedFunction<void(unsigned char, int, int)> m_KeyboardInput;
-    _ProtectedFunction<bool(MouseButton, int, int)> m_MousePressMovement;
-    _ProtectedFunction<void(MouseButton, MouseButtonEvent, int, int)> m_MousePressEvent;
+    internal::_ProtectedFunction<void(Window3DObject&)> m_DrawingFunction;
+    internal::_ProtectedFunction<void(unsigned char, int, int)> m_KeyboardInput;
+    internal::_ProtectedFunction<bool(MouseButton, int, int)> m_MousePressMovement;
+    internal::_ProtectedFunction<void(MouseButton, MouseButtonEvent, int, int)> m_MousePressEvent;
 
     std::timed_mutex m_WaitMutex;
     static std::thread _RenderThread;

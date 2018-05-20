@@ -162,6 +162,7 @@ struct Color {
                 this->m_Iter = this->m_Colors.cbegin();
         }
         void operator++(int){ ++(*this); }
+
         const cf::Color& operator*() const { return *this->m_Iter; }
         const cf::Color& operator->() const { return *this->m_Iter; }
         SimpleEndlessIterator(SimpleEndlessIterator&&) = default;
