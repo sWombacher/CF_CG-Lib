@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     window.setKeyboardInputFunction([&](unsigned char k, int x, int y){
         obj.handleInput(k, x, y);
     });
-    std::cout << "Press any key to exit (3D Windiw)" << std::endl;
+    std::cout << "Press any key to exit (3D Window)" << std::endl;
     window.waitKeyPressed();
 
     // this function probably throws an exception/erros
