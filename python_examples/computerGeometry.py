@@ -7,7 +7,7 @@ cfPoints = [] # internal 2D representation with x and y
 pointVectors = [] # internal pointVector representation with x, y, and w
 
 def readPoints():
-    data = cf.readDatFilePointVector("/home/bloodyangel/git_hub/ChaosAndFractal_Lib/geometry_files/FIRST.DAT")
+    data = cf.readDatFilePointVector("geometry_files/FIRST.DAT")
 
     for i in range(0, data.size()):
         pv = data.get(i)
