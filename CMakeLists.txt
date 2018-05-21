@@ -136,4 +136,7 @@ else()
     message("Warning: Solutions directory not found")
 endif()
 
-add_subdirectory(swig)
+option(COMPILE_WITH_PYTHON_SUPPORT boolean false)
+if (${COMPILE_WITH_PYTHON_SUPPORT})
+    add_subdirectory(swig)
+endif()

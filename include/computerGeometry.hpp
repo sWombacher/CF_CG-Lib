@@ -7,17 +7,25 @@
 #include <sstream>
 #include <string>
 
+// swig currently doesn allow 'static_assert' or 'decltype'
+// build cut down version for swig support
+#if defined(SWIG_SUPPORT) || defined(SWIG)
+#define SWIG_SPARSE_IMPL
+#endif
+
 namespace cf {
 template <bool IS_POINTVECTOR, typename _ValueType> class Vec3;
-
-typedef Vec3<true, float> PointVector_f;
-typedef Vec3<false, float> DirectionVector_f;
 
 typedef Vec3<true, double> PointVector_d;
 typedef Vec3<false, double> DirectionVector_d;
 
+#ifndef SWIG_SPARSE_IMPL
+typedef Vec3<true, float> PointVector_f;
+typedef Vec3<false, float> DirectionVector_f;
+
 typedef Vec3<true, long double> PointVector_ld;
 typedef Vec3<false, long double> DirectionVector_ld;
+#endif
 
 /**
  * @brief PointVector Specialiaztion of general Vec3
@@ -28,7 +36,7 @@ typedef PointVector_d PointVector;
  * @brief DirectionVector Specialiaztion of general Vec3, where component 'w' may not be written to
  */
 typedef DirectionVector_d DirectionVector;
-}
+} // namespace cf
 
 /**
  * @brief operator<< Simple shift operator for output
@@ -49,7 +57,6 @@ namespace cf {
  *  - Support for DirectionVectors and PointVectors (see typedef 'PointVector' and 'DirectionVector')
  */
 template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
-    typedef Vec3<IS_POINTVECTOR, _ValueType> MY_TYPE;
 
     // technically glm isn't required
     // union{ struct{ _ValueType x, y, w; }; _ValueType[3]; }
@@ -59,24 +66,37 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
     typedef glm::tvec3<_ValueType, glm::precision::highp> glmVec3;
 
   public:
+    typedef Vec3<IS_POINTVECTOR, _ValueType> self_type;
     typedef _ValueType value_type;
     Vec3(const _ValueType& x = 0.0, const _ValueType& y = 0.0) : m_Data(x, y, IS_POINTVECTOR ? 1.0 : 0.0) {}
     Vec3(const _ValueType& x, const _ValueType& y, const _ValueType& w) : m_Data(x, y, w) {
-        if (!IS_POINTVECTOR && !MY_TYPE::_EqualZero(w))
+        if (!IS_POINTVECTOR && !self_type::_EqualZero(w))
             throw std::runtime_error("Error: Direction vectors 'w' has to be set");
     }
     Vec3(const cf::Point& p) : m_Data(p.x, p.y, 1.0) {
-        static_assert(IS_POINTVECTOR, "Error: Direction vector cannot be initialized from a cf::Point");
+#define MSG "Error: Direction vector cannot be initialized from a cf::Point"
+#ifndef SWIG_SPARSE_IMPL
+        static_assert(IS_POINTVECTOR, MSG);
+#else
+        if (!IS_POINTVECTOR)
+            throw std::runtime_error(MSG);
+#endif
+#undef MSG
     }
 
     template <bool PV_RHS, typename _VType>
-    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) + _VType(0))> operator+(const Vec3<PV_RHS, _VType>& rhs) const {
+#ifndef SWIG_SPARSE_IMPL
+    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) + _VType(0))>
+#else
+    Vec3<PV_RHS | IS_POINTVECTOR, _ValueType>
+#endif
+        operator+(const Vec3<PV_RHS, _VType>& rhs) const {
         Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) + _VType(0))> tmp;
         for (size_t i = 0; i < 3; ++i)
             tmp[i] = this->m_Data[i] + rhs.m_Data[i];
         return tmp;
     }
-    template <bool PV_RHS, typename _VType> MY_TYPE& operator+=(const Vec3<PV_RHS, _VType>& rhs) {
+    template <bool PV_RHS, typename _VType> self_type& operator+=(const Vec3<PV_RHS, _VType>& rhs) {
         static_assert(
             IS_POINTVECTOR || !PV_RHS,
             "Error: Inplace addition of drection and point vector is a point vector, (Direction += Point  is not allowed)");
@@ -86,13 +106,18 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
     }
 
     template <bool PV_RHS, typename _VType>
-    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) - _VType(0))> operator-(const Vec3<PV_RHS, _VType>& rhs) const {
+#ifndef SWIG_SPARSE_IMPL
+    Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) - _VType(0))>
+#else
+    Vec3<PV_RHS | IS_POINTVECTOR, _ValueType>
+#endif
+        operator-(const Vec3<PV_RHS, _VType>& rhs) const {
         Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) - _VType(0))> tmp;
         for (size_t i = 0; i < 3; ++i)
             tmp[i] = this->m_Data[i] - rhs.m_Data[i];
         return tmp;
     }
-    template <bool PV_RHS, typename _VType> MY_TYPE& operator-=(const Vec3<PV_RHS, _VType>& rhs) {
+    template <bool PV_RHS, typename _VType> self_type& operator-=(const Vec3<PV_RHS, _VType>& rhs) {
         static_assert(
             IS_POINTVECTOR || !PV_RHS,
             "Error: Inplace substruction of drection and point vector is a point vector, (Direction -= Point  is not allowed)");
@@ -106,17 +131,17 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @param rhs Factor for the multiplication
      * @return Multiplied vector
      */
-    MY_TYPE operator*(const _ValueType& rhs) const {
-        MY_TYPE tmp = *this;
+    self_type operator*(const _ValueType& rhs) const {
+        self_type tmp = *this;
         tmp.m_Data *= rhs;
         return tmp;
     }
-    MY_TYPE& operator*=(const _ValueType& rhs) {
+    self_type& operator*=(const _ValueType& rhs) {
         this->m_Data *= rhs;
         return *this;
     }
 
-    friend MY_TYPE operator*(const _ValueType& lhs, const MY_TYPE& vec) { return vec * lhs; }
+    friend self_type operator*(const _ValueType& lhs, const self_type& vec) { return vec * lhs; }
 
     /**
      * @brief operator% Performs the cross product between two vectors
@@ -124,13 +149,17 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @return
      */
     template <bool PV_RHS, typename _VType>
+#ifndef SWIG_SPARSE_IMPL
     Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) * _ValueType(0) - _ValueType(0))>
+#else
+    Vec3<PV_RHS | IS_POINTVECTOR, _ValueType>
+#endif
         operator%(const Vec3<PV_RHS, _VType>& rhs) const {
         Vec3<PV_RHS | IS_POINTVECTOR, decltype(_ValueType(0) * _ValueType(0) - _ValueType(0))> tmp = *this;
         tmp %= rhs;
         return tmp;
     }
-    template <bool PV_RHS, typename _VType> MY_TYPE& operator%=(const Vec3<PV_RHS, _VType>& rhs) {
+    template <bool PV_RHS, typename _VType> self_type& operator%=(const Vec3<PV_RHS, _VType>& rhs) {
         static_assert(
             IS_POINTVECTOR || !PV_RHS,
             "Error: Inplace crossproduct of drection and point vector is a point vector, (Direction %= Point  is not allowed)");
@@ -145,9 +174,16 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @brief normalize Normalizes the PointVector (division by the 'w' component), compile error on DirectionVecotrs
      * @return Return the normalized vector
      */
-    MY_TYPE& normalize() {
-        static_assert(IS_POINTVECTOR, "Error: direction vector cannot be normalized!");
-        if (MY_TYPE::_EqualZero(this->m_Data.z)) {
+    self_type& normalize() {
+#define MSG "Error: direction vector cannot be normalized!"
+#ifndef SWIG_SPARSE_IMPL
+        static_assert(IS_POINTVECTOR, MSG);
+#else
+        if (!IS_POINTVECTOR)
+            throw std::runtime_error(MSG);
+#endif
+#undef MSG
+        if (self_type::_EqualZero(this->m_Data.z)) {
             cf::Console::printWarning("Point vector cannot be normalized (point at infinity, w = 0)");
             return *this;
         }
@@ -169,7 +205,12 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @return
      */
     template <bool PV_RHS, typename _VType>
-    decltype(_VType(0) * _ValueType(0) * (_VType(0) + _ValueType(0))) operator*(const Vec3<PV_RHS, _VType>& rhs) const {
+#ifndef SWIG_SPARSE_IMPL
+    decltype(_VType(0) * _ValueType(0) * (_VType(0) + _ValueType(0)))
+#else
+    _ValueType
+#endif
+        operator*(const Vec3<PV_RHS, _VType>& rhs) const {
         const auto& md = this->m_Data;
         const auto& rd = rhs.m_Data;
         return md[0] * rd[0] + md[1] * rd[1] + md[2] * rd[2];
@@ -206,7 +247,14 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @param value
      */
     void setW(const _ValueType& value) {
-        static_assert(IS_POINTVECTOR, "Error: Write acces to direction vector's w component is not allowed");
+#define MSG "Error: Write acces to direction vector's w component is not allowed"
+#ifndef SWIG_SPARSE_IMPL
+        static_assert(IS_POINTVECTOR, MSG);
+#else
+        if (!IS_POINTVECTOR)
+            throw std::runtime_error(MSG);
+#endif
+#undef MSG
         this->m_Data.z = value;
     }
 
@@ -238,16 +286,16 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
     operator cf::Point() const {
         static_assert(IS_POINTVECTOR,
                       "Error: No convertion from direction vector to cf::Point, try changing type to point vector");
-        if (MY_TYPE::_EqualZero(this->m_Data.z)) {
+        if (self_type::_EqualZero(this->m_Data.z)) {
             cf::Console::printWarning("Normalizing point vector with w = 0  -> point at infinity");
             return {std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity()};
         }
-        if (!MY_TYPE::_EqualZero(std::abs(this->m_Data.z - _ValueType(1.0))))
+        if (!self_type::_EqualZero(std::abs(this->m_Data.z - _ValueType(1.0))))
             cf::Console::printWarning("Applying temporary normalization to point vector (you may want to do this yourself)!\n");
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }
 
-    MY_TYPE& operator=(const cf::Point& p) {
+    self_type& operator=(const cf::Point& p) {
         static_assert(IS_POINTVECTOR,
                       "Error: No convertion from cf::Point to direction vector possible (w component has to be 0)");
         this->m_Data[0] = _ValueType(p.x);
@@ -256,8 +304,8 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
         return *this;
     }
 
-    template <typename _VType, glm::precision precision> MY_TYPE& operator=(const glm::tvec3<_VType, precision>& rhs) {
-        if (!IS_POINTVECTOR && !MY_TYPE::_EqualZero(rhs.z))
+    template <typename _VType, glm::precision precision> self_type& operator=(const glm::tvec3<_VType, precision>& rhs) {
+        if (!IS_POINTVECTOR && !self_type::_EqualZero(rhs.z))
             throw std::runtime_error("Error: Cannot convert glm::tvec3 to direction vector (w component has to be 0)");
         for (size_t i = 0; i < 3; ++i)
             this->m_Data[i] = _ValueType(rhs[i]);
@@ -269,7 +317,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * (point to direction vector)
      */
     template <bool PV_RHS, typename _VType> operator cf::Vec3<PV_RHS, _VType>() const {
-        if (IS_POINTVECTOR && !PV_RHS && !MY_TYPE::_EqualZero(_VType(this->m_Data.z)))
+        if (IS_POINTVECTOR && !PV_RHS && !self_type::_EqualZero(_VType(this->m_Data.z)))
             throw std::runtime_error("Error: Convertion from point vector to direction vector not possible (w != 0)");
         return {_VType(this->m_Data.x), _VType(this->m_Data.y), _VType(this->m_Data.z)};
     }
@@ -278,8 +326,20 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @brief length Calculates the vector length for Direction type vectors
      * @return Length of the underlying vector
      */
-    decltype(_ValueType(0) * _ValueType(0) + _ValueType(0)) length() const {
-        static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
+#ifndef SWIG_SPARSE_IMPL
+    decltype(_ValueType(0) * _ValueType(0) + _ValueType(0))
+#else
+    _ValueType
+#endif
+        length() const {
+#define MSG "Error: Length calculation only possible for direction vectors"
+#ifndef SWIG_SPARSE_IMPL
+        static_assert(!IS_POINTVECTOR, MSG);
+#else
+        if (IS_POINTVECTOR)
+            throw std::runtime_error(MSG);
+#endif
+#undef MSG
         return std::sqrt(this->m_Data[0] * this->m_Data[0] + this->m_Data[1] * this->m_Data[1]);
     }
 
@@ -288,8 +348,15 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * direction type vectors)
      * @return
      */
-    MY_TYPE getVector90Degree() const {
-        static_assert(!IS_POINTVECTOR, "Error: Length calculation only possible for direction vectors");
+    self_type getVector90Degree() const {
+#define MSG "Error: Length calculation only possible for direction vectors"
+#ifndef SWIG_SPARSE_IMPL
+        static_assert(!IS_POINTVECTOR, MSG);
+#else
+        if (IS_POINTVECTOR)
+            throw std::runtime_error(MSG);
+#endif
+#undef MSG
         return {this->m_Data[1], -this->m_Data[0], _ValueType(0.0)};
     }
 
@@ -298,9 +365,9 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @param rhs Other vector
      * @return
      */
-    bool operator==(const MY_TYPE& rhs) const {
+    bool operator==(const self_type& rhs) const {
         for (int i = 0; i < 3; ++i) {
-            if (!MY_TYPE::_EqualZero(rhs[i] - this->m_Data[i]))
+            if (!self_type::_EqualZero(rhs[i] - this->m_Data[i]))
                 return false;
         }
         return true;
@@ -311,7 +378,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @param rhs Other vector
      * @return
      */
-    bool operator!=(const MY_TYPE& rhs) const { return !(*this == rhs); }
+    bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
 
   private:
     template <bool b, typename _VType> friend class Vec3;
@@ -322,10 +389,14 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
 
     glmVec3 m_Data;
 };
-}
+} // namespace cf
 
 template <bool b, typename _VType> std::ostream& operator<<(std::ostream& os, const cf::Vec3<b, _VType>& rhs) {
     return os << static_cast<glm::vec3>(rhs);
 }
 
 #endif // COMPUTER_GEOMETRY_H_H
+
+#ifdef SWIG_SPARSE_IMPL
+#undef SWIG_SPARSE_IMPL
+#endif
