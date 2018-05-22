@@ -18,7 +18,7 @@ endif()
 
 # enable compiler warnings for gcc/clang
 if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} EQUAL "Clang")
-    set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -Wall -Wextra ")
+    set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -Wall -Wextra -fPIC")
 endif()
 
 

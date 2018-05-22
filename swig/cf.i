@@ -38,6 +38,7 @@
     double innerProduct(const cf::Vec3<false, double>& rhs){ return (*self) * rhs; }
     cf::Vec3<true, double> crossProduct(const cf::Vec3<true, double>& rhs){ return (*self) % rhs; }
     cf::Vec3<true, double> crossProduct(const cf::Vec3<false, double>& rhs){ return (*self) % rhs; }
+    cf::Vec3<true, double> multiply(const double& rhs) { return (*self) * rhs; }
 }
 %extend cf::Vec3<false, double> {
     cf::Vec3<true, double> add(const cf::Vec3<true , double>& rhs){ return (*self) + rhs; }
@@ -48,6 +49,7 @@
     double innerProduct(const cf::Vec3<false, double>& rhs){ return (*self) * rhs; }
     cf::Vec3<true, double> crossProduct(const cf::Vec3<true, double>& rhs){ return (*self) % rhs; }
     cf::Vec3<true, double> crossProduct(const cf::Vec3<false, double>& rhs){ return (*self) % rhs; }
+    cf::Vec3<false, double> multiply(const double& rhs) { return (*self) * rhs; }
 }
 
 %extend cf::WindowCoordinateSystem {
