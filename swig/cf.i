@@ -39,6 +39,10 @@
     cf::Vec3<true, double> crossProduct(const cf::Vec3<true, double>& rhs){ return (*self) % rhs; }
     cf::Vec3<true, double> crossProduct(const cf::Vec3<false, double>& rhs){ return (*self) % rhs; }
     cf::Vec3<true, double> multiply(const double& rhs) { return (*self) * rhs; }
+
+    cf::Vec3<true, double>(const cf::Vec3<false, double>& rhs){
+        return new cf::Vec3<true, double>(rhs.getX(), rhs.getY(), 0.0);
+    }
 }
 %extend cf::Vec3<false, double> {
     cf::Vec3<true, double> add(const cf::Vec3<true , double>& rhs){ return (*self) + rhs; }
@@ -50,6 +54,12 @@
     cf::Vec3<true, double> crossProduct(const cf::Vec3<true, double>& rhs){ return (*self) % rhs; }
     cf::Vec3<true, double> crossProduct(const cf::Vec3<false, double>& rhs){ return (*self) % rhs; }
     cf::Vec3<false, double> multiply(const double& rhs) { return (*self) * rhs; }
+
+    cf::Vec3<false, double>(const cf::Vec3<true, double>& rhs){
+        if (std::abs(rhs.getW()) > 0.000001)
+            throw std::runtime_error("Error: Unable to convert point vector to direction vector!");
+        return new cf::Vec3<false, double>(rhs.getX(), rhs.getY());
+    }
 }
 
 %extend cf::WindowCoordinateSystem {
