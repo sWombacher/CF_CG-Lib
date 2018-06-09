@@ -32,7 +32,7 @@
 %extend cf::Vec3<true, double> {
     cf::Vec3<true, double> add(const cf::Vec3<true , double>& rhs){ return (*self) + rhs; }
     cf::Vec3<true, double> add(const cf::Vec3<false, double>& rhs){ return (*self) + rhs; }
-    cf::Vec3<false, double> sub(const cf::Vec3<true, double>& rhs){ return (*self) - rhs; }
+    cf::Vec3<true, double> sub(const cf::Vec3<true, double>& rhs){ return (*self) - rhs; }
     cf::Vec3<true, double> sub(const cf::Vec3<false, double>& rhs){ return (*self) - rhs; }
     double innerProduct(const cf::Vec3<true, double>& rhs){ return (*self) * rhs; }
     double innerProduct(const cf::Vec3<false, double>& rhs){ return (*self) * rhs; }
