@@ -100,7 +100,7 @@ print("Press enter (or wait 3s) to draw line between point1 and point0\n")
 window.waitKey(3000)
 
 # use point/direction vectors
-direction = cf.PointVector(pointVectors[1].sub(pointVectors[0]))
+direction = cf.DirectionVector(pointVectors[1].sub(pointVectors[0]))
 window.drawLinearEquation(cfPoints[1], direction, cf.Color.RED, cf.Window2D.LineType_DOT_1)
 window.show()
 
