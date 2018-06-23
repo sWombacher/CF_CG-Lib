@@ -28,12 +28,15 @@ int main(int argc, char** argv) {
         drawNext("Points");
 
         drawNext("Spheres");
-        system.drawMultiVector(STYPE::IPNS, s0, cf::Color::BLUE, 255);
-        system.drawMultiVector(STYPE::IPNS, s1, cf::Color::BLUE, 255);
-        system.drawMultiVector(STYPE::IPNS, s2, cf::Color::BLUE, 255);
+        system.drawMultiVector(STYPE::IPNS, s0, cf::Color::RED  , 255);
+        system.drawMultiVector(STYPE::IPNS, s1, cf::Color::GREEN, 255);
+        system.drawMultiVector(STYPE::IPNS, s2, cf::Color::BLUE , 255);
 
         drawNext("Circle");
-        system.drawMultiVector(STYPE::IPNS, s0 % s1, cf::Color::BLUE, 255);
+//        system.drawMultiVector(STYPE::IPNS, s0 % s1, cf::Color::BLUE, 255);
+        const auto circle = s0 % s1;
+        std::cout << "Circle:\n" << circle << std::endl;
+        system.drawMultiVector(STYPE::OPNS, circle, cf::Color::BLUE, 255);
 
         drawNext("Point pair");
         system.drawMultiVector(STYPE::IPNS, s0 % s1 % s2, cf::Color::BLACK, 255);

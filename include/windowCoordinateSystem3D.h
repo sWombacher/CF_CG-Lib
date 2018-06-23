@@ -265,7 +265,7 @@ struct WindowCoordinateSystem3D : protected Window3D {
                 if (Type::E0 == e.outerProduct.front()) {
                     switch(e.type){
                     case Type::E1: normal.x = e.factor; break;
-                    case Type::E2: normal.x = e.factor; break;
+                    case Type::E2: normal.y = e.factor; break;
                     case Type::E3: normal.z = e.factor; break;
                     default: break;
                     }
