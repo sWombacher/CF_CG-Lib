@@ -25,21 +25,21 @@ int main(int argc, char** argv) {
         const auto s1 = 1.0_e2 - 0.22_einf + 1.0_e0;
         const auto s2 = -0.72_einf + 1.0_e0;
 
+        /*
         drawNext("Points");
 
         drawNext("Spheres");
-        system.drawMultiVector(STYPE::IPNS, s0, cf::Color::RED  , 255);
-        system.drawMultiVector(STYPE::IPNS, s1, cf::Color::GREEN, 255);
-        system.drawMultiVector(STYPE::IPNS, s2, cf::Color::BLUE , 255);
+        system.drawMultiVector(STYPE::IPNS, s0, cf::Color::RED  , 100);
+        system.drawMultiVector(STYPE::IPNS, s1, cf::Color::GREEN, 100);
+        system.drawMultiVector(STYPE::IPNS, s2, cf::Color::BLUE , 100);
 
         drawNext("Circle");
-//        system.drawMultiVector(STYPE::IPNS, s0 % s1, cf::Color::BLUE, 255);
-        const auto circle = s0 % s1;
-        std::cout << "Circle:\n" << circle << std::endl;
-        system.drawMultiVector(STYPE::OPNS, circle, cf::Color::BLUE, 255);
+        system.drawMultiVector(STYPE::OPNS, s0 % s1, cf::Color::BLUE, 100);
+        */
 
         drawNext("Point pair");
         system.drawMultiVector(STYPE::IPNS, s0 % s1 % s2, cf::Color::BLACK, 255);
+        std::cout << "Point pair: " << (s0 % s1 % s2) << std::endl;
 
 // OPNS
 

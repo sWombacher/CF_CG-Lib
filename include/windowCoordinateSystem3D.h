@@ -156,7 +156,23 @@ struct WindowCoordinateSystem3D : protected Window3D {
             throw std::runtime_error("Error: Point has to be in IPNS");
 
         using namespace cf::literals;
-        cf::MultiVector<_ValueType> vec = v / (-_ValueType(v * 1.0_einf)); // normalize point
+        cf::MultiVector<_ValueType> vec;
+
+        // search for '^einf'
+        const auto iter = std::find_if(v.getData().cbegin(), v.getData().cend(), [](const auto& val){
+            auto iter = std::find_if(val.outerProduct.cbegin(), val.outerProduct.cend(), [](const auto& type){
+               return type == std::decay<decltype(v)>::type::Blade::TYPE::EINF;
+            });
+            return iter != val.outerProduct.cend();
+        });
+        if (iter != v.getData().cend()){
+            const auto tmp = 1.0_e0 * v;
+            vec = 1.0_einf * _ValueType(0.5 * cf::abs(tmp) * cf::abs(tmp)) + tmp;
+        }
+        else
+            vec = v;
+
+        vec = vec / (-_ValueType(vec * 1.0_einf)); // normalize point
 
         glm::tvec3<_ValueType, glm::precision::highp> pos;
         const auto& blades = vec.getData();
@@ -207,11 +223,8 @@ struct WindowCoordinateSystem3D : protected Window3D {
     }
     template <typename _ValueType>
     void _drawPointPair(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t alpha) {
-        cf::MultiVector<_ValueType> dual;
-        if (spaceType != SPACE_TYPE::OPNS)
-            dual = *vec;
-
         using namespace cf::literals;
+        const cf::MultiVector<_ValueType> dual = *vec;
         const auto& v = spaceType == SPACE_TYPE::OPNS ? vec : dual;
         const auto p0 = (v + std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
         const auto p1 = (v - std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);

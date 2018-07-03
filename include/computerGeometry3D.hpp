@@ -24,7 +24,7 @@ static cf::ldMultiVector operator"" _einf(long double value);
 
 static cf::ldMultiVector operator"" _E(long double value);
 static cf::ldMultiVector operator"" _value(long double value);
-}
+} // namespace literals
 
 /// TODO
 /// operators and value in front
@@ -203,8 +203,7 @@ template <typename _ValueType> struct MultiVector {
     }
 
     // conversion operator to _ValueType
-    template<typename _VType>
-    explicit operator _VType () const{
+    template <typename _VType> explicit operator _VType() const {
         static_assert(std::is_arithmetic<_VType>::value, "not a arithmetic type");
         if (this->m_Data.empty())
             return _ValueType(0);
@@ -216,8 +215,7 @@ template <typename _ValueType> struct MultiVector {
     }
 
     // divison operator for values
-    template<typename _VType>
-    MultiVector<decltype(_ValueType(1) / _VType(1))> operator/ (const _VType& value) const {
+    template <typename _VType> MultiVector<decltype(_ValueType(1) / _VType(1))> operator/(const _VType& value) const {
         static_assert(std::is_arithmetic<_VType>::value, "not a arithmetic type");
         MultiVector<decltype(_ValueType(1) / _VType(1))> res = *this;
         for (auto& e : res.m_Data)
@@ -226,20 +224,18 @@ template <typename _ValueType> struct MultiVector {
         res._createConsistentData();
         return res;
     }
-    template<typename _VType>
-    MultiVector<decltype(_ValueType(1) / _VType(1))>& operator/=(const _VType& value) {
+    template <typename _VType> MultiVector<decltype(_ValueType(1) / _VType(1))>& operator/=(const _VType& value) {
         *this = *this / value;
         return *this;
     }
 
     // addition/subtraction multivector with constant
-    template<typename _VType>
-    MultiVector<_ValueType> operator+(const _VType& value) const{
+    template <typename _VType> MultiVector<_ValueType> operator+(const _VType& value) const {
         static_assert(std::is_arithmetic<_VType>::value, "not a arithmetic type");
         MultiVector<_ValueType> result = *this;
         bool valueFound = false;
-        for (auto& e : result.m_Data){
-            if (e.type == Blade::TYPE::VALUE){
+        for (auto& e : result.m_Data) {
+            if (e.type == Blade::TYPE::VALUE) {
                 e.factor += value;
                 valueFound = true;
             }
@@ -250,17 +246,12 @@ template <typename _ValueType> struct MultiVector {
         result._createConsistentData();
         return result;
     }
-    template<typename _VType>
-    MultiVector<_ValueType>& operator+=(const _VType& value) {
+    template <typename _VType> MultiVector<_ValueType>& operator+=(const _VType& value) {
         *this = *this + value;
         return *this;
     }
-    template<typename _VType>
-    MultiVector<_ValueType> operator-(const _VType& value) const{
-        return *this + (-value);
-    }
-    template<typename _VType>
-    MultiVector<_ValueType>& operator-=(const _VType& value) {
+    template <typename _VType> MultiVector<_ValueType> operator-(const _VType& value) const { return *this + (-value); }
+    template <typename _VType> MultiVector<_ValueType>& operator-=(const _VType& value) {
         *this = *this - value;
         return *this;
     }
@@ -366,14 +357,6 @@ template <typename _ValueType> struct MultiVector {
                     b.outerProduct.clear();
                     const MVEC mvec_a(a), mvec_b(b), mvec_c(c);
                     const MVEC res = ((mvec_a * mvec_b) & mvec_c) - ((mvec_a * mvec_c) & mvec_b);
-
-					/// TEST
-					MVEC t0 = mvec_a * mvec_b;
-					MVEC t1 = t0 & mvec_c;
-					MVEC r1 = (mvec_a * mvec_b) & mvec_c;
-					MVEC r2 = (mvec_a * mvec_c) & mvec_b;
-					MVEC r12 = r1 - r2;
-					/// END TEST
                     result.m_Data.insert(result.m_Data.end(), res.m_Data.begin(), res.m_Data.end());
                 } else {
                     // hard case
@@ -487,9 +470,7 @@ template <typename _ValueType> struct MultiVector {
     MultiVector<decltype(_ValueType(1) * _VType(1))> operator^(const MultiVector<_VType>& rhs) const {
         return *this % rhs;
     }
-    template <typename _VType> MultiVector<_ValueType>& operator^=(const MultiVector<_VType>& rhs) {
-        return *this %= rhs;
-    }
+    template <typename _VType> MultiVector<_ValueType>& operator^=(const MultiVector<_VType>& rhs) { return *this %= rhs; }
 
     // geometry product
     template <typename _VType>
@@ -499,11 +480,11 @@ template <typename _ValueType> struct MultiVector {
         MultiVector<_ValueType> lhs_noValue;
 
         decltype(MultiVector<_ValueType>::operator&(rhs)) res;
-        auto foo = [&res](const auto& original, auto& cpy, const auto& other){
-            for (const auto& data : original.m_Data){
+        auto foo = [&res](const auto& original, auto& cpy, const auto& other) {
+            for (const auto& data : original.m_Data) {
                 if (data.type != std::decay<decltype(original)>::type::Blade::TYPE::VALUE)
                     cpy.m_Data.emplace_back(data.type, data.factor);
-                else{
+                else {
                     typename std::decay<decltype(res)>::type tmp;
                     tmp.m_Data.emplace_back(std::decay<decltype(tmp.m_Data.front())>::type::Blade::TYPE::VALUE, data.factor);
                     res += tmp % other;
@@ -531,11 +512,11 @@ template <typename _ValueType> struct MultiVector {
     }
 
     inline void _createConsistentData() {
-		if (this->m_Data.empty()) {
-			// if we dont have data set value to 0
-			this->m_Data.emplace_back(Blade::TYPE::VALUE, 0.0);
-			return;
-		}
+        if (this->m_Data.empty()) {
+            // if we dont have data set value to 0
+            this->m_Data.emplace_back(Blade::TYPE::VALUE, 0.0);
+            return;
+        }
 
         // sort outerProducts by TYPE
         for (auto& e : this->m_Data)
@@ -561,15 +542,59 @@ template <typename _ValueType> struct MultiVector {
                 this->m_Data.erase(this->m_Data.begin() + int(i--));
         }
 
-		// if we dont have data set value to 0
-		if (this->m_Data.empty()) 
-			this->m_Data.emplace_back(Blade::TYPE::VALUE, 0.0);
+        // if we dont have data set value to 0
+        if (this->m_Data.empty())
+            this->m_Data.emplace_back(Blade::TYPE::VALUE, 0.0);
     }
 
     template <typename T> static bool _CmpZero(const T& value) { return std::abs(value) < T(0.000001); }
 
     std::vector<Blade> m_Data;
 };
+
+
+template<typename _ValueType>
+_ValueType abs(const cf::MultiVector<_ValueType>& multiVector){
+    using namespace literals;
+    if (multiVector.getData().empty())
+        return _ValueType(0.0);
+
+    try {
+        const _ValueType res = _ValueType(multiVector);
+        return res;
+    } catch (...) {}
+
+    // unsure about all cases... so just solve for simple case :)
+    size_t count = 0;
+    _ValueType res(0.0);
+
+    auto isTypeE1E2E3 = [](typename MultiVector<_ValueType>::Blade::TYPE t){
+        switch (t){
+        case decltype(t)::E1:
+        case decltype(t)::E2:
+        case decltype(t)::E3:
+            return true;
+            break;
+        default:
+            return false;
+        }
+    };
+
+    for (const auto& e : multiVector.getData()){
+        if (isTypeE1E2E3(e.type)){
+            if (e.outerProduct.size())
+                throw std::runtime_error("Result not known... sry :(");
+
+            ++count;
+            res += e.factor * e.factor;
+        }
+    }
+    if (count == 0)
+        throw std::runtime_error("Result not known... sry :(");
+
+    return std::pow(res, - _ValueType(count));
+}
+
 
 namespace literals {
 static cf::ldMultiVector operator"" _e1(long double value) {
@@ -604,7 +629,7 @@ static cf::ldMultiVector operator"" _value(long double value) {
     Blade tmp(Blade::TYPE::VALUE, value);
     return cf::ldMultiVector(tmp);
 }
-}
-}
+} // namespace literals
+} // namespace cf
 
 #endif
