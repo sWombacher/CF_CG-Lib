@@ -41,13 +41,6 @@
 
 This small guide will help you install and run all provided examples and provide some info about how to add your own project(s).
 
-\mbox{} \\
-\textbf{Getting started:}
-\begin{itemize}
-	\item Introduction for Windows users (section \ref{Windows})
-	\item Introduction for \space macOS \space \space users (section \ref{Mac})
-	\item Introduction for \space \space Linux \space \space \space users (section \ref{Linux})
-\end{itemize}
 
 \mbox{} \\
 \textbf{Available documentation} (located in \textit{$<$ProjectDirectory$>$/Documentation}):
@@ -66,41 +59,29 @@ This library uses some third Party libraries:
 \end{itemize}
 
 \newpage
-\section{Windows}\label{Windows}
+\section{Insatllation}
 
 Insatllation:
 \begin{itemize}
 	\item Install VisualStudio 2017 or VisualStudio 2017 Redistributable (64-Bit):
 	\begin{itemize}
-		\item Provided: VC\_redis.x64.exe
 		\item Link:\\ \url{https://www.visualstudio.com/downloads/}
 	\end{itemize}
 	
 	\mbox{}\\
-	\item 
-	Install Python (3.6.5 tested):
+	\item Install WinPython64-3.6.5:
 	\begin{itemize}
-		\item Provided: python-3.6.5-amd64.exe   
-		\item Link, 64-Bit version required!:\\ \url{https://www.python.org/downloads/release/python-365/} 
-		\item \textbf{IMPORTANT:\\You have to add Python to your \textit{PATH}-Variables}
-		\begin{figure}[H]
-			\includegraphics[width=\linewidth]{pythonPathVariable.png}
-		\end{figure}
+		\item Link, 64-Bit version required!\\ \url{http://winpython.sourceforge.net/} 
 	\end{itemize}
 
-	\item Test your installation
+	\mbox{}\\
+	\item Test your installation:
+	\begin{itemize}
+		\item Open: '\textit{$<$WinPython install dir$>$/WinPython Powershell Prompt.exe}'
+		\item Navigate to your \textit{$<$ProjectDirectory$>$}
+		\item Run: '\textit{python computerGeometry\_example.py}'
+	\end{itemize}
 	
 \end{itemize}
-
-
-\newpage
-\section{Mac}\label{Mac}
-
-Currently there is only a Windows  intruduction due to time constraints
-
-\newpage
-\section{Linux}\label{Linux}
-
-Currently there is only a Windows  intruduction due to time constraints
 
 \end{document}

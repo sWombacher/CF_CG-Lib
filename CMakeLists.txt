@@ -28,7 +28,7 @@ add_definitions(-D${CMAKE_SYSTEM_NAME})
 
 if (USE_SYSTEM_LIBS)
     message("Using system libs")
-	
+
     find_package(OpenCV REQUIRED)
     find_package(GLUT REQUIRED)
     find_package(OpenGL REQUIRED)
@@ -41,12 +41,12 @@ else()
         message(SEND_ERROR "Error:\nProvided libraries are 64bit versions,\nif you have a 64bit system try changing your compiler to a x86_x64 compiler\nNote: you may have to delete the cmake cache to do so")
     endif()
 	if (NOT 3RD_PARTY_DIR)
-		message(SEND_ERROR "3RD_PARTY_DIR has to be set...")
+		message(SEND_ERROR "3RD_PARTY_DIR has to be set...\nfor example '3rdparty/VS2017'")
 	endif()
-	
+
 	message("Using provided 3rd party libs")
 	include_directories(${3RD_PARTY_DIR}/include)
-	
+
 	file(GLOB GLUT_LIB_DEBUG ${3RD_PARTY_DIR}/Debug/freeglut*.lib)
 	file(GLOB GLUT_LIB_RELEASE ${3RD_PARTY_DIR}/Release/freeglut*.lib)
 
