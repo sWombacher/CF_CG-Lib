@@ -63,6 +63,11 @@ template <typename _ValueType> struct MultiVector {
         _ValueType factor;
         std::vector<TYPE> outerProduct;
 
+        bool operator==(const Blade& rhs) const {
+            return this->type == rhs.type && std::abs(this->factor - rhs.factor) < _ValueType(0.00001) &&
+                   this->outerProduct == rhs.outerProduct;
+        }
+
         bool sameType(const Blade& rhs) const { return this->type2int() == rhs.type2int(); }
         int type2int() const {
             int res = int(this->type);
@@ -317,11 +322,11 @@ template <typename _ValueType> struct MultiVector {
                     const int t1 = int(e_rhs.type);
 
                     if (t0 == int(Blade::TYPE::VALUE)) {
-                        result.m_Data.emplace_back(typename MVEC::Blade::TYPE(int(e_lhs.type)), e_lhs.factor * e_rhs.factor);
+                        result.m_Data.emplace_back(typename MVEC::Blade::TYPE(int(e_rhs.type)), e_lhs.factor * e_rhs.factor);
                         continue;
                     }
                     if (t1 == int(Blade::TYPE::VALUE)) {
-                        result.m_Data.emplace_back(typename MVEC::Blade::TYPE(int(e_rhs.type)), e_lhs.factor * e_rhs.factor);
+                        result.m_Data.emplace_back(typename MVEC::Blade::TYPE(int(e_lhs.type)), e_lhs.factor * e_rhs.factor);
                         continue;
                     }
                     vt value;
@@ -335,7 +340,8 @@ template <typename _ValueType> struct MultiVector {
                         continue;
 
                     result.m_Data.emplace_back(MVEC::Blade::TYPE::VALUE, value * e_lhs.factor * e_rhs.factor);
-                } else if (sumSize == 1) {
+                }
+                else if (sumSize == 1) {
                     // advanced case
                     // we can use
                     // a . (b ^ c) = (a . b) * c - (a . c) * b
@@ -502,6 +508,8 @@ template <typename _ValueType> struct MultiVector {
         return *this;
     }
 
+    bool operator==(const MultiVector<_ValueType>& rhs) const { return this->m_Data == rhs.m_Data; }
+
   private:
     template <typename _VType> friend struct MultiVector;
 
@@ -552,9 +560,7 @@ template <typename _ValueType> struct MultiVector {
     std::vector<Blade> m_Data;
 };
 
-
-template<typename _ValueType>
-_ValueType abs(const cf::MultiVector<_ValueType>& multiVector){
+template <typename _ValueType> _ValueType abs(const cf::MultiVector<_ValueType>& multiVector) {
     using namespace literals;
     if (multiVector.getData().empty())
         return _ValueType(0.0);
@@ -562,14 +568,15 @@ _ValueType abs(const cf::MultiVector<_ValueType>& multiVector){
     try {
         const _ValueType res = _ValueType(multiVector);
         return res;
-    } catch (...) {}
+    } catch (...) {
+    }
 
     // unsure about all cases... so just solve for simple case :)
     size_t count = 0;
     _ValueType res(0.0);
 
-    auto isTypeE1E2E3 = [](typename MultiVector<_ValueType>::Blade::TYPE t){
-        switch (t){
+    auto isTypeE1E2E3 = [](typename MultiVector<_ValueType>::Blade::TYPE t) {
+        switch (t) {
         case decltype(t)::E1:
         case decltype(t)::E2:
         case decltype(t)::E3:
@@ -580,8 +587,8 @@ _ValueType abs(const cf::MultiVector<_ValueType>& multiVector){
         }
     };
 
-    for (const auto& e : multiVector.getData()){
-        if (isTypeE1E2E3(e.type)){
+    for (const auto& e : multiVector.getData()) {
+        if (isTypeE1E2E3(e.type)) {
             if (e.outerProduct.size())
                 throw std::runtime_error("Result not known... sry :(");
 
@@ -592,9 +599,8 @@ _ValueType abs(const cf::MultiVector<_ValueType>& multiVector){
     if (count == 0)
         throw std::runtime_error("Result not known... sry :(");
 
-    return std::pow(res, - _ValueType(count));
+    return std::pow(res, -_ValueType(count));
 }
-
 
 namespace literals {
 static cf::ldMultiVector operator"" _e1(long double value) {

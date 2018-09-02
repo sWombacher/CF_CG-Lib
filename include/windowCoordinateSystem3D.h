@@ -226,10 +226,17 @@ struct WindowCoordinateSystem3D : protected Window3D {
         using namespace cf::literals;
         const cf::MultiVector<_ValueType> dual = *vec;
         const auto& v = spaceType == SPACE_TYPE::OPNS ? vec : dual;
-        const auto p0 = (v + std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
-        const auto p1 = (v - std::sqrt(_ValueType(v * v))) / _ValueType(1.0_einf * v);
+
+        const auto v_squared = _ValueType(v * v);
+        const auto v_einf = _ValueType(1.0_einf * v);
+        const auto p0 = (v + std::sqrt(v_squared)) / v_einf;
+        const auto p1 = (v - std::sqrt(v_squared)) / v_einf;
 
         // points are IPNS only
+        std::cout << "P0: " << p0  << "\nP1: " << p1 << "\nV: " << v << '\n' << std::endl;
+        std::cout << "V * V: " << v_squared << "\neinf * V: " << v_einf << std::endl;
+        std::cout << "Vec^2:  " << vec * vec << std::endl;
+
         this->_drawPoint(SPACE_TYPE::IPNS, p0, color, alpha);
         this->_drawPoint(SPACE_TYPE::IPNS, p1, color, alpha);
     }

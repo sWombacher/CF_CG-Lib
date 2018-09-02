@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
 
 // IPNS
         const auto s0 = -1.0_e1 - 0.22_einf + 1.0_e0;
-        const auto s1 = 1.0_e2 - 0.22_einf + 1.0_e0;
-        const auto s2 = -0.72_einf + 1.0_e0;
+        const auto s1 = -0.72_einf + 1.0_e0;
+        const auto s2 = 1.0_e2 - 0.22_einf + 1.0_e0;
 
         /*
         drawNext("Points");

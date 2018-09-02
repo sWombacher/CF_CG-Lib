@@ -139,3 +139,9 @@ option(COMPILE_WITH_PYTHON_SUPPORT boolean false)
 if (${COMPILE_WITH_PYTHON_SUPPORT})
 	add_subdirectory(swig)
 endif()
+
+
+option(COMPILE_WITH_TESTS boolean false)
+if (${COMPILE_WITH_TESTS})
+    add_subdirectory(test)
+endif()
