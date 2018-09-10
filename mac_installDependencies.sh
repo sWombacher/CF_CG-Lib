@@ -7,3 +7,5 @@ brew install homebrew/science/opencv
 brew install glm
 brew install cmake
 brew install clang
+brew install swig
+brew install python
