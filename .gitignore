@@ -9,3 +9,7 @@ MakeFileProject/
 Solutions
 PythonSolutions
 XCodeProject/
+*.aux
+*.log
+*.out
+*.gz
