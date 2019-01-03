@@ -2,6 +2,10 @@
 #include "window2D.h"
 #include <atomic>
 
+#if CV_MAJOR_VERSION > 3
+#include <opencv2/imgcodecs/legacy/constants_c.h>
+#endif
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
