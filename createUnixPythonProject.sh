@@ -10,8 +10,8 @@ make -j4
 
 # copy all python related stuff into 'PythonVersion'
 mkdir -p $pythonDir
-cp ../lib/Debug/_cf.so swig/cf.py ../python/computerGeometry_example.py $pythonDir
-cp -r ../geometry_files/ $pythonDir
+cp ../lib/Debug/_cf.so swig/cf.py ../python/*.py $pythonDir
+cp -r ../geometry_files ../chaos_files $pythonDir
 
 echo To start the examples:
 echo "  - Change directory into 'PythonSolution'"
