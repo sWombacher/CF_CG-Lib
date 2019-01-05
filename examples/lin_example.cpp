@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         std::cout << "Please provide a .lin file, if you want a different file\n\n\n";
         filePath = CHAOS_FILE_PATH; // defined macro directing to <pathToLib>/ChaosAndFractal_Lib/chaos_files
         filePath += "Koch_kurve.lin";
-        //filePath += "Baum_3d_1.lin";
+        // filePath += "Baum_3d_1.lin";
     } else
         filePath = argv[1];
 
@@ -59,8 +59,10 @@ int main(int argc, char** argv) {
     std::cout << std::endl << "Expand string" << std::endl;
     const cf::LSystem_Controller con(2, ls);
     for (const auto& e : con)
-        std::cout << e << std::flush;
+        std::cout << e;
     std::cout << std::endl << std::endl;
+
+    std::cout << "\n\nAlternatively you can use a pre-iterated string:\n" << con.getCompleteString() << std::endl;
 
     std::cout << "Press enter to finish the process";
     cf::Console::waitKey();

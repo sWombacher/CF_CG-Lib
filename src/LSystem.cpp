@@ -142,6 +142,14 @@ LSystem_Controller::iterator LSystem_Controller::end() const {
     return iterator(this->m_Axiom, this->m_Productions, this->m_Depth, true);
 }
 
+std::string LSystem_Controller::getCompleteString() const {
+    std::string result;
+    for (const auto& e : *this)
+        result += e;
+
+    return result;
+}
+
 const char& LSystem_Controller::iterator::operator*() {
     return this->m_Productions->at(this->m_CurrentProduction).at(size_t(this->m_Positions.at(this->m_CurrentDepth).first));
 }

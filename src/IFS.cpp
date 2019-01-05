@@ -6,8 +6,8 @@
 
 namespace cf {
 
-void IteratedFunctionSystem::read(const std::string& fiilePath) {
-    std::fstream input(fiilePath, std::fstream::in);
+void IteratedFunctionSystem::read(const std::string& filePath) {
+    std::fstream input(filePath, std::fstream::in);
     if (!input)
         throw std::runtime_error(R"(File not found in function: "IteratedFunctionSystem::read")");
 

@@ -143,6 +143,10 @@ std::string Direction::toString(RelativeDirection relDir) {
     }
 }
 
+float Interval::getMin() const { return min; }
+
+float Interval::getMax() const { return max; }
+
 float Interval::translateIntervalPostion(const Interval& newInterval, float originalPosition) const {
     return Interval::translateIntervalPostion(*this, newInterval, originalPosition);
 }
@@ -389,8 +393,6 @@ void SimpleSignal::waitSignal() {
     this->m_ConditionVariable.wait(lock);
 }
 
-void SimpleSignal::fireSignal() {
-    this->m_ConditionVariable.notify_one();
-}
+void SimpleSignal::fireSignal() { this->m_ConditionVariable.notify_one(); }
 
-}
+} // namespace cf

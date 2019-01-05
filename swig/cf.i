@@ -1,8 +1,11 @@
 %module cf
 %include <stdint.i>
+%include <cpointer.i>
 %include <std_string.i>
+%include <std_vector.i>
 
 %{
+#include "glm/vec3.hpp"
 #include "IFS.h"
 #include "ORB.h"
 #include "utils.h"
@@ -16,6 +19,7 @@
 #include "windowCoordinateSystem.h"
 %}
 
+%include "glm/vec3.hpp"
 %include "IFS.h"
 %include "ORB.h"
 %include "utils.h"
@@ -27,6 +31,7 @@
 %include "windowVectorized.h"
 %include "computerGeometry.hpp"
 %include "windowCoordinateSystem.h"
+
 
 // long double provided some problems in python
 %extend cf::Vec3<true, double> {
@@ -91,7 +96,7 @@ template<typename T>
 struct ContainerProxy {
     ContainerProxy(const std::vector<T>& data) : m_Data(data){}
     const T& get(size_t idx) { return *this->_get(idx); }
-    void set(size_t idx, const T& element) { *this->_get(idx) = element; }
+    void setElement(size_t idx, const T& element) { *this->_get(idx) = element; }
     void push_back(const T& element) { this->m_Data.push_back(element); }
     void erase(size_t idx) { this->m_Data.erase(this->_get(idx)); }
     size_t size() const { return this->m_Data.size(); }
@@ -108,5 +113,97 @@ private:
 ContainerProxy<cf::Vec3<true, double>> readDatFilePointVector(const std::string& filePath)  {
     return { cf::readDATFile<cf::Vec3<true, double>>(filePath) };
 }
+
+template<typename T>
+void print(const T& rhs) { std::cout << rhs << std::endl; }
+
+struct Math {
+
+template<typename Lhs, typename Rhs, typename Result>
+static Result multiply(const Lhs& lhs, const Rhs& rhs) { return lhs * rhs; }
+
+template<typename Lhs, typename Rhs, typename Result>
+static Result add(const Lhs& lhs, const Rhs& rhs) { return lhs + rhs; }
+
+template<typename Lhs, typename Rhs = Lhs, typename Result = Lhs>
+static Result subtract(const Lhs& lhs, const Rhs& rhs) { return lhs - rhs; }
+
+// single type helper
+template<typename T>
+static T add(const T& lhs, const T& rhs) { return add<T, T, T>(lhs, rhs); }
+
+template<typename T>
+static T subtract(const T& lhs, const T& rhs) { return subtract<T, T, T>(lhs, rhs); }
+
+template<typename T>
+static T multiply(const T& lhs, const T& rhs) { return multiply<T, T, T>(lhs, rhs); }
+
+};
+
+
+template<typename T>
+struct VecBase {
+    VecBase() = default;
+    virtual ~VecBase() = default;
+    VecBase(const T& rhs) : m_Data(rhs){}
+
+    float at(int idx) const { return this->m_Data[idx]; }
+    void setVal(int idx, float val) { this->m_Data[idx] = val; }
+
+    void operator= (const T& rhs) { this->m_Data = rhs; }
+    const T& internalFormat() const { return this->m_Data; } // conversion operator doesn't work...
+
+protected:
+    T m_Data;
+};
+
+
+template<typename T>
+struct MatBase {
+    MatBase() = default;
+    ~MatBase() = default;
+    MatBase(const T& rhs) : m_Data(rhs) {}
+
+    float at(int column, int row) const { return this->m_Data[column][row]; }
+    void setVal(int column, int row, float val) { this->m_Data[column][row] = val; }
+
+    const T& internalFormat() const { return this->m_Data; } // conversion operator doesn't work...
+
+private:
+    T m_Data;
+};
+
+template<typename T> T derefPointer(const T* ptr) { return *ptr; }
+
 %}
 %template(PointVectorContainer) ContainerProxy<cf::Vec3<true, double>>;
+
+%template(printVec3) print<glm::vec3>;
+%template(printVec4) print<glm::vec4>;
+%template(printMat3x3) print<glm::mat3x3>;
+%template(printMat4x4) print<glm::mat4x4>;
+
+%template(addVec3Vec3) Math::add<glm::vec3>;
+%template(addVec4Vec4) Math::add<glm::vec4>;
+%template(addMat3x3Mat3x3) Math::add<glm::mat3x3>;
+%template(addMat4x4Mat4x4) Math::add<glm::mat4x4>;
+
+%template(subVec3Vec3) Math::subtract<glm::vec3>;
+%template(subVec4Vec4) Math::subtract<glm::vec4>;
+%template(subMat3x3Mat3x3) Math::subtract<glm::mat3x3>;
+%template(subMat4x4Mat4x4) Math::subtract<glm::mat4x4>;
+
+%template(multiplyMat3x3Mat3x3) Math::multiply<glm::mat3x3>;
+%template(multiplyMat4x4Mat4x4) Math::multiply<glm::mat4x4>;
+%template(multiplyVec3Mat3x3) Math::multiply<glm::vec3, glm::mat3x3, glm::vec3>;
+%template(multiplyVec4Mat4x4) Math::multiply<glm::vec4, glm::mat4x4, glm::vec4>;
+
+%template(GlmVec3) VecBase<glm::vec3>;
+%template(GlmVec4) VecBase<glm::vec4>;
+%template(GlmMat3x3) MatBase<glm::mat3x3>;
+%template(GlmMat4x4) MatBase<glm::mat4x4>;
+
+%template(StdVectorFloat) std::vector<float>;
+%template(StdVectorGlmVec3) std::vector<glm::vec3>;
+
+%template(Dereference) derefPointer<std::string>;

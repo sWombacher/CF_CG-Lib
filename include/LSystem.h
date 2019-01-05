@@ -94,6 +94,12 @@ struct LSystem_Controller {
     iterator begin() const;
     iterator end() const;
 
+    /**
+     * @brief getCompleteString
+     * @return Complete string for iteration (simple wrapper for begin/end)
+     */
+    std::string getCompleteString() const;
+
   private:
     char m_Axiom;
     const size_t m_Depth;

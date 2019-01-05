@@ -101,6 +101,9 @@ struct Interval {
     float min;
     float max;
 
+    float getMin() const;
+    float getMax() const;
+
     float translateIntervalPostion(const Interval& newInterval, float originalPosition) const;
     static float translateIntervalPostion(const Interval& originalInterval, const Interval& newInterval,
                                           float originalPosition);
