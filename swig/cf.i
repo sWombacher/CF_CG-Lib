@@ -17,6 +17,7 @@
 #include "windowVectorized.h"
 #include "computerGeometry.hpp"
 #include "windowCoordinateSystem.h"
+#include "window3DObjectbased.h"
 %}
 
 %include "glm/vec3.hpp"
@@ -207,3 +208,45 @@ template<typename T> T derefPointer(const T* ptr) { return *ptr; }
 %template(StdVectorGlmVec3) std::vector<glm::vec3>;
 
 %template(Dereference) derefPointer<std::string>;
+
+%inline %{
+
+struct Lin3DCylinder {
+    float diameter;
+    cf::Color color;
+    VecBase<glm::vec3> position;
+    VecBase<glm::vec3> direction;
+};
+
+struct WindowLin3D {
+    WindowLin3D(int width = 800, int height = 600, const char* title = "chaos and fractals") {
+        static std::string str = "";
+        char* argv = &str[0];
+        static int argc = 1;
+        this->m_Window = &cf::Window3DObject::createWindow3DObject(&argc, &argv, width, height, title);
+        assert(this->m_Window);
+        this->m_Window->setDrawingFunction([this](cf::Window3DObject& window) {
+            window.clear();
+            window.drawAxis();
+
+            std::lock_guard<std::mutex> lock(this->m_Mutex);
+            for (const auto& e : this->m_Cylinders)
+                window.drawCylinder(e.direction.internalFormat(), e.position.internalFormat(), e.diameter, e.color);
+        });
+    }
+    void setCylinders(const std::vector<Lin3DCylinder>& cylinders) {
+        std::lock_guard<std::mutex> lock(this->m_Mutex);
+        this->m_Cylinders = cylinders;
+    }
+    const std::vector<Lin3DCylinder>& getCylinders() const { return this->m_Cylinders; }
+
+    void waitKeyPressed(size_t delay = 0) { this->m_Window->waitKeyPressed(delay); }
+
+  private:
+    std::mutex m_Mutex;
+    cf::Window3DObject* m_Window = nullptr;
+    std::vector<Lin3DCylinder> m_Cylinders;
+};
+
+%}
+%template(LinCylinderVec) std::vector<Lin3DCylinder>;
