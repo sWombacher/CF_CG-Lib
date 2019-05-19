@@ -35,6 +35,10 @@ void WindowCoordinateSystem::drawLine(const Point& p1, const Point& p2, const Co
     }
 }
 
+void WindowCoordinateSystem::drawLine(const Line& line) {
+    this->drawLine(line.point1, line.point2, line.color, line.lineType, line.lineWidth);
+}
+
 void WindowCoordinateSystem::drawLinearEquation(const Point& pointVector, const glm::vec3& drawingDirection, const Color& color,
                                                 Window2D::LineType type, int lineWidth) {
     if (std::abs(drawingDirection.z) > cf::WindowCoordinateSystem::ZERO_COMPARE)

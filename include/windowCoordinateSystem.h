@@ -36,7 +36,7 @@ struct WindowCoordinateSystem : protected Window2D {
     void drawPoint(const cf::Point& pos, const cf::Color& color = cf::Color::BLACK, int lineWidth = 1);
 
     /**
-     * @brief drawLine Draw a simple line of width 1
+     * @brief drawLine Draw a simple line
      * @param p1 First point
      * @param p2 Second point
      * @param color Line color
@@ -45,6 +45,12 @@ struct WindowCoordinateSystem : protected Window2D {
      */
     void drawLine(const cf::Point& p1, const cf::Point& p2, const cf::Color& color = cf::Color::BLACK,
                   cf::Window2D::LineType type = cf::Window2D::LineType::DEFAULT, int lineWidth = 1);
+
+    /**
+     * @brief drawLine Draw a simple line
+     * @param line Line parameter
+     */
+    void drawLine(const cf::Line& line);
 
     /**
      * @brief drawLinearEquation Draws a line from a point on line and direction vector
