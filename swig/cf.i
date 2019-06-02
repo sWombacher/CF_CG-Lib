@@ -7,6 +7,7 @@
 %{
 #include "glm/vec3.hpp"
 #include "IFS.h"
+#include "GEN.h"
 #include "ORB.h"
 #include "utils.h"
 #include "LSystem.h"
@@ -22,6 +23,7 @@
 
 %include "glm/vec3.hpp"
 %include "IFS.h"
+%include "GEN.h"
 %include "ORB.h"
 %include "utils.h"
 %include "LSystem.h"
