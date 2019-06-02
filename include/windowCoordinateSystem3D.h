@@ -155,13 +155,14 @@ struct WindowCoordinateSystem3D : protected Window3D {
         if (spaceType != SPACE_TYPE::IPNS)
             throw std::runtime_error("Error: Point has to be in IPNS");
 
+		using MultiVectorType = decltype(v);
         using namespace cf::literals;
         cf::MultiVector<_ValueType> vec;
 
         // search for '^einf'
         const auto iter = std::find_if(v.getData().cbegin(), v.getData().cend(), [](const auto& val){
             auto iter = std::find_if(val.outerProduct.cbegin(), val.outerProduct.cend(), [](const auto& type){
-               return type == std::decay<decltype(v)>::type::Blade::TYPE::EINF;
+               return type == std::decay<MultiVectorType>::type::Blade::TYPE::EINF;
             });
             return iter != val.outerProduct.cend();
         });
