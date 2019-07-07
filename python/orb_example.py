@@ -15,8 +15,8 @@ print(  "\nName: ", orb.getName(),
 
 print("Starting points:")
 startingPoints = orb.getAllStartingPoints()
-for i in range(startingPoints.size()):
-    vec = helper.convertVec3ToArray(startingPoints[i])
+for sp in startingPoints:
+    vec = helper.convertVec3ToArray(sp)
     print(vec)
 
 print("\n\nFactors:")
