@@ -66,7 +66,15 @@ const std::string& GEN::getName() const { return this->m_Name; }
 
 const std::vector<glm::vec3>& GEN::getInitiatorPoints() const { return this->m_InitiatorPoints; }
 
+size_t GEN::getInitiatorPointCount() const { return this->m_InitiatorPoints.size(); }
+
+glm::vec3 GEN::getInitiatorPoint(size_t idx) const { return this->m_InitiatorPoints[idx]; }
+
 const std::vector<glm::vec3>& GEN::getGeneratorPoints() const { return this->m_GeneratorPoints; }
+
+size_t GEN::getGeneratorPointCount() const { return this->m_GeneratorPoints.size(); }
+
+glm::vec3 GEN::getGeneratorPoint(size_t idx) const { return this->m_GeneratorPoints[idx]; }
 
 bool GEN::clearWindowEachTime() const { return this->m_ClearWindowEachTime; }
 
