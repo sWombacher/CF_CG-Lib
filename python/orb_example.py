@@ -26,5 +26,5 @@ for i in range(factors.size()):
     print(factor)
 
 print("\n\n")
-
+cf.Console.waitKey()
 

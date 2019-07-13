@@ -51,5 +51,5 @@ print("\nConverted to internal format result: ")
 cf.printVec3(converted_result.internalFormat())
 
 
-
+cf.Console.waitKey()
 

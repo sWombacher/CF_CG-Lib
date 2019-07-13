@@ -30,3 +30,5 @@ for gp in gen.getGeneratorPoints():
     point = helper.convertVec3ToArray(gp)
     print("Generator point: ", point)
 
+cf.Console.waitKey()
+

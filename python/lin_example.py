@@ -25,4 +25,5 @@ else:
     print("Prdouction for 'F' not found")
 
 print("\n")
+cf.Console.waitKey()
 
