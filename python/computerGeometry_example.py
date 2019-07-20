@@ -1,3 +1,9 @@
+#  computerGeometry_example.py
+
+import sys
+import time
+
+
 from enum import Enum
 import cf
 
@@ -32,6 +38,8 @@ window.drawAxis(cf.Color.BLACK, 10, 10)
 
 for p in points:
     print("Drawing point: ", p)
+    sys.stdout.flush() # force output
+    time.sleep(0.1) # wait for console; increase if necessary
     window.drawPoint(cf.Point(p[0], p[1])) # default color is black
 
 for i in range(0, len(cfPoints)):
@@ -43,10 +51,13 @@ window.show()
 
 # wait for user input
 print("Please set a point\n")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 userPoint = window.waitMouseInput()
 userPoint_pv = cf.PointVector(userPoint)
 print("Set point: x=", userPoint.x, "    y=", userPoint.y)
-
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.drawPoint(userPoint, cf.Color.RED)
 window.show()
 
@@ -70,14 +81,24 @@ des2 = calcSide(pointVectors[2], pointVectors[0])
 if des0 == des1 and des1 == des2:
     if des0 == PointDescription.Left:
         print("Point is inside of the Triangle")
+        sys.stdout.flush() # force output
+        time.sleep(0.1) # wait for console; increase if necessary
     elif des0 == PointDescription.On:
         print("Point is on of the Triangle")
+        sys.stdout.flush() # force output
+        time.sleep(0.1) # wait for console; increase if necessary
     else:
+        sys.stdout.flush() # force output
+        time.sleep(0.1) # wait for console; increase if necessary
         print("Point is outside of the Triangle")
 else:
     print("Point is outside of the Triangle")
+    sys.stdout.flush() # force output
+    time.sleep(0.1) # wait for console; increase if necessary
 
-print("Press enter to continue with part2")
+print("Press any key  to continue with part2")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
 
 
@@ -86,7 +107,9 @@ window.clear()
 window.drawAxis(cf.Color.BLACK, 10, 10)
 window.show()
 
-print("Press enter (or wait 3s) to draw a line between point0 and point2\n")
+print("Press any key (or wait 3s) to draw a line between point0 and point2\n")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey(3000) # wait up to 3000ms until continue
 
 normal = pointVectors[2].crossProduct(pointVectors[0])
@@ -96,7 +119,9 @@ window.drawLinearEquation(normal)
 # window.drawLinearEquation(normal.getX(), normal.getY(), normal.getW())
 window.show()
 
-print("Press enter (or wait 3s) to draw line between point1 and point0\n")
+print("Press any key (or wait 3s) to draw line between point1 and point0\n")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey(3000)
 
 # use point/direction vectors
@@ -104,14 +129,18 @@ direction = cf.DirectionVector(pointVectors[1].sub(pointVectors[0]))
 window.drawLinearEquation(cfPoints[1], direction, cf.Color.RED, cf.Window2D.LineType_DOT_1)
 window.show()
 
-print("Press enter to draw line between point1 and point2\n")
+print("Press any key to draw line between point1 and point2\n")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
 
 # draw line from point1 to point2 directly
 window.drawLine(cfPoints[1], cfPoints[2], cf.Color.BLUE, cf.Window2D.LineType_DOT_DASH_0)
 window.show()
 
-print("Press enter to draw a circle around your point")
+print("Press any key to draw a circle around your point")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
 
 window.drawCircle(userPoint, 19, cf.Color.CYAN, -1)
@@ -123,7 +152,9 @@ window.drawCirclePart(userPoint, 23, 0, 90, cf.Color.RED, 2);
 window.drawCirclePart(userPoint, 23, 90, 360, cf.Color.BLUE, 2);
 window.show()
 
-print("Press enter to continue with the last example")
+print("Press any key to continue with the last example")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
 
 # alternative circle part
@@ -140,5 +171,9 @@ window.show()
 
 # end
 print("Press any key to finish")
+sys.stdout.flush() # force output
+time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
+
+window = None
 

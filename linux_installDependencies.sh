@@ -15,7 +15,7 @@ do
 				sudo yum install glm-devel opencv-devel cmake gcc gcc-c++ freeglut-devel libXi-devel libXmu-devel swig python
 			;;
 			pacman)
-				sudo pacman -S glm opencv cmake gcc libxmu libxi freeglut swig python
+				sudo pacman -S glm opencv cmake gcc libxmu libxi freeglut swig python make hdf5 vtk gtk3 glew
 			;;
 			apt-get)
 				sudo apt-get install libglm-dev libopencv-dev cmake freeglut3-dev libxmu-dev libxi-dev gcc g++ swig python
