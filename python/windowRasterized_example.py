@@ -8,6 +8,10 @@ window = cf.WindowRasterized(800, 600,
         "Window Rasterized example", cf.Color.WHITE)
 window.show()
 
+# if you like to scale the output image
+# change the value to any float value you like
+window.setWindowDisplayScale(1.0)
+
 print("Please select a point")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary

@@ -18,6 +18,9 @@ window = cf.WindowVectorized(700, cfIntervalX, cfIntervalY,
 window.drawAxis()
 window.show()
 
+# if you like to scale the output image
+# change 1 to any float value
+window.setWindowDisplayScale(1.0)
 
 print("Please set a point on the window")
 sys.stdout.flush() # force output
