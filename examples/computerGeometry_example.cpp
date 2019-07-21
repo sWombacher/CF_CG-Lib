@@ -23,8 +23,9 @@ int main(int argc, char** argv) {
 
     /// part 1
     // create coordinate system and draw all points and lines
-    cf::WindowCoordinateSystem coordinateSystem(800, {-10.f, 350.f}, {-10.f, 350.f});
+    cf::WindowCoordinateSystem coordinateSystem(600, {-10.f, 350.f}, {-10.f, 350.f});
     coordinateSystem.drawAxis(cf::Color::BLACK, 10.f, 10.f);
+    coordinateSystem.setWindowDisplayScale(1.5);
 
     for (const auto& point : points) {
         std::cout << point << std::endl;

@@ -36,7 +36,8 @@ void Window2D::show() const {
     else {
         cv::Mat tmp;
         cv::resize(this->m_Image, tmp,
-                   cv::Size(int(this->m_Image.cols * this->m_WindowScale), int(this->m_Image.rows * this->m_WindowScale)));
+                   cv::Size(int(this->m_Image.cols * this->m_WindowScale), int(this->m_Image.rows * this->m_WindowScale)),
+                   0.0, 0.0, cv::INTER_NEAREST);
         cv::imshow(this->m_WindowName, tmp);
     }
 

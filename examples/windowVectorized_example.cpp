@@ -40,6 +40,7 @@ int main(int, char**) {
               << "Width : " << window.getWidth() << std::endl
               << "Height: " << window.getHeight() << std::endl
               << std::endl;
+    window.setWindowDisplayScale(1.2f);
     window.drawAxis();
     window.show();
 
