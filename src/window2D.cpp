@@ -324,7 +324,7 @@ void Window2D::_convertToNewInterval(float& x, float& y) const {
 
 void Window2D::_window2foreground() const {
 #ifdef _WIN32
-    static HWND windowHandle = (HWND)cvGetWindowHandle(this->m_WindowName.c_str());
+    static HWND windowHandle = FindWindow(NULL, this->m_WindowName.c_str());
     SetForegroundWindow(windowHandle);
 #else
 #endif
