@@ -1,5 +1,6 @@
-import cf
 import math
+
+from cf import cf
 
 # read 'ant' files
 value = cf.readAntString('chaos_files/Ant_10.ant')

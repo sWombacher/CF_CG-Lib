@@ -1,6 +1,7 @@
 import numpy as np
-import helper
-import cf
+
+from cf import cf
+from cf import helper
 
 # read ifs file
 ifs = cf.IteratedFunctionSystem()

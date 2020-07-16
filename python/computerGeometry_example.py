@@ -1,11 +1,9 @@
 #  computerGeometry_example.py
-
 import sys
 import time
 
-
+from cf import cf
 from enum import Enum
-import cf
 
 
 points = [] # python representation of point vectors

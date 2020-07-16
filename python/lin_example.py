@@ -1,4 +1,4 @@
-import cf
+from cf import cf
 
 lin = cf.LindenmayerSystem()
 lin.read("chaos_files/Koch_kurve.lin")

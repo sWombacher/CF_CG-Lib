@@ -1,5 +1,5 @@
-import helper
-import cf
+from cf import cf
+from cf import helper
 
 orb = cf.Orbit()
 orb.read("chaos_files/Brezel_1.orb")

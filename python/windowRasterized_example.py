@@ -1,8 +1,8 @@
 # windowRasterized_example.py
-
 import sys
 import time
-import cf
+
+from cf import cf
 
 window = cf.WindowRasterized(800, 600,
         "Window Rasterized example", cf.Color.WHITE)
