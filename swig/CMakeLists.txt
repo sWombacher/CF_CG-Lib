@@ -4,6 +4,7 @@ if (WIN32 OR CYGWIN)
 	set(SWIG_EXECUTABLE ${CMAKE_SOURCE_DIR}/3rdparty/tools/swig/swig.exe)
 endif()
 
+set(Python_USE_STATIC_LIBS TRUE)
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 
