@@ -5,6 +5,7 @@ build-*/
 /lib/
 doxygen/
 VisualStudio/
+VisualStudio_python/
 MakeFileProject/
 Solutions
 PythonSolutions
