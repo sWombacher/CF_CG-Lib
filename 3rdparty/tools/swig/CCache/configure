@@ -623,6 +623,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 EGREP
 GREP
+PROGRAM_NAME
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
@@ -2111,6 +2112,8 @@ $as_echo "$as_me: Configuring ccache" >&6;}
 
 ac_config_headers="$ac_config_headers config.h"
 
+ac_config_files="$ac_config_files config_win32.h"
+
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3170,6 +3173,24 @@ test "$program_suffix" != NONE &&
 ac_script='s/[\\$]/&&/g;s/;s,x,x,$//'
 program_transform_name=`$as_echo "$program_transform_name" | sed "$ac_script"`
  # for program_transform_name
+
+
+if test "x$program_prefix" != "xNONE" -a "x$program_prefix" != "x"
+then
+	PROGRAM_NAME="$program_prefix$PACKAGE_NAME"
+else
+	PROGRAM_NAME="$PACKAGE_NAME"
+fi
+if test "x$program_suffix" != "xNONE" -a "x$program_suffix" != "x"
+then
+	PROGRAM_NAME="$PROGRAM_NAME$program_suffix"
+fi
+
+
+cat >>confdefs.h <<_ACEOF
+#define PROGRAM_NAME "$PROGRAM_NAME"
+_ACEOF
+
 
 
 $as_echo "#define _GNU_SOURCE 1" >>confdefs.h
@@ -4564,6 +4585,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
+    "config_win32.h") CONFIG_FILES="$CONFIG_FILES config_win32.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

@@ -4,130 +4,147 @@ See the RELEASENOTES file for a summary of changes in each release.
 Issue # numbers mentioned below can be found on Github. For more details, add
 the issue number to the end of the URL: https://github.com/swig/swig/issues/
 
-Version 3.0.12 (27 Jan 2017)
-============================
+Version 4.0.2 (8 Jun 2020)
+==========================
 
-2017-01-27: wsfulton
-            [C#] #882 Fix missing filename in error messages when there is a problem
-            writing out C# files.
+2020-06-07  vigsterkr
+            [Ruby] #1717 Nil fix mangling strings
 
-2017-01-27: briancaine
-            [Guile] #744 Fix compilation errors in Guile wrappers - regression
-            introduced in swig-3.0.11.
+2020-06-07  vadz
+            #1748 Fix doxygen comments quoting issue
 
-2017-01-24: andrey-starodubtsev
-            [Java] Apply #704 - director typemap improvements.
-            Memory leak fixes, add support for "directorargout" typemap and
-            add director support to typemaps.i.
+2020-06-07  munoah
+            #1800 Escape spaces in file paths for dependencies (-M -MM etc)
 
-2017-01-24: wsfulton
-            Enhance %extend to extend a class with template constructors, eg:
+2020-06-06  andreas-schwab
+            [Ruby] #1801 Fix encoding on big endian systems when wrapping std::wstring.
 
-              struct Foo {
-                %extend {
-                  template<typename T>
-                  Foo(int a, T b) {
-                    ...
-                  }
-                }
-              };
-              %template(Foo) Foo::Foo<double>;
+2020-05-31  kwwette
+            [Octave] #1789 error handling improvements and return error code on exit for SWIG wrapped modules.
 
-2017-01-22: wsfulton
-            Issue #876 Enhance %extend to extend a class with template methods, eg:
+2020-05-30  msteinbeck
+            [D] #1593 Replace broken imports when using newer versions of D.
 
-              struct Foo {
-                %extend {
-                  template<typename T>
-                  void do_stuff(int a, T b) {
-                    ...
-                  }
-                }
-              };
-              %template(do_stuff_inst) Foo::do_stuff<double>;
+2020-05-29: ZackerySpytz
+            [Python] #1716 Performance improvements converting strings when using Python >= 3.3.
 
-              Similarly for static template methods.
+2020-05-28: ZackerySpytz
+            #1776 Quite dramatically decrease run times when generating very large interface files by changing
+            some internal memory pool sizes.
 
-2017-01-22: kwwette
-            [Octave] add support for version 4.2
-            - The Octave API now uses some C++11 features. It is recommended to use
-              the mkoctfile program supplied by Octave to compile the SWIG-generated
-              wrapper code, as mkoctfile will ensure the correct C++ compiler/options
-              are used. Otherwise, the value of `mkoctfile -p CXX` should be parsed
-              for any -std=* flags which might be present.
-            - Octave has dropped support for << and >> operators, so SWIG now
-              ignores them.
-            - The Octave error() function now raises C++ exceptions to propagate
-              Octave errors, so %exception directives may need to be modified.
-              For convenience the SWIG_RETHROW_OCTAVE_EXCEPTIONS macro can be used
-              to rethrow any Octave exceptions for Octave itself to handle, e.g.:
+2020-05-28: mcfarljm
+            #1788 Fix handling of Doxygen \endlink command.
 
-                try {
-                  $action                        // may call error()
-                }
-                SWIG_RETHROW_OCTAVE_EXCEPTIONS   // error() exceptions are rethrown
-                catch(...) {
-                  ...                            // all other exceptions
-                }
+2020-05-24: vapier
+            [Javascript] #1796 Fix pkg-config invocation in configure.
+
+2020-04-30: kwwette
+            [Octave] Fix exception raising for newer Octave versions
+            Since (at least) Octave 5.1.0, the Octave error() function now raises a C++ exception,
+            which if uncaught immediately exits a SWIG wrapper function, bypassing any cleanup code
+            that may appear after a "fail:" label. This patch adds a "try { ... } catch(...) { }"
+            block around the contents of SWIG wrapper functions to first execute the cleanup code
+            before rethrowing any exception raised. It is backward compatible with earlier versions
+            of Octave where error() does not raise an exception, which will still branch to the
+            "fail:" block to execute cleanup code if an error is encountered.
+
+            Note that the new "try { ... } catch(...) { }" block will localise any local variables
+            used in typemaps that were NOT declared through SWIG's %typemap(...) syntax, so it's
+            possible this could break existing SWIG wrappers which were implicitly sharing local
+            variables between typemaps. This can be fixed, however, by declaring local variables
+            which need to be shared between typemaps through SWIG's %typemap(...) syntax.
+
+2020-02-18: ryannevell
+            [Lua] #1728 Add support for LUA lightuserdata to SWIG_Lua_ConvertPtr.
+
+2020-02-18: dmach
+            [Ruby] #1725 Fix gcc -Wcatch-value warnings.
+
+2020-02-14: treitmayr
+            #1724 Fix wrapping of abstract user-defined conversion operators.
+
+2020-02-13: ddurham2
+            [Python] #1512 Fix memleak when using STL containers of shared_ptr objects.
+
+2020-02-06: wsfulton
+            [Python] #1673 #1674 Fix setting 'this' when extending a proxy class with __slots__.
+
+2020-01-31: vadz
+            [Ruby] #1651 Add std::auto_ptr<> typemaps.
+
+2020-01-31: ZackerySpytz
+            [Python] #1700 More robust error checking for failures in calls to Python C API:
+            PyBytes_AsStringAndSize() and PyString_AsStringAndSize().
+
+2020-01-31: vadz
+            [Python] #1710 Fix crash parsing empty docstrings.
+
+2020-01-30: Alzathar
+            [R] #910 #914 Fix R memory leak on exception.
+
+2020-01-30: richardbeare
+            [R] #1511 Fix bug wrapping functions. These were previously incorrectly wrapped as if
+            they were variables. This happened when 'get' or 'set' was in the name of the function
+            or method, but sometimes also in some other circumstances. If you were using R
+            attribute syntax to access these methods, you'll need to switch to calling them as R
+            methods.
 
             *** POTENTIAL INCOMPATIBILITY ***
 
-2017-01-16: wkalinin
-            [C#] Fix #733 regression introduced in swig-3.0.9.
-            Missing virtual function override in C# layer when using %import.
+2020-01-24: etse-dignitas, wsfulton
+            [C#, D, Java] #1533 Fix upcasting for shared_ptr's of templated types.
 
-2017-01-16: fschlimb
-            Fix #813 template symbol name lookup bug when typedef names are the same but in different
-            namespaces.
+2020-01-16: mcfarljm
+            #1643 #1654 When using -doxygen, fix segfault when nameless parameters or vararg parameters
+            are used.
 
-2017-01-15: wsfulton
-            [C# D Java]
-            The SWIG library no longer uses the javatype, dtype or cstype typemaps, thereby
-            completely freeing them up for users to use without having to replicate the library
-            code that they previously added. The code previously generated by these typemaps
-            has been replaced by the new %proxycode directive. Their use in the library code
-            was fairly minimal:
+2020-01-16: mcfarljm
+            #1632 #1659 Fix newline handling for doxygen "///" comments.
 
-              C#   cstype:   std_array.i std_map.i std_vector.i
-              D    dtype:    std_vector.i
-              Java javatype: arrays_java.i
+2020-01-14: mcfarljm
+            #1647 #1656 Fix crash handling empty doxygen comments.
 
-2017-01-14: wsfulton
-            The %extend directive can now optionally support one of the 'class', 'struct' or 'union'
-            keywords before the identifier name, for example:
+2020-01-14: mcfarljm
+            #1608 Improve doxygen support.
+            - Add support for \param[] commands such as: \param[in].
+            - Optional arguments are marked as 'optional' in pydoc.
+            - Improve support for \code commands so that other languages are supported as code blocks.
+              Support added for java, c and py.  For example Python: \code{.py} ... \endcode
+            - Fix doxygen handling of \em and \p tags for Python.
 
-              struct X { ... };
-              %extend struct X { ... }
+2020-01-13: wsfulton
+            [Python] #1595 Python -builtin constructors silently ignored keyword arguments.
+            Instead of silenty ignoring them, now a "TypeError: f() takes no keyword arguments"
+            exception is thrown if keyword arguments are used. Hence constructors and normal methods/
+            functions behave in the same way. Note, -keyword should be used with -builtin to obtain
+            keyword argument support.
 
-            Previously this had to specified as:
+2020-01-05: jschueller shadchin
+            [Python] #1670 #1696 Add missing field initializers introduced in python 3.8:
+            tp_vectorcall and tp_print.
 
-              struct X { ... };
-              %extend X { ... }
+2020-01-05: friedrichatgc
+            [Octave] #1688 Change swig_this() to use size_t instead of long for compatibility
+            with Windows 64 bit.
 
-2017-01-13: wsfulton
-	    [C# D Java] Add new %proxycode directive which is a macro for %insert("proxycode").
-            This is a way of adding pure C#/D/Java code into the appropriate proxy class, eg:
+2020-01-05: treitmayr
+            [Ruby] #1692 #1689 Add support for Ruby 2.7
 
-              %extend Proxy2 {
-              %proxycode %{
-                public int proxycode2(int i) {
-                  return i+2;
-                }
-              %}
-              }
+2019-12-30: treitmayr
+            [Ruby] #1653 #1668 Fix code generated when using -globalmodule option.
 
-              %inline %{
-              struct Proxy2 {};
-              %}
+2019-12-29: ZackerySpytz
+            [OCaml] #1686 Fix compilation errors with OCaml 4.09.0.
 
-            There will then be a pure Java/C#/D method called proxycode2 in the Proxy2 class.
+2019-12-10: wsfulton
+            #1679 Fix parsing of C++11 identifiers with special meaning (final and override) when
+            they are used as part of the scope name of an identifier, such as a namespace name.
 
-2016-12-31: ajrheading1
-	    Issue #860 - Remove use of std::unary_function and std::binary_function
-            which is deprecated in C++11.
+2019-11-26: wsfulton
+            [C#] #1628 'out' or 'ref' used in a cstype typemap was not always stripped out in parts
+            of director code generation.
 
-2016-12-30: olly
-	    [PHP7] Register internal 'swig_runtime_data_type_pointer' constant
-	    as "CONST_PERSISTENT" to avoid segmentation fault on module unload.
-	    Fixes #859 reported by Timotheus Pokorra. Thanks also to Javier Torres
-	    for a minimal reproducer.
+2019-11-01: wsfulton
+            [Python] #1595 Fix bug in support for keyword arguments (kwargs feature or -keyword)
+            when using -builtin. The fix is in the argument error checking when wrapping zero
+            argument constructors only.

@@ -166,23 +166,25 @@ extern int yydebug;
     PARSETYPE = 376,
     PARSEPARM = 377,
     PARSEPARMS = 378,
-    CAST = 379,
-    LOR = 380,
-    LAND = 381,
-    OR = 382,
-    XOR = 383,
-    AND = 384,
-    LSHIFT = 385,
-    RSHIFT = 386,
-    PLUS = 387,
-    MINUS = 388,
-    STAR = 389,
-    SLASH = 390,
-    MODULO = 391,
-    UMINUS = 392,
-    NOT = 393,
-    LNOT = 394,
-    DCOLON = 395
+    DOXYGENSTRING = 379,
+    DOXYGENPOSTSTRING = 380,
+    CAST = 381,
+    LOR = 382,
+    LAND = 383,
+    OR = 384,
+    XOR = 385,
+    AND = 386,
+    LSHIFT = 387,
+    RSHIFT = 388,
+    PLUS = 389,
+    MINUS = 390,
+    STAR = 391,
+    SLASH = 392,
+    MODULO = 393,
+    UMINUS = 394,
+    NOT = 395,
+    LNOT = 396,
+    DCOLON = 397
   };
 #endif
 /* Tokens.  */
@@ -307,30 +309,32 @@ extern int yydebug;
 #define PARSETYPE 376
 #define PARSEPARM 377
 #define PARSEPARMS 378
-#define CAST 379
-#define LOR 380
-#define LAND 381
-#define OR 382
-#define XOR 383
-#define AND 384
-#define LSHIFT 385
-#define RSHIFT 386
-#define PLUS 387
-#define MINUS 388
-#define STAR 389
-#define SLASH 390
-#define MODULO 391
-#define UMINUS 392
-#define NOT 393
-#define LNOT 394
-#define DCOLON 395
+#define DOXYGENSTRING 379
+#define DOXYGENPOSTSTRING 380
+#define CAST 381
+#define LOR 382
+#define LAND 383
+#define OR 384
+#define XOR 385
+#define AND 386
+#define LSHIFT 387
+#define RSHIFT 388
+#define PLUS 389
+#define MINUS 390
+#define STAR 391
+#define SLASH 392
+#define MODULO 393
+#define UMINUS 394
+#define NOT 395
+#define LNOT 396
+#define DCOLON 397
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 1356 "parser.y" /* yacc.c:1909  */
+#line 1542 "parser.y" /* yacc.c:1909  */
 
   const char  *id;
   List  *bases;
@@ -339,10 +343,12 @@ union YYSTYPE
     String *rawval;
     int     type;
     String *qualifier;
+    String *refqualifier;
     String *bitfield;
     Parm   *throws;
     String *throwf;
     String *nexcept;
+    String *final;
   } dtype;
   struct {
     const char *type;
@@ -358,6 +364,7 @@ union YYSTYPE
     ParmList  *throws;
     String    *throwf;
     String    *nexcept;
+    String    *final;
   } decl;
   Parm         *tparms;
   struct {
@@ -375,7 +382,7 @@ union YYSTYPE
   int           intvalue;
   Node         *node;
 
-#line 379 "y.tab.h" /* yacc.c:1909  */
+#line 386 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -1,4 +1,4 @@
-/* SWIG warning codes */
+/* SWIG warning codes - generated from swigwarn.h - do not edit */
 
 
 %define SWIGWARN_NONE                     0 %enddef
@@ -131,6 +131,7 @@
 %define SWIGWARN_TYPE_INCOMPLETE          402 %enddef
 %define SWIGWARN_TYPE_ABSTRACT            403 %enddef
 %define SWIGWARN_TYPE_REDEFINED           404 %enddef
+%define SWIGWARN_TYPE_RVALUE_REF_QUALIFIER_IGNORED 405 %enddef
 
 %define SWIGWARN_TYPEMAP_SOURCETARGET     450 %enddef
 %define SWIGWARN_TYPEMAP_CHARLEAK         451 %enddef
@@ -185,6 +186,18 @@
 %define SWIGWARN_LANG_ILLEGAL_DESTRUCTOR  521 %enddef
 %define SWIGWARN_LANG_EXTEND_CONSTRUCTOR  522 %enddef
 %define SWIGWARN_LANG_EXTEND_DESTRUCTOR   523 %enddef
+%define SWIGWARN_LANG_EXPERIMENTAL        524 %enddef
+%define SWIGWARN_LANG_DIRECTOR_FINAL      525 %enddef
+
+/* -- Doxygen comments -- */
+
+%define SWIGWARN_DOXYGEN_UNKNOWN_COMMAND          560 %enddef
+%define SWIGWARN_DOXYGEN_UNEXPECTED_END_OF_COMMENT  561 %enddef
+%define SWIGWARN_DOXYGEN_COMMAND_EXPECTED         562 %enddef
+%define SWIGWARN_DOXYGEN_HTML_ERROR               563 %enddef
+%define SWIGWARN_DOXYGEN_COMMAND_ERROR            564 %enddef
+%define SWIGWARN_DOXYGEN_UNKNOWN_CHARACTER        565 %enddef
+%define SWIGWARN_DOXYGEN_UNEXPECTED_ITERATOR_VALUE  566 %enddef
 
 /* -- Reserved (600-799) -- */
 
