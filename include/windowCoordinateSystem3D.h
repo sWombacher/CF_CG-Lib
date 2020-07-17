@@ -242,7 +242,7 @@ struct WindowCoordinateSystem3D : protected Window3D {
         this->_drawPoint(SPACE_TYPE::IPNS, p1, color, alpha);
     }
     template <typename _ValueType>
-    void _drawLine(SPACE_TYPE spaceType, const cf::MultiVector<_ValueType>& vec, const cf::Color& color, uint8_t){
+    void _drawLine(SPACE_TYPE, const cf::MultiVector<_ValueType>&, const cf::Color&, uint8_t){
         throw std::runtime_error("_drawLine not yet implemented");
     }
     template <typename _ValueType>
