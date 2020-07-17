@@ -7,8 +7,12 @@ project(cf_cg)
 cmake_minimum_required(VERSION 3.1)
 
 # this is case sensitive!
-#set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_BUILD_TYPE "Debug")
+if (${CMAKE_BUILD_TYPE})
+    set(CMAKE_BUILD_TYPE "Debug")
+    message("No build type set, using build type: " ${CMAKE_BUILD_TYPE})
+else()
+    message("Set build type: " ${CMAKE_BUILD_TYPE})
+endif()
 
 if (WIN32 OR CYGWIN)
     set(USE_SYSTEM_LIBS FALSE)

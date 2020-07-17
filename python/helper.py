@@ -1,4 +1,4 @@
-from cf import cf
+from libcfcg import cf
 
 def convertVec3ToArray(vec3):
     cpy = cf.GlmVec3(vec3)

@@ -3,7 +3,7 @@ import math
 import sys
 import time
 
-from cf import cf
+from libcfcg import cf
 
 xInterval = [-0.5, 10.0]
 yInterval = [-5.0, 5.0]

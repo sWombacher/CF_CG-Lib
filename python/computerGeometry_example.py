@@ -2,7 +2,7 @@
 import sys
 import time
 
-from cf import cf
+from libcfcg import cf
 from enum import Enum
 
 

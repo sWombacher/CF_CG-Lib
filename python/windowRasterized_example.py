@@ -2,7 +2,7 @@
 import sys
 import time
 
-from cf import cf
+from libcfcg import cf
 
 window = cf.WindowRasterized(800, 600,
         "Window Rasterized example", cf.Color.WHITE)

@@ -1,7 +1,7 @@
 import numpy as np
 
-from cf import cf
-from cf import helper
+from libcfcg import cf
+from libcfcg import helper
 
 # read ifs file
 ifs = cf.IteratedFunctionSystem()
