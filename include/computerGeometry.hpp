@@ -66,8 +66,15 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
     typedef glm::tvec3<_ValueType, glm::precision::highp> glmVec3;
 
   public:
-    typedef Vec3<IS_POINTVECTOR, _ValueType> self_type;
     typedef _ValueType value_type;
+    typedef Vec3<IS_POINTVECTOR, _ValueType> self_type;
+
+#ifndef SWIG_SPARSE_IMPL
+    typedef Vec3<IS_POINTVECTOR, _ValueType> self_type_result_ref;
+#else
+    typedef Vec3<IS_POINTVECTOR, _ValueType>& self_type_result_ref;
+#endif
+
     Vec3(const _ValueType& x = 0.0, const _ValueType& y = 0.0) : m_Data(x, y, IS_POINTVECTOR ? 1.0 : 0.0) {}
     Vec3(const _ValueType& x, const _ValueType& y, const _ValueType& w) : m_Data(x, y, w) {
         if (!IS_POINTVECTOR && !self_type::_EqualZero(w))
@@ -96,7 +103,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
             tmp[i] = this->m_Data[i] + rhs.m_Data[i];
         return tmp;
     }
-    template <bool PV_RHS, typename _VType> self_type& operator+=(const Vec3<PV_RHS, _VType>& rhs) {
+    template <bool PV_RHS, typename _VType> self_type_result_ref operator+=(const Vec3<PV_RHS, _VType>& rhs) {
         static_assert(
             IS_POINTVECTOR || !PV_RHS,
             "Error: Inplace addition of drection and point vector is a point vector, (Direction += Point  is not allowed)");
@@ -117,7 +124,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
             tmp[i] = this->m_Data[i] - rhs.m_Data[i];
         return tmp;
     }
-    template <bool PV_RHS, typename _VType> self_type& operator-=(const Vec3<PV_RHS, _VType>& rhs) {
+    template <bool PV_RHS, typename _VType> self_type_result_ref operator-=(const Vec3<PV_RHS, _VType>& rhs) {
         static_assert(
             IS_POINTVECTOR || !PV_RHS,
             "Error: Inplace substruction of drection and point vector is a point vector, (Direction -= Point  is not allowed)");
@@ -136,7 +143,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
         tmp.m_Data *= rhs;
         return tmp;
     }
-    self_type& operator*=(const _ValueType& rhs) {
+    self_type_result_ref operator*=(const _ValueType& rhs) {
         this->m_Data *= rhs;
         return *this;
     }
@@ -159,7 +166,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
         tmp %= rhs;
         return tmp;
     }
-    template <bool PV_RHS, typename _VType> self_type& operator%=(const Vec3<PV_RHS, _VType>& rhs) {
+    template <bool PV_RHS, typename _VType> self_type_result_ref operator%=(const Vec3<PV_RHS, _VType>& rhs) {
         static_assert(
             IS_POINTVECTOR || !PV_RHS,
             "Error: Inplace crossproduct of drection and point vector is a point vector, (Direction %= Point  is not allowed)");
@@ -174,7 +181,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @brief normalize Normalizes the PointVector (division by the 'w' component), compile error on DirectionVecotrs
      * @return Return the normalized vector
      */
-    self_type& normalize() {
+    self_type_result_ref normalize() {
 #define MSG "Error: direction vector cannot be normalized!"
 #ifndef SWIG_SPARSE_IMPL
         static_assert(IS_POINTVECTOR, MSG);
@@ -295,7 +302,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
         return cf::Point(this->m_Data.x / this->m_Data.z, this->m_Data.y / this->m_Data.z);
     }
 
-    self_type& operator=(const cf::Point& p) {
+    self_type_result_ref operator=(const cf::Point& p) {
         static_assert(IS_POINTVECTOR,
                       "Error: No convertion from cf::Point to direction vector possible (w component has to be 0)");
         this->m_Data[0] = _ValueType(p.x);
@@ -304,7 +311,7 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
         return *this;
     }
 
-    template <typename _VType, glm::precision precision> self_type& operator=(const glm::tvec3<_VType, precision>& rhs) {
+    template <typename _VType, glm::precision precision> self_type_result_ref operator=(const glm::tvec3<_VType, precision>& rhs) {
         if (!IS_POINTVECTOR && !self_type::_EqualZero(rhs.z))
             throw std::runtime_error("Error: Cannot convert glm::tvec3 to direction vector (w component has to be 0)");
         for (size_t i = 0; i < 3; ++i)
