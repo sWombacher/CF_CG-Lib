@@ -12,9 +12,9 @@ namespace cf {
 struct IteratedFunctionSystem {
     /**
      * @brief read a *.ifs file from path
-     * @param fiilePath Path to a *.ifs file
+     * @param filePath Path to a *.ifs file
      */
-    void read(const std::string& fiilePath);
+    void read(const std::string& filePath);
 
     std::size_t getNumTransformations() const;
 

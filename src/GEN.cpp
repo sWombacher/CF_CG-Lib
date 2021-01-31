@@ -4,8 +4,11 @@ namespace cf {
 
 void GEN::read(const std::string& filePath) {
     std::fstream file(filePath);
-    if (!file)
-        throw std::runtime_error("File \"" + filePath + "\" not found!");
+    if (!file) {
+        const auto error = "File \"" + filePath + "\" not found!";
+        std::cout << error << std::endl;
+        throw std::runtime_error(error);
+    }
 
     auto readNextLine = [&file, str = std::string()]() mutable {
         std::getline(file, str);
