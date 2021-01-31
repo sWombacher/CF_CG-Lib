@@ -311,7 +311,8 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
         return *this;
     }
 
-    template <typename _VType, glm::precision precision> self_type_result_ref operator=(const glm::tvec3<_VType, precision>& rhs) {
+    template <typename _VType, glm::precision precision>
+    self_type_result_ref operator=(const glm::tvec3<_VType, precision>& rhs) {
         if (!IS_POINTVECTOR && !self_type::_EqualZero(rhs.z))
             throw std::runtime_error("Error: Cannot convert glm::tvec3 to direction vector (w component has to be 0)");
         for (size_t i = 0; i < 3; ++i)
@@ -386,6 +387,15 @@ template <bool IS_POINTVECTOR, typename _ValueType> class Vec3 {
      * @return
      */
     bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
+
+    /**
+     * @brief clone Function for simple cloning this object (useful for python)
+     * @return A copy of the current object
+     */
+    Vec3 clone() const {
+        Vec3 vec = *this;
+        return vec;
+    }
 
   private:
     template <bool b, typename _VType> friend class Vec3;
