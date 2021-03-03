@@ -9,6 +9,7 @@ VisualStudio_python/
 MakeFileProject/
 Solutions
 PythonSolutions
+Documentation
 XCodeProject/
 *.aux
 *.log
