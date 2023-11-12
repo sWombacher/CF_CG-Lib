@@ -10,7 +10,8 @@ cd CF_CG-Lib-master
 cd PythonSolutions
 python3 windowRasterized_example.py
  
-clear
+echo ""
+echo ""
 echo "Everything set up, you can find the exampls in ~/CF_CG-Lib-master/PythonSolutions"
 echo "You can create new files new files for execution in the same directory"
-echo "Most importantly: Have fun! :)
+echo "Most importantly: Have fun! :)"
