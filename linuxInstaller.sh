@@ -6,12 +6,12 @@ rm master.zip
 cd CF_CG-Lib-master
 ./linux_installDependencies.sh
 ./createUnixPythonProject.sh
+
+unzip 3rdparty/wine_clucalc.zip
  
 cd PythonSolutions
 python3 windowRasterized_example.py
 
-unzip 3rdparty/wine_clucalc.zip
- 
 echo ""
 echo ""
 echo "Everything set up, you can find the exampls in ~/CF_CG-Lib-master/PythonSolutions"
