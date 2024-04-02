@@ -9,6 +9,8 @@ cd CF_CG-Lib-master
  
 cd PythonSolutions
 python3 windowRasterized_example.py
+
+unzip 3rdparty/wine_clucalc.zip
  
 echo ""
 echo ""

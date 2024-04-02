@@ -12,17 +12,17 @@ do
 		read -p "Is this your package manager (y/n)? " answer
 		case ${answer:0:1} in y|Y )
 			case ${osInfo[$f]} in yum)
-				sudo yum install glm-devel opencv-devel cmake gcc gcc-c++ freeglut-devel libXi-devel libXmu-devel swig python3-devel
+				sudo yum install glm-devel opencv-devel cmake gcc gcc-c++ freeglut-devel libXi-devel libXmu-devel swig python3-devel wine
 			;;
 			pacman)
-				sudo pacman -S glm opencv cmake gcc libxmu libxi freeglut swig python make hdf5 vtk gtk3 glew
+				sudo pacman -S glm opencv cmake gcc libxmu libxi freeglut swig python make hdf5 vtk gtk3 glew wine
 			;;
 			apt-get)
-				sudo apt-get install libglm-dev libopencv-dev cmake freeglut3-dev libxmu-dev libxi-dev gcc g++ swig python3-dev
+				sudo apt-get install libglm-dev libopencv-dev cmake freeglut3-dev libxmu-dev libxi-dev gcc g++ swig python3-dev wine
 			;;
 			*)
 				echo Packagemanager not supported
-				echo Please install \'glm\' \'opencv\' and \'cmake\' manually
+				echo Please install \'glm\' \'opencv\' and \'cmake\' manually, for additional CLUCalc please install wine as well
 			;;
 			esac
 	    ;;
