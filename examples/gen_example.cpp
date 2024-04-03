@@ -35,5 +35,7 @@ int main(int argc, char** argv) {
         std::cout << e << '\n';
 
     std::cout << std::endl;
+	std::cout << "Press enter to finish the process";
+	cf::Console::waitKey();
     return 0;
 }

@@ -31,8 +31,6 @@ int main(int argc, char** argv) {
     img1.show();
     img2.show();
 
-    std::cout << R"(Press keys on a window "Result", to blend image1 to image2)";
-
     // blend image2 above image1
     const int minWidth = std::min(img1.getWidth(), img2.getWidth());
     const int minHeight = std::min(img1.getHeight(), img2.getHeight());
@@ -40,7 +38,10 @@ int main(int argc, char** argv) {
     Image toDisplay(minWidth, minHeight, "Result");
     const float blending_step = 0.1f;
 
-    for (float blend = 0.f; blend <= 1.f; blend += blending_step) {
+	std::cout << "Press any key on a window to blend image1 to image2.\n" << std::endl;
+	toDisplay.waitKey();
+
+    for (float blend = 0.f; blend <= 1.0001f; blend += blending_step) {  // das Epsilon 0.0001 muss sein ;(
         for (int y = 0; y < minHeight; ++y) {
             for (int x = 0; x < minWidth; ++x) {
                 // just a simple way to blend two colors
@@ -49,12 +50,12 @@ int main(int argc, char** argv) {
             }
         }
         // show result and wait for key input on a window
-        toDisplay.show();
+		toDisplay.show();
+		std::cout << "Press key once more." << std::endl;
         toDisplay.waitKey();
-    }
+	}
     cf::Console::clearConsole();
-    std::cout << "Press any key to finish the process." << std::endl;
-    toDisplay.show();
-    toDisplay.waitKey();
+	std::cout << "Press enter to finish the process";
+	cf::Console::waitKey();
     return 0;
 }

@@ -9,6 +9,7 @@
 
 int main(int argc, char** argv) {
     using namespace cf::literals;
+    using Blade = cf::dMultiVector::Blade;
     using STYPE = cf::WindowCoordinateSystem3D::SPACE_TYPE;
 
     cf::WindowCoordinateSystem3D system(&argc, argv);

@@ -35,7 +35,7 @@ int main(int, char**) {
     cf::Console::clearConsole();
 
     // create window and print mouse input
-    cf::WindowVectorized window(800, range_x, range_y, "Hello world", cf::Color::ORANGE);
+    cf::WindowVectorized window(600, range_x, range_y, "Hello world", cf::Color::ORANGE);
     std::cout << "Created window size:\n"
               << "Width : " << window.getWidth() << std::endl
               << "Height: " << window.getHeight() << std::endl
@@ -60,7 +60,7 @@ int main(int, char**) {
               << "Image: j-position: " << std::round(point1.y) << std::endl
               << std::endl;
 
-    std::cout << "\n\nActivate image window and press enter to continue with part 2: drawing \n";
+    std::cout << "\n\nActivate image window and press any key to continue with part 2: drawing \n";
     window.waitKey();
     cf::Console::clearConsole();
 
@@ -97,12 +97,12 @@ int main(int, char**) {
 
     // draw line and rectangle
     cf::Console::clearConsole();
-    std::cout << "Press enter to draw a line\n";
+    std::cout << "Press any key to draw a line\n";
     window.waitKey();
     window.drawLine(point1, point2, 2, cf::Color::BLACK);
     window.show();
 
-    std::cout << "\n\n\nPress enter to draw a rectangle\n";
+    std::cout << "\n\n\nPress any key to draw a rectangle\n";
     window.waitKey();
     window.drawRectangle(point1, point2, 2, cf::Color::GREEN);
     window.show();
@@ -116,7 +116,7 @@ int main(int, char**) {
     const auto pixelLength = int(std::round(window.convert_intervalLength_to_pixelLength(intervalLength)));
 
     // draw
-    std::cout << "\n\n\nPress enter to draw a circle (point1 as center, point2 on circle line)\n";
+    std::cout << "\n\n\nPress any key to draw a circle (point1 as center, point2 on circle line)\n";
     window.waitKey();
     window.drawCircle(point1, pixelLength, 2, cf::Color(127, 27, 127));
     window.show();
@@ -137,11 +137,11 @@ int main(int, char**) {
     //  from that line we need +/- 60 degrees to reach the other circle sides
     window.drawCirclePart(point2, pixelLength, angle - 60.f, angle + 60.f, 2, cf::Color::GREY);
 
-    std::cout << "\n\n\nPress enter to draw a circle part (point2 center, point1 on circle line)\n";
+    std::cout << "\n\n\nPress any key to draw a circle part (point2 center, point1 on circle line)\n";
     window.waitKey();
     window.show();
 
-    std::cout << "\n\n\nPress enter to finish the process\n";
-    window.waitKey();
-    return 0;
+	std::cout << "\n\n\nPress enter to end the process" << std::flush;
+	cf::Console::waitKey();
+	return 0;
 }
