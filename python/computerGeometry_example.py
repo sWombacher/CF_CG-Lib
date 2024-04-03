@@ -22,6 +22,7 @@
 # Problem 1 (Umkopieren von Punkt-Vektoren):
 #   NICHT mittels  PV2 = PV1  da Aenderungen an PV2 sich auch auf PV1 auswirken!!!
 #   Sondern:  PV2 = cf.PointVector(PV1.getX(), PV1.getY(), PV1.getW())
+#      oder:  PV2 = PV1.clone()
 # Problem 2 (Return-Wert von normalize() bei Homogenisierung=Normalisierung):
 #   Aufruf immer nur:   X.normalize()   und nicht:    Y=X.normalize()
 #
@@ -60,6 +61,7 @@ readPoints()
 
 # part 1, create coordinatesystem & draw all points/lines
 window = cf.WindowCoordinateSystem(600, cf.Interval(-10, 270), cf.Interval(-10, 270), "Window Name")
+window.setWindowDisplayScale(1.0)
 window.drawAxis(cf.Color.BLACK, 10, 10)
 
 # Read points of the triangle
@@ -74,10 +76,10 @@ for i in range(0, len(cfPoints)):
     p1 = cfPoints[(i+1) % len(cfPoints)] 
     window.drawLine(p0, p1)
 
-window.show() # no display of drawings without this lien!!!
+window.show() # no display of drawings without this line!!!
 
 # wait for user input
-print("Please set a point\n")
+print("\nPlease use mouse to set a point")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 userPoint = window.waitMouseInput()
@@ -89,93 +91,62 @@ time.sleep(0.1) # wait for console; increase if necessary
 window.drawPoint(userPoint, cf.Color.RED)
 window.show()
 
-class PointDescription(Enum):
-    Left = 0,
-    Right = 1,
-    On = 2
-
-def calcSide(pVA, pVB, userPV): # calculate position of userpoint in relation to a line
-    line = pVA.crossProduct(pVB) # implicit form of line through both points
-
-    hnfFactor = 1/(math.sqrt(line.getX()**2 + line.getY()**2)) # HNF-Factor
-    line = line*hnfFactor   # HNF of line but without consideration of sign!!!
-    
-    innerProduct = line.innerProduct(userPV) 
-    if abs(innerProduct) < 1 :  # "1" due to discrete coordinates!!!
-        return PointDescription.On
-    if innerProduct < 0:
-        return PointDescription.Right
-    return PointDescription.Left
-
-# calculation of the position of the userpoint in relation to all lines
-des0 = calcSide(pointVectorsV[0], pointVectorsV[1], userPointV)
-des1 = calcSide(pointVectorsV[1], pointVectorsV[2], userPointV)
-des2 = calcSide(pointVectorsV[2], pointVectorsV[0], userPointV)
-
-# message whether point is inside, outside or on the border of the triangle
-if des0 == des1 and des1 == des2:
-    if des0 == PointDescription.Left:
-        print("Point is inside the triangle")
-        sys.stdout.flush() # force output
-        time.sleep(0.1) # wait for console; increase if necessary
-    else:
-        sys.stdout.flush() # force output
-        time.sleep(0.1) # wait for console; increase if necessary
-        print("Point is outside the triangle")
+# test if point is inside or outside of triangle (border=inside)
+line0 = pointVectorsV[0].crossProduct(pointVectorsV[1]) # implicit line
+line1 = pointVectorsV[1].crossProduct(pointVectorsV[2]) # implicit line
+line2 = pointVectorsV[2].crossProduct(pointVectorsV[0]) # implicit line
+sign0 = mySign(line0.innerProduct(userPointV)) # "1" if left of line and 
+sign1 = mySign(line1.innerProduct(userPointV)) # "-1" if right of line
+sign2 = mySign(line2.innerProduct(userPointV))
+if (sign0>=0 and sign1>=0 and sign2>=0):
+    print("Point inside triangle")
 else:
-    if des0 == PointDescription.On or des1 == PointDescription.On or des2 == PointDescription.On:
-        print("Point is on the border of the triangle")
-        sys.stdout.flush() # force output
-        time.sleep(0.1) # wait for console; increase if necessary
-    else:
-        print("Point is outside the triangle")
-        sys.stdout.flush() # force output
-        time.sleep(0.1) # wait for console; increase if necessary
+    print("Point outside triangle")
 
 print("Press any key  to continue with part2")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
 
-
+# *********************************************************************
 # part 2
 window.clear()
 window.drawAxis(cf.Color.BLACK, 10, 10)
 window.show()
 
-print("Press any key (or wait 3s) to draw a line between point0 and point2\n")
+print("Press any key (or wait 3s) to draw a line between point0 and point2")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey(3000) # wait up to 3000ms until continue
 
-# line through 2 points
-normalV1 = pointVectorsV[2].crossProduct(pointVectorsV[0])
-print("Normal-Vector:   x=", normalV1.getX(), "   y=", normalV1.getY(), "   z=", normalV1.getW())
-window.drawLinearEquation(normalV1)
+# line through 2 points (implicit form)
+normalV0 = pointVectorsV[2].crossProduct(pointVectorsV[0])
+print("Normal-Vector:   x=", normalV0.getX(), "   y=", normalV0.getY(), "   w=", normalV0.getW())
+window.drawLinearEquation(normalV0, cf.Color.GREEN, cf.Window2D.LineType_DOT_DASH_0)
 # alternative:
-# window.drawLinearEquation(normalV.getX(), normalV.getY(), normalV.getW())
+# window.drawLinearEquation(normalV0.getX(), normalV0.getY(), normalV0.getW())
 window.show()
 
-print("Press any key (or wait 3s) to draw line between point1 and point0\n")
+print("Press any key (or wait 3s) to draw line between point1 and point0")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey(3000)
 
-# line with point and direction vector
+# line with point and direction vector (parametric form)
 direction = cf.DirectionVector(pointVectorsV[1].sub(pointVectorsV[0]))
-normalV2 = direction.crossProduct(pointVectorsV[1])
-window.drawLinearEquation(normalV2, cf.Color.RED, cf.Window2D.LineType_DOT_1)
+normalV1 = pointVectorsV[1].crossProduct(direction)
+window.drawLinearEquation(normalV1, cf.Color.RED, cf.Window2D.LineType_DOT_1)
 # alternative for drawing only:
 #window.drawLinearEquation(cfPoints[1], direction, cf.Color.RED, cf.Window2D.LineType_DOT_1)
 window.show()
 
-print("Press any key to draw line between point1 and point2\n")
+print("Press any key to draw a line between point1 and point2")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
 
 # draw line from point1 to point2 directly
-window.drawLine(cfPoints[1], cfPoints[2], cf.Color.BLUE, cf.Window2D.LineType_DOT_DASH_0)
+window.drawLine(cfPoints[1], cfPoints[2], cf.Color.BLUE, cf.Window2D.LineType_DEFAULT, 3)
 window.show()
 
 print("Press any key to draw a circle around your point")

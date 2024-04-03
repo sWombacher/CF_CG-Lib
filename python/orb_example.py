@@ -28,3 +28,4 @@ for i in range(factors.size()):
 print("\n\n")
 cf.Console.waitKey()
 
+window = None # destroy window

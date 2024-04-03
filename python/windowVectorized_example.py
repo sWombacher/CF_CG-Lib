@@ -26,7 +26,7 @@ window.setWindowDisplayScale(1.0)
 
 window.show() # all drawing instructions buffered so far are executed 
 
-print("Please set a point on the window")
+print("Use mouse to set a point")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 point = window.waitMouseInput()
@@ -34,13 +34,13 @@ window.drawCircle(point, 3, -1, cf.Color.GREY) # buffered and not displayed unti
 window.show() # all drawing instructions buffered so far are executed
 #transforming points from interval to image and vice versa
 pixelPoint = window.transformPoint_fromInterval_toImage(point)
-print("Point pressed in interval coordinates: ", point.x, point.y)
-print("Point pressed in image coordinates: ", pixelPoint.x, pixelPoint.y)
+print("Point in interval coordinates: ", point.x, point.y)
+print("Point in image coordinates: ", pixelPoint.x, pixelPoint.y)
 # test: transform image position back to interval coordinates
 pointRe = window.transformPoint_fromImage_toInterval (pixelPoint)
 print("Image coordinates transformed back to interval: ", pointRe.x, pointRe.y)
 
-print("Please set one more point")
+print("Use mouse to set one more point")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 p0 = window.waitMouseInput()
@@ -52,8 +52,8 @@ window.setColor(p1.x, p1.y, cf.Color.WHITE) # nearly invisible point
 window.drawCircle(p1, 13, 1, cf.Color.WHITE) # circle around point
 window.show() # all drawing instructions buffered so far are executed
 
-print(">>> The white point in the middle is nearly invisible!!!")
-print("Press any key to draw a line and arectangle")
+print(">>> The white point in the middle of the circle is nearly invisible!")
+print("Press any key to draw a line and a rectangle")
 sys.stdout.flush() # force output
 time.sleep(0.1) # wait for console; increase if necessary
 window.waitKey()
