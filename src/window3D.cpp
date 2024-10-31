@@ -57,13 +57,13 @@ void Window3D::printWindowUsage() {
 }
 
 static Window3D* windowPtr = nullptr;
-void _WindowResizeEvent(int w, int h) {
+void Window3D::_WindowResizeEvent(int w, int h) {
     windowPtr->m_Width = w;
     windowPtr->m_Height = h;
     windowPtr->_AdjustCamera();
 }
 
-void _DrawingFunction() {
+void Window3D::_DrawingFunction() {
     if (!windowPtr)
         throw std::runtime_error("Error: window ptr not set!");
 
@@ -86,7 +86,7 @@ void _DrawingFunction() {
         glutTimerFunc(0, [](int) { glutPostRedisplay(); }, 1);
     }
 }
-void _KeyboardCallbackFunction(unsigned char key, int x, int y) {
+void Window3D::_KeyboardCallbackFunction(unsigned char key, int x, int y) {
     if (!windowPtr)
         throw std::runtime_error("Error: window ptr not set!");
 
@@ -218,7 +218,7 @@ void Window3D::handleMousePressEvent(MouseButton, MouseButtonEvent, int, int) {}
 
 static int _MouseCtlLastX = -1, _MouseCtlLastY = -1, _MouseCtlBtn = -1;
 static bool _MouseCtlLastZoomMode = false;
-void _MouseCtlClickCallbackFunction(int button, int press, int y, int x) {
+void Window3D::_MouseCtlClickCallbackFunction(int button, int press, int y, int x) {
     _MouseCtlLastX = _MouseCtlLastY = -1;
     _MouseCtlBtn = button;
 
@@ -239,7 +239,7 @@ void _MouseCtlClickCallbackFunction(int button, int press, int y, int x) {
             (press == GLUT_DOWN) ? Window3D::MouseButtonEvent::PRESSED : Window3D::MouseButtonEvent::RELEASED, x, y);
 }
 
-void _MouseCtlMotionCallbackFunction(int y, int x) {
+void Window3D::_MouseCtlMotionCallbackFunction(int y, int x) {
     bool preventDefault = false;
     if (windowPtr->m_AdditionalMouseMotionCallback)
         preventDefault = windowPtr->m_AdditionalMouseMotionCallback(static_cast<Window3D::MouseButton>(_MouseCtlBtn), x, y);

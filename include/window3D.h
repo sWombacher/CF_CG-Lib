@@ -194,11 +194,11 @@ struct Window3D {
     glm::vec3 m_FreeCamera_LookDirection = glm::vec3(0.f, 0.f, 1.f);
 
   private:
-    friend void _KeyboardCallbackFunction(unsigned char key, int x, int y);
-    friend void _DrawingFunction();
-    friend void _MouseCtlClickCallbackFunction(int button, int press, int y, int x);
-    friend void _MouseCtlMotionCallbackFunction(int y, int x);
-    friend void _WindowResizeEvent(int w, int h);
+    static void _KeyboardCallbackFunction(unsigned char key, int x, int y);
+    static void _DrawingFunction();
+    static void _MouseCtlClickCallbackFunction(int button, int press, int y, int x);
+    static void _MouseCtlMotionCallbackFunction(int y, int x);
+    static void _WindowResizeEvent(int w, int h);
 
     float m_MaxFPS = 0.f;
 
